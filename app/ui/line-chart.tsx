@@ -8,7 +8,10 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
+import type { ChartData, ChartOptions } from 'chart.js';
 import { Line } from "react-chartjs-2";
+import { getChartData } from '@/app/lib/json';
+import { useEffect, useState } from "react";
 
 // Register ChartJS components using ChartJS.register
 ChartJS.register(
@@ -21,32 +24,40 @@ ChartJS.register(
 
 ChartJS.register(CategoryScale, /* ... */)
 
-export default async function MyLineChart() { 
+export default function MyLineChart() {
+  
+  const [chartData, setChartData] = useState<ChartData<'line'>>({
+    datasets: [],
+  });
+
+  const [chartOptions, setChartOptions] = useState<ChartOptions<'line'>>({});
+  
+  useEffect(() => {
+    getChartData().then((data) => {
+      setChartData({
+        labels: data.date,
+        datasets: [
+          {
+            label: '기준금리',
+            data: data.rate7,
+            backgroundColor: 'red',
+          },
+        ]
+      });  
+    });
+
+    setChartOptions({
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {y: {beginAtZero: true}}
+    });
+  }, [chartData]);
+
   return (
-    <div className="chart-container" style={{position: 'relative', height:'40vh', width:'80vw'}}>
+    <div className="chart-container" style={{height:'50vh', width:'80vw'}}>
       <Line
-        data={{
-          labels: [
-            "2023-01",
-            "2023-02",
-            "2023-03",
-            "2023-04",
-            "2023-05",
-            "2023-06",
-            "2023-07",
-          ],
-          datasets: [
-            {
-              data: [100, 120, 115, 134, 168, 132, 200],
-              backgroundColor: "purple",
-            },
-            {
-              data: [50, 60, 215, 134, 158, 112, 100],
-              backgroundColor: "red",
-            }
-          ],
-        }}
-        options={{responsive: true, maintainAspectRatio : false}}
+        data={chartData}
+        options={chartOptions}
       />
     </div>
   );
