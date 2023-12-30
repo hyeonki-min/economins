@@ -1,7 +1,11 @@
 'use server';
 import { promises as fs } from 'fs';
 
-export interface Rate {
+interface IObjectKeys {
+  [key: string]: string[] | number[];
+}
+
+export interface Rate extends IObjectKeys{
     rate: number[]
     rate1: number[]
     rate2: number[]

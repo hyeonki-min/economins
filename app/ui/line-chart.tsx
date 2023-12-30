@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import type { ChartData, ChartOptions } from 'chart.js';
 import { Line } from "react-chartjs-2";
-import { getChartData } from '@/app/lib/json';
+import { getChartData, Rate } from '@/app/lib/json';
 import { useEffect, useState } from "react";
 
 // Register ChartJS components using ChartJS.register
@@ -24,8 +24,7 @@ ChartJS.register(
 
 ChartJS.register(CategoryScale, /* ... */)
 
-export default function MyLineChart() {
-  
+export default function MyLineChart({ dataType }: { dataType: string }) {
   const [chartData, setChartData] = useState<ChartData<'line'>>({
     datasets: [],
   });
@@ -34,12 +33,13 @@ export default function MyLineChart() {
   
   useEffect(() => {
     getChartData().then((data) => {
+      const test = data[dataType as keyof Rate];
       setChartData({
         labels: data.date,
         datasets: [
           {
             label: '기준금리',
-            data: data.rate7,
+            data: test,
             backgroundColor: 'red',
           },
         ]
@@ -51,7 +51,7 @@ export default function MyLineChart() {
       maintainAspectRatio: true,
       scales: {y: {beginAtZero: true}}
     });
-  }, [chartData]);
+  }, [dataType]);
 
   return (
     <div className="chart-container" style={{height:'50vh', width:'80vw'}}>

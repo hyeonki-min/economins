@@ -16,3 +16,23 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.has-\[\:checked\]\:ring-indigo-200:has(:checked) {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(199 210 254/var(--tw-ring-opacity));
+}
+
+.has-\[\:checked\]\:text-indigo-900:has(:checked) {
+  --tw-text-opacity: 1;
+  color: rgb(49 46 129/var(--tw-text-opacity));
+}
+
+.has-\[\:checked\]\:bg-indigo-50:has(:checked) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(238 242 255/var(--tw-bg-opacity));
+}
+
+.checked\:border-indigo-500:checked {
+  --tw-border-opacity: 1;
+  border-color: rgb(99 102 241/var(--tw-border-opacity));
+}
