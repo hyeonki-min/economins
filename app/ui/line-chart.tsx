@@ -1,4 +1,3 @@
-// components/MyLineChart.tsx
 "use client";
 import {
   Chart as ChartJS,
@@ -24,26 +23,31 @@ ChartJS.register(
 
 ChartJS.register(CategoryScale, /* ... */)
 
-export default function MyLineChart({ dataType }: { dataType: string }) {
+export default function MyLineChart({ dataType }: { dataType: Array<string> }) {
   const [chartData, setChartData] = useState<ChartData<'line'>>({
     datasets: [],
   });
 
   const [chartOptions, setChartOptions] = useState<ChartOptions<'line'>>({});
-  
+  const backgroundColors = ['red', 'blue', 'orange', 'green', 'yellow', 'purple', 'gray'];
   useEffect(() => {
+    var datasets: any = [];
+
     getChartData().then((data) => {
-      const test = data[dataType as keyof Rate];
-      setChartData({
+      dataType.forEach((element, index) => {
+        datasets.push({
+          'label': element,
+          'data': data[element as keyof Rate],
+          'backgroundColor': backgroundColors[index]
+        });
+      });
+      const getCheckedChartData: ChartData <'line'> = {
         labels: data.date,
-        datasets: [
-          {
-            label: '기준금리',
-            data: test,
-            backgroundColor: 'red',
-          },
-        ]
-      });  
+        datasets: datasets
+      };
+      setChartData(
+        getCheckedChartData
+      );  
     });
 
     setChartOptions({
