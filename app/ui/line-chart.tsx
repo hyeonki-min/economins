@@ -23,7 +23,12 @@ ChartJS.register(
 
 ChartJS.register(CategoryScale, /* ... */)
 
-export default function MyLineChart({ dataType }: { dataType: Array<string> }) {
+export interface Candidate {
+  name: string,
+  type: string
+}
+
+export default function MyLineChart({ dataType }: { dataType: Candidate[] }) {
   const [chartData, setChartData] = useState<ChartData<'line'>>({
     datasets: [],
   });
@@ -36,10 +41,10 @@ export default function MyLineChart({ dataType }: { dataType: Array<string> }) {
     getChartData().then((data) => {
       dataType.forEach((element, index) => {
         datasets.push({
-          'label': element,
-          'data': data[element as keyof Rate],
+          'label': element.name,
+          'data': data[element.name as keyof Rate],
           'backgroundColor': backgroundColors[index],
-          'yAxisID': element === '전국'? 'y': 'y2'
+          'yAxisID': element.type === 'rate'? 'y': 'y2'
         });
       });
       const getCheckedChartData: ChartData <'line'> = {
