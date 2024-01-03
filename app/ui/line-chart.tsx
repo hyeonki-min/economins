@@ -38,22 +38,37 @@ export default function MyLineChart({ dataType }: { dataType: Array<string> }) {
         datasets.push({
           'label': element,
           'data': data[element as keyof Rate],
-          'backgroundColor': backgroundColors[index]
+          'backgroundColor': backgroundColors[index],
+          'yAxisID': element === '전국'? 'y': 'y2'
         });
       });
       const getCheckedChartData: ChartData <'line'> = {
-        labels: data.date,
         datasets: datasets
       };
       setChartData(
-        getCheckedChartData
-      );  
+          getCheckedChartData
+      );
     });
 
     setChartOptions({
       responsive: true,
       maintainAspectRatio: true,
-      scales: {y: {beginAtZero: true}}
+      scales: {
+        y2: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          beginAtZero: true
+        }
+      }
     });
   }, [dataType]);
 

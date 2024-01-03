@@ -2,20 +2,17 @@
 import { promises as fs } from 'fs';
 
 interface IObjectKeys {
-  [key: string]: string[] | number[];
+  [key: string]: Coordinates[];
+}
+
+export interface Coordinates {
+  x: string,
+  y: number
 }
 
 export interface Rate extends IObjectKeys{
-    rate: number[]
-    rate1: number[]
-    rate2: number[]
-    rate3: number[]
-    rate4: number[]
-    rate5: number[]
-    rate6: number[]
-    rate7: number[]
-    date: string[]
-  }
+    rate: Coordinates[]
+}
 
 export async function getChartData() { 
     const file = await fs.readFile(process.cwd() + '/app/data.json', 'utf8');
