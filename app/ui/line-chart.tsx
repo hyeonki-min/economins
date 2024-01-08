@@ -27,7 +27,10 @@ ChartJS.register(CategoryScale, /* ... */)
 
 export interface Candidate {
   name: string,
-  type: string
+  type: string,
+  initDate: string,
+  start: number,
+  end: number
 }
 
 export default function MyLineChart({ dataType }: { dataType: Candidate[] }) {
@@ -36,7 +39,7 @@ export default function MyLineChart({ dataType }: { dataType: Candidate[] }) {
   });
 
   const [chartOptions, setChartOptions] = useState<ChartOptions<'line'>>({});
-  
+
   useEffect(() => {
     const backgroundColors = ['red', 'blue', 'orange', 'green', 'yellow', 'purple', 'gray'];
     var datasets: any = [];
@@ -51,7 +54,7 @@ export default function MyLineChart({ dataType }: { dataType: Candidate[] }) {
         }
         datasets.push({
           'label': element.name,
-          'data': data[element.name as keyof Rate],
+          'data': element.end === 0? data[element.name as keyof Rate].splice(element.start):data[element.name as keyof Rate].splice(element.start, element.end),
           'backgroundColor': backgroundColors[index],
           'yAxisID': firstAxis === element.type ? 'y': 'y2',
         });
@@ -62,37 +65,75 @@ export default function MyLineChart({ dataType }: { dataType: Candidate[] }) {
       setChartData(
           getCheckedChartData
       );
-      setChartOptions({
-        responsive: true,
-        maintainAspectRatio: true,
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y2: {
-            type: 'linear',
-            position: 'right',
-            grid: {
-              drawOnChartArea: false,
+      if (axisPositionSet.size<=1) {
+        setChartOptions({
+          responsive: true,
+          maintainAspectRatio: true,
+          interaction: {
+            intersect: false,
+            mode: 'index',
+          },
+          scales: {
+            y: {
+              type: 'linear',
+              position: 'left',
+              beginAtZero: true
+            },
+            x: {
+              type: 'time',
+              time: {
+                unit: 'month',
+                displayFormats: {
+                  month: 'yyyy-MM'
+                },
+                tooltipFormat: 'yyyy-MM' 
+              },
+              grid: {
+                display: false,
+                drawTicks: false,
+              }
+            }
+          },
+        });  
+      } else {
+        setChartOptions({
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            y2: {
+              type: 'linear',
+              position: 'right',
+              grid: {
+                drawOnChartArea: false,
+              },
+            },
+            y: {
+              type: 'linear',
+              position: 'left',
+              beginAtZero: true
+            },
+            x: {
+              type: 'time',
+              time: {
+                unit: 'month',
+                displayFormats: {
+                  month: 'yyyy-MM'
+                },
+                tooltipFormat: 'yyyy-MM' 
+              },
+              grid: {
+                display: false,
+                drawTicks: false,
+              }
             },
           },
-          y: {
-            type: 'linear',
-            position: 'left',
-            beginAtZero: true
-          },
-          x: {
-            type: 'time',
-            time: {
-              displayFormats: {
-                year: 'yyyy-MM'
-              },
-              tooltipFormat: 'yyyy-MM' 
+          plugins: {
+            tooltip: {
+              filter: (item) => item.parsed.y !== null,
             }
           }
-        },
-      });  
+        });  
+      }
     });
   }, [dataType]);
 
