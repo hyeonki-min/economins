@@ -138,7 +138,7 @@ export default function MyLineChart({ dataType }: { dataType: Candidate[] }) {
   }, [dataType]);
 
   return (
-    <div className="chart-container" style={{height:'50vh', width:'80vw'}}>
+    <div className="chart-container" style={{height:'60vh', width:'80vw'}}>
       <Line
         data={chartData}
         options={chartOptions}
