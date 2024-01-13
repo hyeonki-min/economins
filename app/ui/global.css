@@ -5,6 +5,8 @@
 input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
+  border: 0;
+  outline: none;
 }
 
 input[type='number']::-webkit-inner-spin-button {
@@ -19,7 +21,7 @@ input[type='number']::-webkit-outer-spin-button {
 
 .has-\[\:checked\]\:ring-indigo-200:has(:checked) {
   --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(199 210 254/var(--tw-ring-opacity));
+  --tw-ring-color: rgb(212 212 212/var(--tw-ring-opacity));
 }
 
 .has-\[\:checked\]\:text-indigo-900:has(:checked) {
@@ -32,7 +34,26 @@ input[type='number']::-webkit-outer-spin-button {
   background-color: rgb(238 242 255/var(--tw-bg-opacity));
 }
 
-.checked\:border-indigo-500:checked {
-  --tw-border-opacity: 1;
+.has-\[\:checked\]\:bg-neutral-950:has(:checked) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(10 10 10/var(--tw-bg-opacity));
+}
+
+.has-\[\:checked\]\:bg-slate-300:has(:checked) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(203 213 225/var(--tw-bg-opacity));
+}
+
+.has-\[\:checked\]\:text-slate-50:has(:checked) {
+  --tw-bg-opacity: 1;
+  color: rgb(255 255 255/var(--tw-bg-opacity));
+}
+
+.has-\[\:checked\]\:bg-indigo-500:has(:checked) {
+  --tw-bg-opacity: 1;
   border-color: rgb(99 102 241/var(--tw-border-opacity));
+}
+
+.has-\[\:checked\]\:bg-clip-padding:has(:checked) {
+  background-clip: inherit;
 }

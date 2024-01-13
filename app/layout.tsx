@@ -1,14 +1,14 @@
 import '@/app/ui/global.css';
-import { inter } from '@/app/ui/fonts';
+import { blinker } from '@/app/ui/fonts';
 import { Metadata } from 'next';
  
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard',
+    template: '%s | economins',
+    default: 'economins',
   },
-  description: 'The official Next.js Learn Dashboard built with App Router.',
-  metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
+  description: 'The economic metric visualization.',
+  metadataBase: new URL('https://github.com/ho9science/economins'),
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>{children}</body>
+      <body className={`${blinker.className} antialiased`}>{children}</body>
     </html>
   );
 }
