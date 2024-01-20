@@ -22,9 +22,8 @@ const allElement = [
 ];
 
 
-export default function Page() {
+export default async function Page() {
   const [types, setTypes] = useState<string>('전체');
-  
   return (
     <main className="min-h-screen flex-col bg-slate-50">
       <div className="flex h-12 shrink-0 items-end p-2 md:h-12">

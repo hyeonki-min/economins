@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex h-12 shrink-0 items-end p-2 md:h-12">
         <EconominsLogo />
       </div>
-      <div className="m-0 m-auto flex max-w-screen-2xl gap-4 md:flex-row">
+      <div className="m-0 m-auto max-w-screen-2xl">
         {children}
       </div>
     </div>

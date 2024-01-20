@@ -9,8 +9,7 @@ export default async function createPresignedUrl({ bucket, key }: {bucket: strin
         region: 'ap-northeast-2',
         credentials: fromEnv(),
     })
-    
-    const command = new GetObjectCommand({ Bucket: bucket, Key: 'indicator/base_rate_korea.json' });
+    const command = new GetObjectCommand({ Bucket: bucket, Key: key+".json" });
     const url = await getSignedUrl(client, command, { expiresIn: 3600 });
     const rest = await fetch(url, {
         method: 'GET',
