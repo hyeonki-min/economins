@@ -100,16 +100,18 @@ export default function LineChart({
       backgroundColor: 'red',
       yAxisID: 'y',
     });
-    const secondIndex = getIdx(indicator2.initDate);
-    datasets.push({
-        label: indicator2.name,
-        data:
-        secondIndex[1] === 0
-            ? data2.slice(secondIndex[0])
-            : data2.slice(secondIndex[0], secondIndex[1]),
-        backgroundColor: 'blue',
-        yAxisID: 'y',
-      });
+    if (data2) {
+      const secondIndex = getIdx(indicator2.initDate);
+      datasets.push({
+          label: indicator2.name,
+          data:
+          secondIndex[1] === 0
+              ? data2.slice(secondIndex[0])
+              : data2.slice(secondIndex[0], secondIndex[1]),
+          backgroundColor: 'blue',
+          yAxisID: 'y',
+        });
+    }
     const getCheckedChartData: ChartData<'line'> = {
       datasets: datasets,
     };
