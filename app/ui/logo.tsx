@@ -1,11 +1,11 @@
 import { DocumentChartBarIcon } from '@heroicons/react/24/outline';
-import { lusitana } from '@/app/ui/fonts';
+import { blinker } from '@/app/ui/fonts';
 import Link from 'next/link';
 
 export default function EconominsLogo() {
   return (
     <div
-      className={`${lusitana.className} flex flex-row items-center leading-none`}
+      className={`${blinker.className} flex flex-row items-center leading-none`}
     >
       <Link
         href="/"
