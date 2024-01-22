@@ -4,12 +4,12 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { fromEnv } from "@aws-sdk/credential-providers";
 
-export default async function createPresignedUrl({ bucket, key }: {bucket: string, key: string}) {
+export default async function createPresignedUrl({ key }: {key: string}) {
     const client = new S3Client({ 
-        region: 'ap-northeast-2',
+        region: process.env.AWS_REGION,
         credentials: fromEnv(),
     })
-    const command = new GetObjectCommand({ Bucket: bucket, Key: key+".json" });
+    const command = new GetObjectCommand({ Bucket: process.env.AWS_BUCKET_NAME, Key: key+".json" });
     const url = await getSignedUrl(client, command, { expiresIn: 3600 });
     const rest = await fetch(url, {
         method: 'GET',
@@ -18,7 +18,7 @@ export default async function createPresignedUrl({ bucket, key }: {bucket: strin
         },
     })
     if (!rest.ok) {
-        throw new Error('Failed to fetch data');
+        return false;
     }
     return rest.json();
 }

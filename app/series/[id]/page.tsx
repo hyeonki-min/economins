@@ -2,16 +2,17 @@ import LineChart from '@/app/ui/line-chart';
 
 import createPresignedUrl from '@/app/lib/economins';
 import SearchModal from '@/app/ui/series/search-modal';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
   const [indicator, data] = await Promise.all([
-    createPresignedUrl({
-      bucket: 'economins',
-      key: 'indicator/'+id,
-    }),
-    createPresignedUrl({ bucket: 'economins', key: 'data/'+id }),
+    createPresignedUrl({ key: 'indicator/'+id }),
+    createPresignedUrl({ key: 'data/'+id }),
   ]);
+  if (!indicator) {
+    notFound();
+  }
   return (
     <>
       <h1>{indicator.name}</h1>

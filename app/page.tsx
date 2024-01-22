@@ -15,7 +15,7 @@ export interface Element {
 }
 
 export default async function Page() {
-  const allElement: Element[] = await createPresignedUrl({ bucket: 'economins', key: 'main/main' });
+  const allElement: Element[] = await createPresignedUrl({ key: 'main/main' });
 
   return (
     <main className="min-h-screen flex-col bg-slate-50">
