@@ -3,14 +3,23 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { RocketLaunchIcon } from '@heroicons/react/24/outline'
-import SearchResult from '@/app/ui/series/search-result';
 
-export default function SearchModal() {
-  const [open, setOpen] = useState(true)
+export default function SearchModal(
+  {
+    name,
+    children,
+  }: {
+    name: string,
+    children: React.ReactNode
+  }) {
+  
+  const [open, setOpen] = useState(false)
 
   const cancelButtonRef = useRef(null)
 
   return (
+    <>
+      <h1>{name} <span className="cursor-pointer" onClick={() => setOpen(!open)}>+</span></h1>
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
         <Transition.Child
@@ -58,7 +67,7 @@ export default function SearchModal() {
                     </div>
                   </div>
                 </div>
-                <SearchResult></SearchResult>
+                {children}
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
@@ -75,5 +84,6 @@ export default function SearchModal() {
         </div>
       </Dialog>
     </Transition.Root>
+    </>
   )
 }

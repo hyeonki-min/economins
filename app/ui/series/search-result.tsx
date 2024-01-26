@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import clsx from 'clsx';
-import { usePathname } from 'next/navigation'
+import createPresignedUrl from '@/app/lib/economins';
 
 export interface Candidate {
   id: string;
@@ -24,15 +24,22 @@ const allElement : Candidate[] = [
   {'id': 'apt-price-index-seoul','name': '아파트 실거래가 지수 서울', 'type': 'apart', 'initDate': '2006-01', 'start': 0, 'end': 0},
 ]
 
-export default function SearchResult() {
-  const pathName = usePathname();
+export interface Element {
+  name: string,
+  type: string,
+  source: string,
+  id: string
+}
+
+export default async function SearchResult({id}: {id: string}) {
+  const allElement: Element[] = await createPresignedUrl({ key: 'main/main' });
   
   return (
     <div className="mt-4 space-y-2">
       {allElement.map((el) => (
         <Link
           key={el.name}
-          href={pathName+'/'+el.id}
+          href={id+'/'+el.id}
           className={clsx(
             'group grid items-center rounded-lg border border-slate-300 p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200',
             // {
