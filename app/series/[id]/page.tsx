@@ -2,8 +2,8 @@ import LineChart from '@/app/ui/line-chart';
 
 import createPresignedUrl from '@/app/lib/economins';
 import SearchModal from '@/app/ui/series/search-modal';
-import { notFound } from 'next/navigation';
 import SearchResult from '@/app/ui/series/search-result';
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const id = params.id;
@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
   return (
     <>
-      <SearchModal name={indicator.name}>
+      <SearchModal firstTitle={indicator.name} secondTitle=''>
         <SearchResult id={id}></SearchResult>
       </SearchModal>
       <div className="flex gap-4 md:flex-row md:py-6">

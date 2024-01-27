@@ -53,6 +53,7 @@ export default function LineChart({
   const [chartData, setChartData] = useState<ChartData<'line'>>({
     datasets: [],
   });
+  const [chartOptions, setChartOptions] = useState<ChartOptions<'line'>>({});
 
   const monthDiff = (d1: Date, d2: Date) => {
     var months;
@@ -100,7 +101,7 @@ export default function LineChart({
       backgroundColor: 'red',
       yAxisID: 'y',
     });
-    if (data2) {
+    if (data2.length>1) {
       const secondIndex = getIdx(indicator2.initDate);
       datasets.push({
           label: indicator2.name,
@@ -109,81 +110,90 @@ export default function LineChart({
               ? data2.slice(secondIndex[0])
               : data2.slice(secondIndex[0], secondIndex[1]),
           backgroundColor: 'blue',
-          yAxisID: 'y',
+          yAxisID: indicator.type===indicator2.type?'y':'y2',
         });
     }
     const getCheckedChartData: ChartData<'line'> = {
       datasets: datasets,
     };
     setChartData(getCheckedChartData);
-  }, [data, indicator, startYear, startMonth, endYear, endMonth]);
+    setChartOptions(getOption(indicator, indicator2));
+  }, [data, data2, indicator, startYear, startMonth, endYear, endMonth]);
 
-  const options: ChartOptions<'line'> = {
-    responsive: true,
-    maintainAspectRatio: true,
-    interaction: {
-      intersect: false,
-      mode: 'index',
-    },
-    scales: {
-      y: {
-        type: 'linear',
-        position: 'left',
-        beginAtZero: true,
-      },
-      x: {
-        type: 'time',
-        time: {
-          unit: 'month',
-          displayFormats: {
-            month: 'yyyy-MM',
+  const getOption = (indicator:any, indicator2:any) => {
+    if (indicator2.length!==0 && (indicator.type !== indicator2.type)) {
+      const options: ChartOptions<'line'> = {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          y2: {
+            type: 'linear',
+            position: 'right',
+            grid: {
+              drawOnChartArea: false,
+            },
           },
-          tooltipFormat: 'yyyy-MM',
-        },
-        grid: {
-          display: false,
-          drawTicks: false,
-        },
-      },
-    },
-  };
-  const options2: ChartOptions<'line'> = {
-    responsive: true,
-    maintainAspectRatio: true,
-    scales: {
-      y2: {
-        type: 'linear',
-        position: 'right',
-        grid: {
-          drawOnChartArea: false,
-        },
-      },
-      y: {
-        type: 'linear',
-        position: 'left',
-        beginAtZero: true,
-      },
-      x: {
-        type: 'time',
-        time: {
-          unit: 'month',
-          displayFormats: {
-            month: 'yyyy-MM',
+          y: {
+            type: 'linear',
+            position: 'left',
+            beginAtZero: true,
           },
-          tooltipFormat: 'yyyy-MM',
+          x: {
+            type: 'time',
+            time: {
+              unit: 'month',
+              displayFormats: {
+                month: 'yyyy-MM',
+              },
+              tooltipFormat: 'yyyy-MM',
+            },
+            grid: {
+              display: false,
+              drawTicks: false,
+            },
+          },
         },
-        grid: {
-          display: false,
-          drawTicks: false,
+        plugins: {
+          tooltip: {
+            filter: (item) => item.parsed.y !== null,
+          },
         },
-      },
-    },
-    plugins: {
-      tooltip: {
-        filter: (item) => item.parsed.y !== null,
-      },
-    },
-  };
+      };  
+      return options;
+    } else {
+      const options: ChartOptions<'line'> = {
+        responsive: true,
+        maintainAspectRatio: true,
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          y: {
+            type: 'linear',
+            position: 'left',
+            beginAtZero: true,
+          },
+          x: {
+            type: 'time',
+            time: {
+              unit: 'month',
+              displayFormats: {
+                month: 'yyyy-MM',
+              },
+              tooltipFormat: 'yyyy-MM',
+            },
+            grid: {
+              display: false,
+              drawTicks: false,
+            },
+          },
+        },
+      };
+      return options; 
+    }
+  }
+  
   return (
     <>
       <div className="flex items-center justify-center gap-1">
@@ -233,7 +243,7 @@ export default function LineChart({
           className="chart-container"
           style={{ height: '80vh', width: '80vw' }}
         >
-          {<Line data={chartData} options={options} />}
+          <Line data={chartData} options={chartOptions} />
         </div>
       </div>
     </>

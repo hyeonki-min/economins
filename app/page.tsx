@@ -22,7 +22,7 @@ export default async function Page() {
       <div className="flex h-12 shrink-0 items-end p-2 md:h-12">
         <EconominsLogo />
       </div>
-      <div className="m-0 m-auto grid max-w-screen-2xl">
+      <div className="m-0 m-auto grid max-w-screen-2xl pt-4">
         <div className="grid grid-flow-row grid-cols-4 gap-4 text-slate-700">
           <Category></Category>
           {

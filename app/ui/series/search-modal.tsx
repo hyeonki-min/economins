@@ -3,23 +3,28 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { RocketLaunchIcon } from '@heroicons/react/24/outline'
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
+
 
 export default function SearchModal(
   {
-    name,
+    firstTitle,
+    secondTitle,
     children,
   }: {
-    name: string,
+    firstTitle: string,
+    secondTitle: string,
     children: React.ReactNode
   }) {
-  
   const [open, setOpen] = useState(false)
-
   const cancelButtonRef = useRef(null)
 
   return (
     <>
-      <h1>{name} <span className="cursor-pointer" onClick={() => setOpen(!open)}>+</span></h1>
+      <h1 className="flex items-center self-start">{ firstTitle }
+      <PlusCircleIcon className="cursor-pointer sm:h-5 sm:w-5" onClick={() => setOpen(!open)}></PlusCircleIcon>
+      { secondTitle }
+      </h1>
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
         <Transition.Child
