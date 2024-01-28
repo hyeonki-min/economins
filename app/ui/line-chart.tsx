@@ -26,14 +26,6 @@ ChartJS.register(
 
 ChartJS.register(CategoryScale /* ... */);
 
-export interface Candidate {
-  name: string;
-  type: string;
-  initDate: string;
-  start: number;
-  end: number;
-}
-
 export default function LineChart({
   data,
   indicator,
@@ -63,7 +55,7 @@ export default function LineChart({
     return months <= 0 ? 0 : months;
   };
 
-  const getIdx = (initDateStr: any) => {
+  const getStartEndIdx = (initDateStr: any, type: any) => {
     const initDate = new Date(initDateStr);
     let realStartMonth = startMonth - 1;
     let realEndMonth = endMonth;
@@ -75,34 +67,27 @@ export default function LineChart({
     if (initDate > new Date(startYear, realStartMonth)) {
       rangeIdx = monthDiff(initDate, new Date(endYear, realEndMonth));
     }
+    if(type.includes('quarterly')) {
+      idx = Math.round(idx/3+1);
+      rangeIdx = Math.round(rangeIdx/3);
+    }
     return [idx, rangeIdx+idx];
   }
+  
   useEffect(() => {
-    const initDate = new Date(indicator.initDate);
-    let realStartMonth = startMonth - 1;
-    let realEndMonth = endMonth;
-    let idx = monthDiff(initDate, new Date(startYear, realStartMonth));
-    let rangeIdx = monthDiff(
-      new Date(startYear, realStartMonth),
-      new Date(endYear, realEndMonth),
-    );
-    if (initDate > new Date(startYear, realStartMonth)) {
-      rangeIdx = monthDiff(initDate, new Date(endYear, realEndMonth));
-    }
-    var startIndex = idx;
-    var endIndex = idx + rangeIdx;
     var datasets: any = [];
+    const firstIndex = getStartEndIdx(indicator.initDate, indicator.type);
     datasets.push({
       label: indicator.name,
       data:
-        endIndex === 0
-          ? data.slice(startIndex)
-          : data.slice(startIndex, endIndex),
+        firstIndex[1] === 0
+          ? data.slice(firstIndex[0])
+          : data.slice(firstIndex[0], firstIndex[1]),
       backgroundColor: 'red',
       yAxisID: 'y',
     });
     if (data2.length>1) {
-      const secondIndex = getIdx(indicator2.initDate);
+      const secondIndex = getStartEndIdx(indicator2.initDate, indicator2.type);
       datasets.push({
           label: indicator2.name,
           data:
@@ -118,7 +103,7 @@ export default function LineChart({
     };
     setChartData(getCheckedChartData);
     setChartOptions(getOption(indicator, indicator2));
-  }, [data, data2, indicator, startYear, startMonth, endYear, endMonth]);
+  }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth]);
 
   const getOption = (indicator:any, indicator2:any) => {
     if (indicator2.length!==0 && (indicator.type !== indicator2.type)) {
@@ -196,7 +181,11 @@ export default function LineChart({
   
   return (
     <>
-      <div className="flex items-center justify-center gap-1">
+      <div className="flex items-center justify-center">
+        <div className="flex-auto text-xs text-slate-500">
+          {indicator.unit}
+        </div>
+        <div className="flex flex-auto gap-1 items-center justify-center">
         <input
           type="number"
           id="startYear"
@@ -237,6 +226,10 @@ export default function LineChart({
           value={endMonth}
           onChange={(e) => setEndMonth(e.target.valueAsNumber)}
         ></input>
+        </div>
+        <div className="flex-auto justify-end text-right text-xs text-slate-500">
+        {indicator.type===indicator2.type?indicator.unit:indicator2.unit}
+        </div>
       </div>
       <div className="flex flex-col justify-center">
         <div
