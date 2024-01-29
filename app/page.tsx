@@ -3,8 +3,6 @@ import createPresignedUrl from '@/app/lib/economins';
 
 import EconominsLogo from '@/app/ui/logo';
 import Category from '@/app/ui/category';
-import Link from 'next/link';
-import clsx from 'clsx';
 
 
 export interface Element {
@@ -23,26 +21,7 @@ export default async function Page() {
         <EconominsLogo />
       </div>
       <div className="m-0 m-auto grid max-w-screen-2xl pt-4">
-        <div className="grid grid-flow-row grid-cols-4 gap-4 text-slate-700">
-          <Category></Category>
-          {
-            allElement.map((el)=>(
-              <Link 
-              key={el.name}
-              href={'/series/'+el.id}
-              className={clsx(
-                'text-slate-700 group grid grid-rows-[32px_1fr_auto] items-center p-4 ring-1 ring-transparent rounded-lg border border-slate-300 hover:bg-slate-200',
-                // {
-                //   'hidden': types !== "전체"? el.type !== types: false,
-                // }
-              )}
-              >
-              <h4>{el.name}</h4>
-              <p className="text-xs">{el.source}</p>
-              </Link>
-            ))
-          }
-        </div>
+        <Category elements={allElement}></Category>
       </div>
     </main>
   );
