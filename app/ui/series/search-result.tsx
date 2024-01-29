@@ -18,7 +18,7 @@ export default async function SearchResult({id}: {id: string}) {
       {allElement.map((el) => (
         <Link
           key={el.name}
-          href={'/series/'+id+'/'+el.id}
+          href={id===el.id?'/series/'+id:'/series/'+id+'/'+el.id}
           className={clsx(
             'group grid items-center rounded-lg border border-slate-300 p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200',
             // {

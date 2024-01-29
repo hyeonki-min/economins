@@ -228,7 +228,7 @@ export default function LineChart({
         ></input>
         </div>
         <div className="flex-auto justify-end text-right text-xs text-slate-500">
-        {indicator.type===indicator2.type?indicator.unit:indicator2.unit}
+        {indicator.type===indicator2.type?'':indicator2.unit}
         </div>
       </div>
       <div className="flex flex-col justify-center">
