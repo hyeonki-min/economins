@@ -64,6 +64,7 @@ export default function LineChart({
       new Date(startYear, realStartMonth),
       new Date(endYear, realEndMonth),
     );
+    rangeIdx = rangeIdx+idx;
     if (initDate > new Date(startYear, realStartMonth)) {
       rangeIdx = monthDiff(initDate, new Date(endYear, realEndMonth));
     }
@@ -71,7 +72,7 @@ export default function LineChart({
       idx = Math.round(idx/3+1);
       rangeIdx = Math.round(rangeIdx/3);
     }
-    return [idx, rangeIdx+idx];
+    return [idx, rangeIdx];
   }
   
   useEffect(() => {
@@ -88,7 +89,8 @@ export default function LineChart({
     });
     if (data2.length>1) {
       const secondIndex = getStartEndIdx(indicator2.initDate, indicator2.type);
-      datasets.push({
+      if (secondIndex[0] !== 0 || secondIndex[1] !== 0) {
+        datasets.push({
           label: indicator2.name,
           data:
           secondIndex[1] === 0
@@ -97,6 +99,7 @@ export default function LineChart({
           backgroundColor: 'blue',
           yAxisID: indicator.type===indicator2.type?'y':'y2',
         });
+      }
     }
     const getCheckedChartData: ChartData<'line'> = {
       datasets: datasets,
@@ -234,7 +237,7 @@ export default function LineChart({
       <div className="flex flex-col justify-center">
         <div
           className="chart-container"
-          style={{ height: '80vh', width: '80vw' }}
+          style={{ height: '84vh', width: '80vw' }}
         >
           <Line data={chartData} options={chartOptions} />
         </div>

@@ -5,16 +5,10 @@ import clsx from 'clsx';
 import { RocketLaunchIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce';
+import { Indicator } from '@/app/lib/definitions';
 
 
-export interface Element {
-  name: string,
-  type: string,
-  source: string,
-  id: string
-}
-
-export default function SearchResults({id, allElement}: {id: string, allElement: Element[]}) {
+export default function SearchResults({id, allElement}: {id: string, allElement: Indicator[]}) {
   const [keyword, setKeyword] = useState<string>('');
   const handleSearch = useDebouncedCallback((term) => {
     setKeyword(term);

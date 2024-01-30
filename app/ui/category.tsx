@@ -3,16 +3,10 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { Indicator } from '@/app/lib/definitions';
 
-export interface Element {
-  name: string;
-  type: string;
-  source: string;
-  id: string;
-}
 
-export default function Category({ elements }: { elements: Element[] }) {
-
+export default function Category({ elements }: { elements: Indicator[] }) {
   const [types, setTypes] = useState<string>('all');
   let cType = new Map([['all', '']]);
   elements.map((el) => {

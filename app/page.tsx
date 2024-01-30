@@ -3,17 +3,11 @@ import createPresignedUrl from '@/app/lib/economins';
 
 import EconominsLogo from '@/app/ui/logo';
 import Category from '@/app/ui/category';
+import { Indicator } from '@/app/lib/definitions';
 
-
-export interface Element {
-  name: string,
-  type: string,
-  source: string,
-  id: string
-}
 
 export default async function Page() {
-  const allElement: Element[] = await createPresignedUrl({ key: 'main/main' });
+  const allElement: Indicator[] = await createPresignedUrl({ key: 'main/main' });
 
   return (
     <main className="min-h-screen flex-col bg-slate-50">
