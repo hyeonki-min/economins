@@ -41,6 +41,7 @@ export default function LineChart({
   const [startMonth, setStartMonth] = useState(new Date().getMonth() + 1);
   const [endYear, setEndYear] = useState(new Date().getFullYear());
   const [endMonth, setEndMonth] = useState(new Date().getMonth() + 1);
+  const [beginAtZero, setBeginAtZero] = useState<boolean>(false);
 
   const [chartData, setChartData] = useState<ChartData<'line'>>({
     datasets: [],
@@ -84,7 +85,7 @@ export default function LineChart({
         firstIndex[1] === 0
           ? data.slice(firstIndex[0])
           : data.slice(firstIndex[0], firstIndex[1]),
-      backgroundColor: 'red',
+      backgroundColor: '#FF2400',
       yAxisID: 'y',
     });
     if (data2.length>1) {
@@ -96,7 +97,7 @@ export default function LineChart({
           secondIndex[1] === 0
               ? data2.slice(secondIndex[0])
               : data2.slice(secondIndex[0], secondIndex[1]),
-          backgroundColor: 'blue',
+          backgroundColor: '#008080',
           yAxisID: indicator.type===indicator2.type?'y':'y2',
         });
       }
@@ -106,7 +107,7 @@ export default function LineChart({
     };
     setChartData(getCheckedChartData);
     setChartOptions(getOption(indicator, indicator2));
-  }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth]);
+  }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth, beginAtZero]);
 
   const getOption = (indicator:any, indicator2:any) => {
     if (indicator2.length!==0 && (indicator.type !== indicator2.type)) {
@@ -117,6 +118,7 @@ export default function LineChart({
           y2: {
             type: 'linear',
             position: 'right',
+            beginAtZero: beginAtZero,
             grid: {
               drawOnChartArea: false,
             },
@@ -124,7 +126,7 @@ export default function LineChart({
           y: {
             type: 'linear',
             position: 'left',
-            beginAtZero: true,
+            beginAtZero: beginAtZero,
           },
           x: {
             type: 'time',
@@ -160,7 +162,7 @@ export default function LineChart({
           y: {
             type: 'linear',
             position: 'left',
-            beginAtZero: true,
+            beginAtZero: beginAtZero,
           },
           x: {
             type: 'time',
@@ -184,6 +186,14 @@ export default function LineChart({
   
   return (
     <>
+      <div className="flex items-center justify-end">
+        <label htmlFor="beginAtZero" className="text-slate-700">
+          beginAtZero
+          <input type="checkbox" id="beginAtZero"
+           style={{"color": "#008080"}}
+           onChange={() => setBeginAtZero(!beginAtZero)}></input>
+        </label>
+      </div>
       <div className="flex items-center justify-center">
         <div className="flex-auto text-xs text-slate-500">
           {indicator.unit}
@@ -194,11 +204,27 @@ export default function LineChart({
           id="startYear"
           aria-describedby="helper-text-explanation"
           className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
-          min="1900"
+          min="2000"
           max={new Date().getFullYear()}
+          maxLength={4}
           value={startYear}
-          onChange={(e) => setStartYear(e.target.valueAsNumber)}
-        ></input>
+          onChange={(e) => {
+            setStartYear(e.target.valueAsNumber);
+          }}
+          onBlur={(e) => {
+            const value = e.target.valueAsNumber;
+            const min = parseInt(e.target.min);
+            const max = parseInt(e.target.max);
+            if(isNaN(value) || value < min){
+              setStartYear(min);
+            } else if (value > max) {
+              setStartYear(max);
+            } else if (value > endYear) {
+              setStartYear(endYear);
+            }
+          }}
+        >
+        </input>
         <input
           type="number"
           id="startMonth"
@@ -206,8 +232,21 @@ export default function LineChart({
           className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
           min="1"
           max="12"
+          maxLength={2}
           value={startMonth}
-          onChange={(e) => setStartMonth(e.target.valueAsNumber)}
+          onChange={(e) => {
+            setStartMonth(e.target.valueAsNumber);
+          }}
+          onBlur={(e) => {
+            const value = e.target.valueAsNumber;
+            const min = parseInt(e.target.min);
+            const max = parseInt(e.target.max);
+            if(isNaN(value) || value < min){
+              setStartMonth(min);
+            } else if (value > max) {
+              setStartMonth(max);
+             }
+          }}
         ></input>
         <input
           type="number"
@@ -216,8 +255,23 @@ export default function LineChart({
           className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
           min="1900"
           max={new Date().getFullYear()}
+          maxLength={4}
           value={endYear}
-          onChange={(e) => setEndYear(e.target.valueAsNumber)}
+          onChange={(e) => {
+            setEndYear(e.target.valueAsNumber);
+          }}
+          onBlur={(e) => {
+            const value = e.target.valueAsNumber;
+            const min = parseInt(e.target.min);
+            const max = parseInt(e.target.max);
+            if(isNaN(value) || value < min){
+              setEndYear(min);
+            } else if (value > max) {
+              setEndYear(max);
+            } else if (value < startYear) {
+              setEndYear(startYear);
+            }
+          }}
         ></input>
         <input
           type="number"
@@ -226,12 +280,25 @@ export default function LineChart({
           className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
           min="1"
           max="12"
+          maxLength={2}
           value={endMonth}
-          onChange={(e) => setEndMonth(e.target.valueAsNumber)}
+          onChange={(e) => {
+            setEndMonth(e.target.valueAsNumber);
+          }}
+          onBlur={(e) => {
+            const value = e.target.valueAsNumber;
+            const min = parseInt(e.target.min);
+            const max = parseInt(e.target.max);
+            if(isNaN(value) || value < min){
+              setEndMonth(min);
+            } else if (value > max) {
+              setEndMonth(max);
+             }
+          }}
         ></input>
         </div>
         <div className="flex-auto justify-end text-right text-xs text-slate-500">
-        {indicator.type===indicator2.type?'':indicator2.unit}
+          {indicator.type===indicator2.type?'':indicator2.unit}
         </div>
       </div>
       <div className="flex flex-col justify-center">
