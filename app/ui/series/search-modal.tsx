@@ -20,7 +20,7 @@ export default function SearchModal(
 
   return (
     <>
-      <h1 className="flex items-center self-start">{ firstTitle }
+      <h1 className="flex items-center self-start text-xl">{ firstTitle }
       <PlusCircleIcon className="cursor-pointer sm:h-5 sm:w-5" onClick={() => setOpen(!open)}></PlusCircleIcon>
       { secondTitle }
       </h1>

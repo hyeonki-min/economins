@@ -1,4 +1,4 @@
-import LineChart from '@/app/ui/line-chart';
+import LineChart from '@/app/ui/series/line-chart';
 
 import createPresignedUrl from '@/app/lib/economins';
 import SearchModal from '@/app/ui/series/search-modal';
@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: { id: string, compareId
     createPresignedUrl({ key: 'indicator/'+compareId }),
     createPresignedUrl({ key: 'data/'+compareId }),  
   ]);
-  if (!mainIndicator || !compareIndicator) {
+  if (mainIndicator.length < 1 || compareIndicator.length < 1) {
     notFound();
   }
   return (

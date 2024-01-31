@@ -18,7 +18,7 @@ export default async function createPresignedUrl({ key }: {key: string}) {
         },
     })
     if (!rest.ok) {
-        return false;
+        return [];
     }
     return rest.json();
 }
