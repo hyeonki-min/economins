@@ -16,11 +16,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const currentYear = new Date().getFullYear();
   return (
     <html lang="en">
       <body className={`${blinker.className} antialiased bg-slate-50`}>{children}
         <footer className={`${blinker.className} my-3 m-auto max-w-screen-2xl`}>
-          copyright © 2024 economins. All rights reserved.
+          copyright © {currentYear} economins. All rights reserved.
         </footer>
       </body>
     </html>

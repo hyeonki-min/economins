@@ -1,7 +1,13 @@
 import { IndicatorInfo } from '@/app/lib/definitions';
 import createPresignedUrl from '@/app/lib/economins';
 
-export default async function IndicatorInfo({ id, name }: { id: string, name: string }) {
+export default async function IndicatorInfo({
+  id,
+  name,
+}: {
+  id: string;
+  name: string;
+}) {
   const indicators: IndicatorInfo[] = await createPresignedUrl({
     key: 'info/' + id,
   });
@@ -14,12 +20,18 @@ export default async function IndicatorInfo({ id, name }: { id: string, name: st
           </div>
         </div>
         <div className="px-28">
-          {indicators.length < 1? (<div>There are no detail info.</div>) : indicators.map((indicator) => (
-            <>
-              <h1 className="text-2xl">{indicator.keyword}</h1>
-              <div>{indicator.description}</div>
-            </>
-          ))}
+          {indicators.length < 1 ? (
+            <div>There are no detail info.</div>
+          ) : (
+            indicators.map((indicator) => (
+              <div key={indicator.keyword}>
+                <h1 className="text-2xl">{indicator.keyword}</h1>
+                <div className="pb-10 font-normal leading-6">
+                  {indicator.description}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
