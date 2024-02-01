@@ -14,8 +14,10 @@ export default async function Page() {
       <div className="flex sticky top-0 h-12 shrink-0 items-end p-2 md:h-12">
         <EconominsLogo />
       </div>
-      <div className="m-0 m-auto grid max-w-screen-2xl pt-4">
-        <Category elements={allElement}></Category>
+      <div className="min-h-screen">
+        <div className="m-0 m-auto grid max-w-screen-2xl pt-4">
+          <Category elements={allElement}></Category>
+        </div>
       </div>
     </main>
   );

@@ -17,7 +17,7 @@ export default async function RelatedReports({ id }: { id: string }) {
         </div>
       </div>
       <div className="grid grid-flow-row grid-cols-4 gap-8">
-        {relatedReports.length < 1? (<div>There is no related reports.</div>) : relatedReports.map((report) => (
+        {relatedReports.length < 1? (<div>There are no related reports.</div>) : relatedReports.map((report) => (
           <div className="max-h-52 rounded-3xl border-solid bg-slate-200 p-12">
             <h3 className="text-2xl">{report.title}</h3>
             <div className="my-3">

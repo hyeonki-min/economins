@@ -14,7 +14,7 @@ export default async function IndicatorInfo({ id, name }: { id: string, name: st
           </div>
         </div>
         <div className="px-28">
-          {indicators.length < 1? (<div>There is no detail info.</div>) : indicators.map((indicator) => (
+          {indicators.length < 1? (<div>There are no detail info.</div>) : indicators.map((indicator) => (
             <>
               <h1 className="text-2xl">{indicator.keyword}</h1>
               <div>{indicator.description}</div>

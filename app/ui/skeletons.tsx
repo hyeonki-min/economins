@@ -82,7 +82,7 @@ export function LatestInvoicesSkeleton() {
   );
 }
 
-export default function DashboardSkeleton() {
+export function DashboardSkeleton() {
   return (
     <>
       <div
@@ -211,6 +211,35 @@ export function InvoicesTableSkeleton() {
               <TableRowSkeleton />
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function SeriesSkeleton() {
+  return (
+    <>
+      <div
+        className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
+      />
+      <div className="m-0 m-auto max-w-screen-2xl">
+        <SeriesChartSkeleton />
+      </div>
+    </>
+  );
+}
+
+export function SeriesChartSkeleton() {
+  return (
+    <div className={`${shimmer} relative w-full overflow-hidden md:col-span-4`}>
+      <div className="mb-4 h-8 w-36 rounded-md bg-gray-100" />
+      <div className="mb-4 h-8 w-36 rounded-md bg-gray-100" />
+      <div className="rounded-xl bg-gray-100 p-4">
+        <div className="mt-0 grid h-[700px] grid-cols-12 items-end gap-2 rounded-md bg-white p-4 sm:grid-cols-13 md:gap-4" />
+        <div className="flex items-center pb-2 pt-6">
+          <div className="h-5 w-5 rounded-full bg-gray-200" />
+          <div className="ml-2 h-4 w-20 rounded-md bg-gray-200" />
         </div>
       </div>
     </div>
