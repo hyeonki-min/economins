@@ -25,8 +25,7 @@ export default async function Page({ params }: { params: { id: string, compareId
       </SearchModal>
       <div className="flex gap-4 md:flex-row md:py-6">
         <div className="flex flex-col">
-          <LineChart data={mainData} indicator={mainIndicator} data2={compareData} indicator2={compareIndicator}>
-          </LineChart>
+          <LineChart data={mainData} indicator={mainIndicator} data2={compareData} indicator2={compareIndicator}/>
         </div>
       </div>
     </>
