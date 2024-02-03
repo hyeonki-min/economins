@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { Indicator } from '@/app/lib/definitions';
