@@ -42,11 +42,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/github-actions-rmodi
+          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/economins-github-actions-role
           aws-region: ${{ inputs.aws_region }}
 
       - name: prepare ECR repo name based on the Github repository
