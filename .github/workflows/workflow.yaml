@@ -15,9 +15,9 @@ on:
         description: Tag to apply to images.
         type: string
         default: snapshot-artifact
-      github_iam_role:
-        description: Name of the IAM Role for adding access to ECR repo
-        default: "github-actions-role"
+      ecr_repo:
+        description: ECR repo
+        default: "economins"
         type: string
       aws_account_id:
         description: AWS Account ID
@@ -48,16 +48,6 @@ jobs:
           role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/economins-github-actions-role
           aws-region: ${{ inputs.aws_region }}
 
-      - name: prepare ECR repo name based on the Github repository
-        shell: bash
-        run: |
-          set -eux
-          # lowercase the name
-          repo="${GITHUB_REPOSITORY,,}"
-
-          # replace / with _
-          echo "ECR_REPO_NAME=${repo//\//_}" >> $GITHUB_ENV
-
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -70,7 +60,7 @@ jobs:
         shell: bash
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPO_NAME }}
+          ECR_REPOSITORY: ${{ inputs.ecr_repo }}
           IMAGE_TAG: ${{ inputs.image_tag }}
         run: |
           docker build --build-arg="AWS_REGION=${{ inputs.aws_region }}" "${{ inputs.docker_build_dir }}" -f "${{ inputs.path_to_dockerfile }}" -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
