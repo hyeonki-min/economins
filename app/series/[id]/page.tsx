@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             indicator={indicator}
             data2={[]}
             indicator2={[]}
-          ></LineChart>
+          />
         </div>
       </div>
       <RelatedReports id={id}></RelatedReports>
