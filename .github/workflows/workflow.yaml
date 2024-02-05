@@ -7,12 +7,15 @@ on:
         description: Tag to apply to images.
         type: string
         default: snapshot-artifact
-      ecr_repo:
+      aws_ecr_repo:
         description: ECR repo
         default: "economins"
         type: string
       aws_account_id:
         description: AWS Account ID
+        type: string
+      aws_ecr_id:
+        description: AWS ECR ID
         type: string
       aws_region:
         description: Target AWS Region
@@ -49,12 +52,10 @@ jobs:
         id: build-publish
         env:
           REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
-          REGISTRY_ALIAS: ${{ inputs.ecr_repo }}
-          REPOSITORY: ${{ inputs.ecr_repo }}
+          REGISTRY_ALIAS: ${{ inputs.aws_ecr_id }}
+          REPOSITORY: ${{ inputs.aws_ecr_repo }}
           IMAGE_TAG: ${{ inputs.image_tag }}
         run: |
           docker build -t $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
-          echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$ECR_REPOSITORY"
-          echo "image_tag=$IMAGE_TAG" 
           echo "full_image=$REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG"
