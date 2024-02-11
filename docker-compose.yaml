@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  app:
+    image: economins:latest
+    ports:
+      - "3000:3000"
+    restart: always
+    environment:
+      - AWS_ACCESS_KEY_ID=economins
+      - AWS_SECRET_ACCESS_KEY=economins
+      - AWS_REGION=ap-northeast-2
+      - AWS_BUCKET_NAME=economins
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+    restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www:/var/www/certbot/:rw
+      - ./certbot/conf:/etc/letsencrypt/:rw

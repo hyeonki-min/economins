@@ -1,4 +1,3 @@
-import styles from '@/app/ui/home.module.css';
 import createPresignedUrl from '@/app/lib/economins';
 
 import EconominsLogo from '@/app/ui/logo';
@@ -10,7 +9,7 @@ export const revalidate = 1
 
 export default async function Page() {
   
-  const allElement = await createPresignedUrl({ key: 'main/main' });
+  const allElement: Indicator[] = await createPresignedUrl({ key: 'main/main' });
   if (allElement.length < 1) {
     notFound();
   }
