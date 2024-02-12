@@ -15,6 +15,7 @@
     "@aws-sdk/signature-v4-crt": "^3.489.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
+    "@next/third-parties": "^14.1.0",
     "@tailwindcss/forms": "^0.5.7",
     "@types/node": "20.5.7",
     "@vercel/postgres": "^0.5.0",

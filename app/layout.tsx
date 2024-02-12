@@ -1,7 +1,8 @@
 import '@/app/ui/global.css';
 import { blinker } from '@/app/ui/fonts';
 import { Metadata } from 'next';
- 
+import { GoogleTagManager } from '@next/third-parties/google'
+
 export const metadata: Metadata = {
   title: {
     template: '%s | economins',
@@ -24,6 +25,7 @@ export default function RootLayout({
           copyright © {currentYear} economins. All rights reserved.
         </footer>
       </body>
+      <GoogleTagManager gtmId="GTM-KXQRLLCL" />
     </html>
   );
 }

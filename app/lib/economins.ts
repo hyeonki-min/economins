@@ -11,7 +11,6 @@ export default async function createPresignedUrl({ key }: {key: string}) {
     })
     const command = new GetObjectCommand({ Bucket: process.env.AWS_BUCKET_NAME, Key: key+".json" });
     const url = await getSignedUrl(client, command, { expiresIn: 3600 });
-    console.log(url);
     const rest = await fetch(url, {
         method: 'GET',
         headers: {
