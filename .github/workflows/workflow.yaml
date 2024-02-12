@@ -1,23 +1,9 @@
 name: Docker image build and publish
 
 on:
-  workflow_dispatch:
-    inputs:
-      image_tag:
-        description: Tag to apply to images.
-        type: string
-        default: snapshot-artifact
-      aws_ecr_repo:
-        description: ECR repo
-        default: "economins"
-        type: string
-      aws_account_id:
-        description: AWS Account ID
-        type: string
-      aws_region:
-        description: Target AWS Region
-        default: "ap-northeast-2"
-        type: string
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   docker:
@@ -36,8 +22,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/economins-github-actions-role
-          aws-region: ${{ inputs.aws_region }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/economins-github-actions-role
+          aws-region: ${{ env.AWS_REGION }}
           
       - name: Login to Amazon ECR
         id: login-ecr
@@ -47,8 +33,8 @@ jobs:
         env:
           DOCKER_BUILDKIT: 0
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: ${{ inputs.aws_ecr_repo }}
-          IMAGE_TAG: ${{ inputs.image_tag }}
+          REPOSITORY: ${{ env.ECR_REPO }}
+          IMAGE_TAG: ${{ github.ref_name }}
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
