@@ -11,16 +11,16 @@ export default async function RelatedReports({ id }: { id: string }) {
   return (
     <div className="min-h-screen py-28">
       <div className="w-full py-28">
-        <div className="pb-28">
+        <div className="md:pb-28">
           <h2 className="text-5xl">관련 리포트.</h2>
         </div>
       </div>
-      <div className="grid grid-flow-row grid-cols-4 gap-8">
+      <div className="grid grid-flow-row md:grid-cols-4 gap-2 md:gap-8">
         {relatedReports.length < 1 ? (
           <div>There are no related reports.</div>
         ) : (
           relatedReports.map((report) => (
-            <div key={report.title} className="flex flex-col justify-between rounded-3xl border-solid bg-slate-200 p-12">
+            <div key={report.title} className="flex flex-col justify-between rounded-3xl border-solid bg-slate-200 p-8 md:p-12">
               <h3 className="text-2xl">{report.title}</h3>
               <div className="my-3">
                 <p className="font-normal leading-6">{report.description}</p>

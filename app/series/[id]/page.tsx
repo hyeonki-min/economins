@@ -21,8 +21,8 @@ export default async function Page({ params }: { params: { id: string } }) {
       <SearchModal firstTitle={indicator.name} secondTitle="">
         <SearchResult id={id}></SearchResult>
       </SearchModal>
-      <div className="flex gap-4 md:flex-row md:py-6">
-        <div className="flex flex-col">
+      <div className="flex md:gap-4 md:flex-row md:py-6">
+        <div className="w-lvw flex flex-col">
           <LineChart
             data={data}
             indicator={indicator}

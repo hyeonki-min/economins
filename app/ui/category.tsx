@@ -14,8 +14,8 @@ export default function Category({ elements }: { elements: Indicator[] }) {
   });
   const allTypes = Array.from(cType.keys());
   return (
-    <div className="grid grid-flow-row grid-cols-4 gap-4 text-slate-700">
-      <div className="col-span-4 flex gap-2">
+    <div className="grid gap-2 md:grid-cols-4 md:gap-4 text-slate-700">
+      <div className="md:col-span-4 flex gap-2">
         {allTypes.map((type) => (
           <label
             htmlFor={type}

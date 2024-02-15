@@ -21,7 +21,7 @@ export default function SearchModal(
   return (
     <>
       <h1 className="flex items-center self-start text-xl">{ firstTitle }
-      <PlusCircleIcon className="cursor-pointer sm:h-5 sm:w-5" onClick={() => setOpen(!open)}></PlusCircleIcon>
+      <PlusCircleIcon className="cursor-pointer h-5 w-5 md:text-base" onClick={() => setOpen(!open)}></PlusCircleIcon>
       { secondTitle }
       </h1>
     <Transition.Root show={open} as={Fragment}>

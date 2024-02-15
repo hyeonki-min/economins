@@ -19,7 +19,7 @@ export default async function IndicatorInfo({
             <h2 className="text-5xl">{name} 조금 더 잘 이해하기.</h2>
           </div>
         </div>
-        <div className="px-28">
+        <div className="md:px-28">
           {indicators.length < 1 ? (
             <div>There are no detail info.</div>
           ) : (

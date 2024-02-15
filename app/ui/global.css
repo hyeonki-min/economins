@@ -57,3 +57,15 @@ input[type='number']::-webkit-outer-spin-button {
 .has-\[\:checked\]\:bg-clip-padding:has(:checked) {
   background-clip: inherit;
 }
+
+.chart-container {
+  width: 100vw;
+  height: 100vh;
+} 
+
+@media (min-width: 768px) {
+  .chart-container {
+    width: 78vw;
+    height: 82vh;
+  } 
+}

@@ -303,8 +303,7 @@ export default function LineChart({
       </div>
       <div className="flex flex-col justify-center">
         <div
-          className="chart-container"
-          style={{ height: '82vh', width: '78vw' }}
+          className="chart-container w-fit"
         >
           <Line data={chartData} options={chartOptions} />
         </div>

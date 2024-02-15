@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: '%s | economins',
     default: 'economins',
   },
-  description: 'The economic metric visualization.',
+  description: '대한민국 경제 지표 시각화 정보를 제공합니다.',
   metadataBase: new URL('https://github.com/ho9science/economins'),
 };
 
