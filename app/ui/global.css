@@ -60,12 +60,5 @@ input[type='number']::-webkit-outer-spin-button {
 
 .chart-container {
   width: 100vw;
-  height: 100vh;
+  height: 85vh;
 } 
-
-@media (min-width: 768px) {
-  .chart-container {
-    width: 78vw;
-    height: 82vh;
-  } 
-}

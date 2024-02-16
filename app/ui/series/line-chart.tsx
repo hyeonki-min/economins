@@ -301,9 +301,9 @@ export default function LineChart({
           {indicator.type===indicator2.type?'':indicator2.unit}
         </div>
       </div>
-      <div className="flex flex-col justify-center">
+      <div className="flex items-center justify-center">
         <div
-          className="chart-container w-fit"
+          className="chart-container"
         >
           <Line data={chartData} options={chartOptions} />
         </div>
