@@ -9,9 +9,9 @@ export default async function RelatedReports({ id }: { id: string }) {
     key: 'related/' + id,
   });
   return (
-    <div className="min-h-screen py-28">
-      <div className="w-full py-28">
-        <div className="md:pb-28">
+    <div className="min-h-screen py-28 fade-in-animation">
+      <div className="w-full py-8">
+        <div className="md:pb-8">
           <h2 className="text-5xl">관련 리포트.</h2>
         </div>
       </div>

@@ -12,10 +12,10 @@ export default async function IndicatorInfo({
     key: 'info/' + id,
   });
   return (
-    <div className="py-28">
-      <div className="py-28">
+    <div className="py-28 fade-in-animation">
+      <div className="py-8">
         <div className="w-full">
-          <div className="pb-28">
+          <div className="pb-8">
             <h2 className="text-5xl">{name} 조금 더 잘 이해하기.</h2>
           </div>
         </div>

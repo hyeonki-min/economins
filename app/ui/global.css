@@ -61,4 +61,25 @@ input[type='number']::-webkit-outer-spin-button {
 .chart-container {
   width: 100vw;
   height: 85vh;
-} 
+}
+
+.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateX(0);
+}
+
+@media(prefers-reduced-motion: no-preference) {
+  .fade-in-animation {
+    opacity: 0;
+    transform: translateY(0);
+    animation: fade-in linear forwards;
+    animation-timeline: view();
+    animation-range: 200px 500px;
+    animation-delay: 2s;
+  }
+  
+  @keyframes fade-in {
+    to { opacity: 1; transform: translateY(-50px); transition-delay: 1s; }
+  }
+}
