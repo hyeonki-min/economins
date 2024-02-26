@@ -204,7 +204,7 @@ export default function LineChart({
           id="startYear"
           aria-describedby="helper-text-explanation"
           className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
-          min="2000"
+          min="1990"
           max={new Date().getFullYear()}
           maxLength={4}
           value={startYear}
@@ -253,7 +253,7 @@ export default function LineChart({
           id="endYear"
           aria-describedby="helper-text-explanation"
           className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
-          min="1900"
+          min="1990"
           max={new Date().getFullYear()}
           maxLength={4}
           value={endYear}
