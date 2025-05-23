@@ -87,6 +87,7 @@ export default function LineChart({
           : data.slice(firstIndex[0], firstIndex[1]),
       backgroundColor: '#FF2400',
       yAxisID: 'y',
+      spanGaps: true
     });
     if (data2.length>1) {
       const secondIndex = getStartEndIdx(indicator2.initDate, indicator2.type);
@@ -99,6 +100,7 @@ export default function LineChart({
               : data2.slice(secondIndex[0], secondIndex[1]),
           backgroundColor: '#008080',
           yAxisID: indicator.type===indicator2.type?'y':'y2',
+          spanGaps: true
         });
       }
     }
@@ -114,6 +116,11 @@ export default function LineChart({
       const options: ChartOptions<'line'> = {
         responsive: true,
         maintainAspectRatio: true,
+        interaction: {
+          mode: 'nearest',
+          intersect: false,
+          axis: 'x'
+        },
         scales: {
           y2: {
             type: 'linear',
@@ -127,6 +134,9 @@ export default function LineChart({
             type: 'linear',
             position: 'left',
             beginAtZero: beginAtZero,
+            grid: {
+              drawOnChartArea: false,
+            },
           },
           x: {
             type: 'time',
