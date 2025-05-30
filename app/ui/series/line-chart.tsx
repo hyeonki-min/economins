@@ -12,6 +12,7 @@ import {
 import type { ChartData, ChartOptions } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
 
 // Register ChartJS components using ChartJS.register
@@ -22,20 +23,23 @@ ChartJS.register(
   LineElement,
   Tooltip,
   TimeScale,
+  annotationPlugin
 );
-
-ChartJS.register(CategoryScale /* ... */);
 
 export default function LineChart({
   data,
   indicator,
   data2,
-  indicator2
+  indicator2,
+  eventTime,
+  eventTitle,
 }: {
   data: any;
   indicator: any;
   data2: any;
   indicator2: any;
+  eventTime: any;
+  eventTitle: any;
 }) {
   const [startYear, setStartYear] = useState(new Date().getFullYear() - 5);
   const [startMonth, setStartMonth] = useState(new Date().getMonth() + 1);
@@ -77,6 +81,41 @@ export default function LineChart({
   }
   
   useEffect(() => {
+     if (
+      eventTime != null &&
+      startYear === null &&
+      startMonth === null &&
+      endYear === null &&
+      endMonth === null
+    ) {
+      const [inputYearStr, inputMonthStr] = eventTime.split("-");
+      const inputYear = parseInt(inputYearStr, 10);
+      const inputMonth = parseInt(inputMonthStr, 10);
+
+      const currentYear = new Date().getFullYear();
+      const currentMonth = new Date().getMonth() + 1;
+
+      const startY = inputYear - 2;
+      const startM = inputMonth;
+
+      let potentialEndY = inputYear + 2;
+      let potentialEndM = inputMonth;
+
+      let finalEndY = potentialEndY;
+      let finalEndM = potentialEndM;
+
+      if (
+        potentialEndY > currentYear ||
+        (potentialEndY === currentYear && potentialEndM > currentMonth)
+      ) {
+        finalEndY = currentYear;
+        finalEndM = currentMonth;
+      }
+      setStartYear(startY);
+      setStartMonth(startM);
+      setEndYear(finalEndY);
+      setEndMonth(finalEndM);
+    }
     var datasets: any = [];
     const firstIndex = getStartEndIdx(indicator.initDate, indicator.type);
     datasets.push({
@@ -157,6 +196,21 @@ export default function LineChart({
           tooltip: {
             filter: (item) => item.parsed.y !== null,
           },
+          annotation: {
+            annotations: {
+              verticalLine: {
+                type: 'line',
+                scaleID: 'x',
+                value: eventTime,
+                borderWidth: 2,
+                borderColor: 'rgba(255, 99, 132, 0.25)',
+                label: {
+                  display: true,
+                  content: eventTitle,
+                },
+              },
+            },
+          },
         },
       };  
       return options;
@@ -189,6 +243,23 @@ export default function LineChart({
             },
           },
         },
+        plugins: {
+          annotation: {
+            annotations: {
+              verticalLine: {
+                type: 'line',
+                scaleID: 'x',
+                value: eventTime,
+                borderWidth: 2,
+                borderColor: 'rgba(255, 99, 132, 0.25)',
+                label: {
+                  display: true,
+                  content: eventTitle,
+                },
+              },
+            },
+          },
+        }
       };
       return options; 
     }
@@ -315,7 +386,7 @@ export default function LineChart({
         <div
           className="chart-container"
         >
-          <Line data={chartData} options={chartOptions} />
+          <Line data={chartData} options={chartOptions} plugins={[annotationPlugin]}/>
         </div>
       </div>
     </>
