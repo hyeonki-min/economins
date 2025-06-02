@@ -51,6 +51,7 @@ export default function LineChart({
     datasets: [],
   });
   const [chartOptions, setChartOptions] = useState<ChartOptions<'line'>>({});
+  const [showAnnotation, setShowAnnotation] = useState<boolean>(false);
 
   const monthDiff = (d1: Date, d2: Date) => {
     var months;
@@ -81,12 +82,8 @@ export default function LineChart({
   }
   
   useEffect(() => {
-     if (
-      eventTime != null &&
-      startYear === null &&
-      startMonth === null &&
-      endYear === null &&
-      endMonth === null
+    if (
+      eventTime != null
     ) {
       const [inputYearStr, inputMonthStr] = eventTime.split("-");
       const inputYear = parseInt(inputYearStr, 10);
@@ -115,7 +112,27 @@ export default function LineChart({
       setStartMonth(startM);
       setEndYear(finalEndY);
       setEndMonth(finalEndM);
+      setShowAnnotation(true);
+    } else {
+      setShowAnnotation(false);
     }
+  }, [eventTime, eventTitle])
+  
+  useEffect(() => {
+    if (eventTime) {
+      const [inputYearStr, inputMonthStr] = eventTime.split("-");
+      const inputYear = parseInt(inputYearStr, 10);
+      const inputMonth = parseInt(inputMonthStr, 10);
+      if (
+        inputYear > startYear ||
+        (inputYear === startYear && inputMonth >= startMonth)
+      ) {
+        setShowAnnotation(true);
+      } else {
+        setShowAnnotation(false);
+      }
+    }
+ 
     var datasets: any = [];
     const firstIndex = getStartEndIdx(indicator.initDate, indicator.type);
     datasets.push({
@@ -148,7 +165,7 @@ export default function LineChart({
     };
     setChartData(getCheckedChartData);
     setChartOptions(getOption(indicator, indicator2));
-  }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth, beginAtZero]);
+  }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth, beginAtZero, showAnnotation]);
 
   const getOption = (indicator:any, indicator2:any) => {
     if (indicator2.length!==0 && (indicator.type !== indicator2.type)) {
@@ -197,7 +214,7 @@ export default function LineChart({
             filter: (item) => item.parsed.y !== null,
           },
           annotation: {
-            annotations: {
+            annotations: showAnnotation ? {
               verticalLine: {
                 type: 'line',
                 scaleID: 'x',
@@ -209,7 +226,7 @@ export default function LineChart({
                   content: eventTitle,
                 },
               },
-            },
+            } : {},
           },
         },
       };  
@@ -245,7 +262,7 @@ export default function LineChart({
         },
         plugins: {
           annotation: {
-            annotations: {
+            annotations: showAnnotation ? {
               verticalLine: {
                 type: 'line',
                 scaleID: 'x',
@@ -257,7 +274,7 @@ export default function LineChart({
                   content: eventTitle,
                 },
               },
-            },
+            } : {},
           },
         }
       };

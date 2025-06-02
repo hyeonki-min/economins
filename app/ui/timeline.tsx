@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { DataSet, Timeline } from 'vis-timeline/standalone';
 import 'vis-timeline/dist/vis-timeline-graph2d.min.css';
+import { events } from '@/app/lib/events';
+
 
 export default function VisTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -13,11 +15,13 @@ export default function VisTimeline() {
     
     if (!containerRef.current || timelineRef.current) return;
 
-    const items = new DataSet([
-      { id: 1, content: '윤석열 대통령 당선', start: '2022-04' },
-      { id: 2, content: '윤석열 대통령 쿠테타', start: '2024-12' },
-      { id: 3, content: '윤석열 대통령 탄핵', start: '2025-04' },
-    ]);
+    const transformed = events.map(({ id, name, date }) => ({
+      id,
+      content: name,
+      start: date,
+    }));
+
+    const items = new DataSet(transformed);
 
     var now = new Date();
     const maxDate = new Date(now.getFullYear(), now.getMonth()+1, 1);
@@ -54,9 +58,8 @@ export default function VisTimeline() {
      <div className="mt-4 p-4 border rounded bg-gray-100 text-sm">
         {selectedItem ? (
           <div>
+            <p>{selectedItem.start}</p>
             <strong>{selectedItem.content}</strong>
-            <p>{selectedItem.description}</p>
-            <p>시작일: {selectedItem.start}</p>
           </div>
         ) : (
           <p></p>

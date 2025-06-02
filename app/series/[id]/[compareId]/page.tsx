@@ -4,6 +4,8 @@ import createPresignedUrl from '@/app/lib/economins';
 import SearchModal from '@/app/ui/series/search-modal';
 import SearchResult from '@/app/ui/series/search-result';
 import { notFound } from 'next/navigation';
+import Carousel from '@/app/ui/carousel';
+import { events } from '@/app/lib/events';
 
 type Props = {
   params: { id: string, compareId: string},
@@ -22,9 +24,14 @@ export default async function Page({ params, searchParams }: Props) {
   if (mainIndicator.length < 1 || compareIndicator.length < 1) {
     notFound();
   }
-  const event = searchParams.event; 
+  const target = searchParams.event; 
 
-  console.log(event)
+  const finalEvent = events.find((event : any) => event.id === target) ?? {
+    id: null,
+    name: null,
+    date: null
+  }
+
   return (
     <>
       <SearchModal firstTitle={mainIndicator.name} secondTitle={compareIndicator.name}>
@@ -32,8 +39,11 @@ export default async function Page({ params, searchParams }: Props) {
       </SearchModal>
       <div className="md:py-6">
         <div className="flex flex-col">
-          <LineChart data={mainData} indicator={mainIndicator} data2={compareData} indicator2={compareIndicator} eventTime={'2022-01'} eventTitle={'COVID-19'}/>
+          <LineChart data={mainData} indicator={mainIndicator} data2={compareData} indicator2={compareIndicator} eventTime={finalEvent.date} eventTitle={finalEvent.name}/>
         </div>
+      </div>
+      <div className="">
+        <Carousel target={finalEvent.id}/>
       </div>
     </>
   );

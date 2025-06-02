@@ -6,8 +6,15 @@ import SearchResult from '@/app/ui/series/search-result';
 import { notFound } from 'next/navigation';
 import RelatedReports from '@/app/ui/series/related-reports';
 import IndicatorInfo from '@/app/ui/series/indicator-info';
+import { events } from '@/app/lib/events';
+import Carousel from '@/app/ui/carousel';
 
-export default async function Page({ params }: { params: { id: string } }) {
+type Props = {
+  params: { id: string, compareId: string},
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export default async function Page({ params, searchParams }: Props) {
   const id = params.id;
   const [indicator, data] = await Promise.all([
     createPresignedUrl({ key: 'indicator/' + id }),
@@ -16,6 +23,15 @@ export default async function Page({ params }: { params: { id: string } }) {
   if (indicator.length < 1) {
     notFound();
   }
+
+  const target = searchParams.event; 
+
+  const finalEvent = events.find((event : any) => event.id === target) ?? {
+    id: null,
+    name: null,
+    date: null
+  }
+
   return (
     <>
       <SearchModal firstTitle={indicator.name} secondTitle="">
@@ -28,8 +44,12 @@ export default async function Page({ params }: { params: { id: string } }) {
             indicator={indicator}
             data2={[]}
             indicator2={[]}
+            eventTime={finalEvent.date} eventTitle={finalEvent.name}
           />
         </div>
+      </div>
+      <div className="">
+        <Carousel target={finalEvent.id}/>
       </div>
       <RelatedReports id={id}></RelatedReports>
       <IndicatorInfo id={id} name={indicator.name}></IndicatorInfo>
