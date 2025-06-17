@@ -15,6 +15,75 @@ import { useEffect, useState } from 'react';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
 
+interface PresidentTerm {
+  name: string;
+  start: string; // 'YYYY-MM'
+  end: string;
+  color: string; // Hex with alpha e.g., '#FF000080'
+  labelColor: string; // Font color for label
+}
+
+const presidentTerms: PresidentTerm[] = [
+  {
+    name: "김영삼",
+    start: "1993-02",
+    end: "1998-02",
+    color: "#0039904D",
+    labelColor: "#0070BB"
+  },
+  {
+    name: "김대중",
+    start: "1998-02",
+    end: "2003-02",
+    color: "#009A444D",
+    labelColor: "#001D9F"
+  },
+  {
+    name: "노무현",
+    start: "2003-02",
+    end: "2008-02",
+    color: "#ffd9184D",
+    labelColor: "#40B93C"
+  },
+  {
+    name: "이명박",
+    start: "2008-02",
+    end: "2013-02",
+    color: "#0095DA4D",
+    labelColor: "#0000A8"
+  },
+  {
+    name: "박근혜",
+    start: "2013-02",
+    end: "2017-03",
+    color: "#C9252B4D",
+    labelColor: "#994C4C"
+  },
+  {
+    name: "문재인",
+    start: "2017-05",
+    end: "2022-05",
+    color: "#1524844D",
+    labelColor: "#004EA2"
+  },
+  {
+    name: "윤석열",
+    start: "2022-05",
+    end: "2025-04",
+    color: "#E61E2B4D",
+    labelColor: "#00B5E2"
+  },
+  {
+    name: "이재명",
+    start: "2025-06",
+    end: "2030-06",
+    color: "#1524844D",
+    labelColor: "#004EA2"
+  }
+];
+
+
+
 // Register ChartJS components using ChartJS.register
 ChartJS.register(
   CategoryScale,
@@ -23,7 +92,7 @@ ChartJS.register(
   LineElement,
   Tooltip,
   TimeScale,
-  annotationPlugin
+  annotationPlugin,
 );
 
 export default function LineChart({
@@ -46,12 +115,14 @@ export default function LineChart({
   const [endYear, setEndYear] = useState(new Date().getFullYear());
   const [endMonth, setEndMonth] = useState(new Date().getMonth() + 1);
   const [beginAtZero, setBeginAtZero] = useState<boolean>(false);
-
   const [chartData, setChartData] = useState<ChartData<'line'>>({
     datasets: [],
   });
   const [chartOptions, setChartOptions] = useState<ChartOptions<'line'>>({});
-  const [showAnnotation, setShowAnnotation] = useState<boolean>(false);
+  const [showAnnotation, setShowAnnotation] = useState<boolean>(false);  
+  const [showPresidentTerms, setShowPresidentTerms] = useState<boolean>(false);
+  const [annotations, setAnnotations] = useState<Record<string, any>>();
+
 
   const monthDiff = (d1: Date, d2: Date) => {
     var months;
@@ -80,11 +151,82 @@ export default function LineChart({
     }
     return [idx, rangeIdx];
   }
-  
+
+  const formatDate = (year: number, month: number): string => {
+    return `${year}-${String(month).padStart(2, '0')}`;
+  };
+
+  const getPresidentAnnotations = (
+    startYear: number,
+    startMonth: number,
+    endYear: number,
+    endMonth: number,
+    isShow: boolean
+  ): Record<string, any> => {
+    const start = formatDate(startYear, startMonth);
+    const end = formatDate(endYear, endMonth);
+    if (!isShow) {
+      return {};
+    }
+    return presidentTerms
+      .filter(term => term.end >= start && term.start <= end)
+      .reduce((acc, term, index) => {
+        const xMin = term.start <= start && term.end >= start ? start : term.start;
+        const xMax = term.start <= end && term.end >= end ? end : term.end;
+        acc[`president${index}`] = {
+          type: 'box',
+          xMin: xMin,
+          xMax: xMax,
+          backgroundColor: term.color,
+          borderWidth: 0,
+          label: {
+            display: true,
+            content: [term.name],
+            position: 'end',
+            color: term.labelColor,
+            font: { size: 14 },
+          }
+        };
+        return acc;
+      }, {} as Record<string, any>);
+  };
+
+  const getLineAnnotations = (
+    eventTime: any,
+    eventTitle: any,
+  ): Record<string, any> => {
+    return eventTime ? {
+      verticalLine: {
+        type: 'line',
+        scaleID: 'x',
+        value: eventTime,
+        borderWidth: 2,
+        borderColor: 'rgba(255, 99, 132, 0.25)',
+        label: {
+          display: true,
+          content: eventTitle,
+        },
+      }
+    } : {}
+  };
+
+  const composeAnnotations = () => {
+     if(showPresidentTerms) {
+      const presidentAnnotations = getPresidentAnnotations(startYear, startMonth, endYear, endMonth, showPresidentTerms);
+      const lineAnnotations = getLineAnnotations(eventTime, eventTitle);
+      return {...presidentAnnotations, ...lineAnnotations}
+    }else {
+      return getLineAnnotations(eventTime, eventTitle);
+    }
+  };
+
   useEffect(() => {
     if (
       eventTime != null
     ) {
+      setShowAnnotation(true);
+      const lineAnnotations = getLineAnnotations(eventTime, eventTitle);
+      setAnnotations(lineAnnotations);
       const [inputYearStr, inputMonthStr] = eventTime.split("-");
       const inputYear = parseInt(inputYearStr, 10);
       const inputMonth = parseInt(inputMonthStr, 10);
@@ -112,12 +254,13 @@ export default function LineChart({
       setStartMonth(startM);
       setEndYear(finalEndY);
       setEndMonth(finalEndM);
-      setShowAnnotation(true);
+      console.log("useeffect3")
     } else {
       setShowAnnotation(false);
+            console.log("useeffect4")
     }
   }, [eventTime, eventTitle])
-  
+
   useEffect(() => {
     if (eventTime) {
       const [inputYearStr, inputMonthStr] = eventTime.split("-");
@@ -127,12 +270,25 @@ export default function LineChart({
         inputYear > startYear ||
         (inputYear === startYear && inputMonth >= startMonth)
       ) {
+        console.log(annotations, showAnnotation)
         setShowAnnotation(true);
       } else {
         setShowAnnotation(false);
       }
     }
- 
+    if(showPresidentTerms) {
+      console.log("in", showPresidentTerms)
+      const presidentAnnotations = getPresidentAnnotations(startYear, startMonth, endYear, endMonth, showPresidentTerms);
+      setAnnotations(prev => ({
+        ...prev,
+        ...presidentAnnotations
+      }));
+    }else {
+      const lineAnnotations = getLineAnnotations(eventTime, eventTitle);
+      setAnnotations(lineAnnotations);
+    }
+
+    console.log("useeffect6", annotations, showAnnotation);
     var datasets: any = [];
     const firstIndex = getStartEndIdx(indicator.initDate, indicator.type);
     datasets.push({
@@ -163,9 +319,11 @@ export default function LineChart({
     const getCheckedChartData: ChartData<'line'> = {
       datasets: datasets,
     };
+    console.log(annotations);
     setChartData(getCheckedChartData);
     setChartOptions(getOption(indicator, indicator2));
-  }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth, beginAtZero, showAnnotation]);
+
+  }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth, beginAtZero, showPresidentTerms]);
 
   const getOption = (indicator:any, indicator2:any) => {
     if (indicator2.length!==0 && (indicator.type !== indicator2.type)) {
@@ -214,19 +372,7 @@ export default function LineChart({
             filter: (item) => item.parsed.y !== null,
           },
           annotation: {
-            annotations: showAnnotation ? {
-              verticalLine: {
-                type: 'line',
-                scaleID: 'x',
-                value: eventTime,
-                borderWidth: 2,
-                borderColor: 'rgba(255, 99, 132, 0.25)',
-                label: {
-                  display: true,
-                  content: eventTitle,
-                },
-              },
-            } : {},
+            annotations: composeAnnotations()
           },
         },
       };  
@@ -262,19 +408,7 @@ export default function LineChart({
         },
         plugins: {
           annotation: {
-            annotations: showAnnotation ? {
-              verticalLine: {
-                type: 'line',
-                scaleID: 'x',
-                value: eventTime,
-                borderWidth: 2,
-                borderColor: 'rgba(255, 99, 132, 0.25)',
-                label: {
-                  display: true,
-                  content: eventTitle,
-                },
-              },
-            } : {},
+            annotations: composeAnnotations()
           },
         }
       };
@@ -285,12 +419,20 @@ export default function LineChart({
   return (
     <>
       <div className="flex items-center justify-end">
-        <label htmlFor="beginAtZero" className="text-slate-700">
-          beginAtZero
-          <input type="checkbox" id="beginAtZero"
-           style={{"color": "#008080"}}
-           onChange={() => setBeginAtZero(!beginAtZero)}></input>
-        </label>
+        <div className="flex flex-col">
+          <label htmlFor="beginAtZero" className="text-slate-700">
+            <input type="checkbox" id="beginAtZero"
+            style={{"color": "#008080"}}
+            onChange={() => setBeginAtZero(!beginAtZero)}></input>
+            Y축을 0부터 시작
+          </label>
+          <label htmlFor="showPresidentTerms" className="text-slate-700">
+            <input type="checkbox" id="showPresidentTerms"
+            style={{"color": "#008080"}}
+            onChange={() => setShowPresidentTerms(!showPresidentTerms)}></input>
+            역대 대통령 재임기간
+          </label>
+        </div>
       </div>
       <div className="flex items-center justify-center">
         <div className="flex-auto text-xs text-slate-500">
