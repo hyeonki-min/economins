@@ -60,7 +60,6 @@ input[type='number']::-webkit-outer-spin-button {
 
 .chart-container {
   width: 100vw;
-  height: 85vh;
 }
 
 .show {
@@ -82,4 +81,60 @@ input[type='number']::-webkit-outer-spin-button {
   @keyframes fade-in {
     to { opacity: 1; transform: translateY(-50px); transition-delay: 1s; }
   }
+}
+
+/* 타임라인 전체 영역 */
+.vis-timeline {
+  border: none;
+  background-color: #fafafa;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding-top: 10px;
+}
+
+/* 타임라인 막대 영역 */
+.vis-item {
+  background-color: #1976d2; /* Material Blue 700 */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+}
+.vis-item:hover {
+  background-color: #1565c0; /* Darker on hover */
+}
+
+/* 선택된 항목 강조 */
+.vis-item.vis-selected {
+  background-color: #ef5350; /* Material Red 400 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* 그룹 라벨 */
+.vis-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #424242; /* Grey 800 */
+  padding-left: 8px;
+}
+
+/* 현재 시간 표시 라인 */
+.vis-current-time {
+  background-color: #ff9800; /* Material Orange */
+}
+
+/* 타임라인 라인 및 스케일 라벨 */
+.vis-time-axis .vis-text {
+  color: #757575; /* Grey 600 */
+  font-size: 0.75rem;
+}
+.vis-time-axis .vis-grid.vis-major {
+  border-color: #e0e0e0;
+}
+.vis-time-axis .vis-grid.vis-minor {
+  border-color: #f5f5f5;
 }
