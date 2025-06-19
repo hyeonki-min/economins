@@ -15,15 +15,16 @@ export default function Carousel({
 
     const handleClick = (id: string) => {
       const params = new URLSearchParams(searchParams.toString());
-        const currentEvent = params.get('event');
+      const currentEvent = params.get('event');
 
-        if (currentEvent === id) {
-          params.delete('event');
-        } else {
-          params.set('event', id);
-        }
+      if (currentEvent === id) {
+        params.delete('event');
+      } else {
+        params.set('event', id);
+      }
 
-        router.replace(`?${params.toString()}`, { scroll: false });    };
+      router.replace(`?${params.toString()}`, { scroll: false });
+    };
 
     useEffect(() => {
       
@@ -148,7 +149,7 @@ export default function Carousel({
           </div>
         ))};
       </div>
-      <div className="">
+      <div className="mt-2">
         <button className="prev-btn rounded-full bg-gray-200 p-2 hover:bg-white transition">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />

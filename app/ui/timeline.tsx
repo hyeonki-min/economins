@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DataSet, Timeline } from 'vis-timeline/standalone';
 import 'vis-timeline/dist/vis-timeline-graph2d.min.css';
 import { events } from '@/app/lib/events';
+import Link from 'next/link';
 
 
 export default function VisTimeline() {
@@ -15,10 +16,11 @@ export default function VisTimeline() {
     
     if (!containerRef.current || timelineRef.current) return;
 
-    const transformed = events.map(({ id, name, date }) => ({
+    const transformed = events.map(({ id, name, date, url }) => ({
       id,
       content: name,
       start: date,
+      url: url,
     }));
 
     const items = new DataSet(transformed);
@@ -57,9 +59,10 @@ export default function VisTimeline() {
     <div ref={containerRef} />
      <div className="mt-4 p-4 border rounded bg-gray-100 text-sm">
         {selectedItem ? (
-          <div>
+          <div className="flex flex-col">
             <p>{selectedItem.start}</p>
             <strong>{selectedItem.content}</strong>
+            <Link href={`/series`+selectedItem.url+`?event=`+selectedItem.id}>👉 지표 보러가기</Link>
           </div>
         ) : (
           <p></p>
