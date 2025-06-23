@@ -31,7 +31,7 @@ export default function VisTimeline() {
     const options = {
       width: '100%',
       height: '300px',
-      min: new Date(1970, 0, 1),
+      min: new Date(1996, 0, 1),
       max: maxDate,
       editable: false,
       margin: {
