@@ -6,10 +6,10 @@ import { GoogleTagManager } from '@next/third-parties/google'
 export const metadata: Metadata = {
   title: {
     template: '%s | economins',
-    default: 'economins',
+    default: '경제 데이터 시각화 - economins',
   },
-  description: '대한민국 경제 지표 시각화 정보를 제공합니다.',
-  metadataBase: new URL('https://github.com/ho9science/economins'),
+  description: '대한민국 기준금리 vs 부동산 실거래가 등 거시경제 지표를 시각적으로 비교하는 서비스',
+  metadataBase: new URL('https://economins.com'),
 };
 
 export default function RootLayout({
