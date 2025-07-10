@@ -16,6 +16,7 @@ export default async function createPresignedUrl({ key }: {key: string}) {
         headers: {
             'Accept': 'application/json',
         },
+        cache: 'no-store'
     })
     if (!rest.ok) {
         console.log(rest.status);

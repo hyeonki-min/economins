@@ -3,19 +3,16 @@ import createPresignedUrl from '@/app/lib/economins';
 import EconominsLogo from '@/app/ui/logo';
 import Category from '@/app/ui/category';
 import { Indicator } from '@/app/lib/definitions';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { nanumsquare } from '@/app/ui/fonts';
 import dynamic from 'next/dynamic';
 
-
-const EconomicTimeline = dynamic(() => import('@/app/ui/timeline'), { ssr: false });
+const EconomicTimeline = dynamic(() => import('@/app/ui/timeline'), {
+  ssr: false,
+});
 
 export default async function Page() {
   const allElement: Indicator[] = await createPresignedUrl({ key: 'main/main' });
-  if (allElement.length < 1) {
-    notFound();
-  }
 
   return (
     <main className="flex-col bg-slate-50">
@@ -24,7 +21,11 @@ export default async function Page() {
       </div>
       <div className={`${nanumsquare.className} min-h-screen`}>
         <div className="m-0 m-auto max-w-screen-xl">
-          <Category elements={allElement}></Category>
+          {allElement && allElement.length > 0 ? (
+            <Category elements={allElement} />
+          ) : (
+            <div className="text-center text-gray-500 py-10">표시할 카테고리 정보가 없습니다.</div>
+          )}          
           <div className="mt-10"></div>
           <EconomicTimeline />
           <div className="max-w-xl mx-auto mt-8 p-6 bg-white shadow-md rounded-2xl border border-gray-200">
