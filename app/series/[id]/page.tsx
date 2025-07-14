@@ -10,19 +10,11 @@ import { events } from '@/app/lib/events';
 import { seoMetaMap } from '@/app/lib/seoMeta';
 import Carousel from '@/app/ui/carousel';
 import { Metadata } from 'next';
+import { Events, RouteProps } from '@/app/lib/definitions';
+import { adjustDateRangeByEvent, DateRangeSchema, findEvent } from '@/app/lib/utils';
 
-type Props = {
-  params: { id: string, compareId: string},
-  searchParams: { [key: string]: string | string[] | undefined };
-};
 
-type EventMeta = {
-  id: string;
-  name: string;
-  date: string;
-};
-
-const getEventMeta = (eventId?: string): EventMeta | null => {
+const getEventMeta = (eventId?: string): Events | null => {
   if (!eventId) return null;
   return events.find((event) => event.id === eventId) ?? null;
 };
@@ -35,7 +27,7 @@ const buildDescription = (base: string, eventName?: string | null) =>
     ? `${eventName} 전후 ${base}`
     : `${base}`;
 
-export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: RouteProps): Promise<Metadata> {
   const { id } = params;
 
   const baseMeta = seoMetaMap[id];
@@ -64,8 +56,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 }
 
 
-
-export default async function Page({ params, searchParams }: Props) {
+export default async function Page({ params, searchParams }: RouteProps) {
   const id = params.id;
   const [indicator, data] = await Promise.all([
     createPresignedUrl({ key: 'indicator/' + id }),
@@ -74,14 +65,9 @@ export default async function Page({ params, searchParams }: Props) {
   if (indicator.length < 1) {
     notFound();
   }
-
-  const target = searchParams.event; 
-
-  const finalEvent = events.find((event : any) => event.id === target) ?? {
-    id: null,
-    name: null,
-    date: null
-  }
+  let dateRange = DateRangeSchema.parse(searchParams);
+  const finalEvent = findEvent(events, searchParams.event);
+  dateRange = adjustDateRangeByEvent(dateRange, finalEvent?.date);
 
   return (
     <>
@@ -94,13 +80,14 @@ export default async function Page({ params, searchParams }: Props) {
             data={data}
             indicator={indicator}
             data2={[]}
-            indicator2={[]}
-            eventTime={finalEvent.date} eventTitle={finalEvent.name}
+            indicator2={undefined}
+            dateRange={dateRange}
+            event={finalEvent}
           />
         </div>
       </div>
       <div className="">
-        <Carousel target={finalEvent.id}/>
+        <Carousel target={finalEvent?.id}/>
       </div>
       <RelatedReports id={id}></RelatedReports>
       <IndicatorInfo id={id} name={indicator.name}></IndicatorInfo>

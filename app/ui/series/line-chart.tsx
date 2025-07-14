@@ -15,7 +15,8 @@ import { useEffect, useState } from 'react';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
 import { presidentTerms } from '@/app/lib/presidents';
-
+import { getMonth, getYear } from '@/app/lib/utils';
+import { DateRange, Events, Indicator, XYPointList } from '@/app/lib/definitions';
 
 
 // Register ChartJS components using ChartJS.register
@@ -34,20 +35,21 @@ export default function LineChart({
   indicator,
   data2,
   indicator2,
-  eventTime,
-  eventTitle,
+  dateRange,
+  event,
 }: {
-  data: any;
-  indicator: any;
-  data2: any;
-  indicator2: any;
-  eventTime: any;
-  eventTitle: any;
+  data: XYPointList;
+  indicator: Indicator;
+  data2: XYPointList;
+  indicator2?: Indicator;
+  dateRange: DateRange;
+  event: Events | undefined;
 }) {
-  const [startYear, setStartYear] = useState(new Date().getFullYear() - 5);
-  const [startMonth, setStartMonth] = useState(new Date().getMonth() + 1);
-  const [endYear, setEndYear] = useState(new Date().getFullYear());
-  const [endMonth, setEndMonth] = useState(new Date().getMonth() + 1);
+  
+  const [startYear, setStartYear] = useState(getYear(dateRange.start));
+  const [startMonth, setStartMonth] = useState(getMonth(dateRange.start));
+  const [endYear, setEndYear] = useState(getYear(dateRange.end));
+  const [endMonth, setEndMonth] = useState(getMonth(dateRange.end));
   const [beginAtZero, setBeginAtZero] = useState<boolean>(false);
   const [chartData, setChartData] = useState<ChartData<'line'>>({
     datasets: [],
@@ -126,8 +128,8 @@ export default function LineChart({
   };
 
   const getLineAnnotations = (
-    eventTime: any,
-    eventTitle: any,
+    eventTime?: string | null,
+    eventTitle?: string | null,
   ): Record<string, any> => {
     return eventTime ? {
       verticalLine: {
@@ -147,21 +149,21 @@ export default function LineChart({
   const composeAnnotations = () => {
      if(showPresidentTerms) {
       const presidentAnnotations = getPresidentAnnotations(startYear, startMonth, endYear, endMonth, showPresidentTerms);
-      const lineAnnotations = getLineAnnotations(eventTime, eventTitle);
+      const lineAnnotations = getLineAnnotations(event?.date, event?.name);
       return {...presidentAnnotations, ...lineAnnotations}
     }else {
-      return getLineAnnotations(eventTime, eventTitle);
+      return getLineAnnotations(event?.date, event?.name);
     }
   };
 
   useEffect(() => {
     if (
-      eventTime != null
+      event != null
     ) {
       setShowAnnotation(true);
-      const lineAnnotations = getLineAnnotations(eventTime, eventTitle);
+      const lineAnnotations = getLineAnnotations(event.date, event.name);
       setAnnotations(lineAnnotations);
-      const [inputYearStr, inputMonthStr] = eventTime.split("-");
+      const [inputYearStr, inputMonthStr] = event.date.split("-");
       const inputYear = parseInt(inputYearStr, 10);
       const inputMonth = parseInt(inputMonthStr, 10);
 
@@ -191,11 +193,11 @@ export default function LineChart({
     } else {
       setShowAnnotation(false);
     }
-  }, [eventTime, eventTitle])
+  }, [event])
 
   useEffect(() => {
-    if (eventTime) {
-      const [inputYearStr, inputMonthStr] = eventTime.split("-");
+    if (event?.date) {
+      const [inputYearStr, inputMonthStr] = event.date.split("-");
       const inputYear = parseInt(inputYearStr, 10);
       const inputMonth = parseInt(inputMonthStr, 10);
       if (
@@ -214,7 +216,7 @@ export default function LineChart({
         ...presidentAnnotations
       }));
     }else {
-      const lineAnnotations = getLineAnnotations(eventTime, eventTitle);
+      const lineAnnotations = getLineAnnotations(event?.date, event?.name);
       setAnnotations(lineAnnotations);
     }
 
@@ -231,16 +233,16 @@ export default function LineChart({
       spanGaps: true
     });
     if (data2.length>1) {
-      const secondIndex = getStartEndIdx(indicator2.initDate, indicator2.type);
+      const secondIndex = getStartEndIdx(indicator2?.initDate, indicator2?.type);
       if (secondIndex[0] !== 0 || secondIndex[1] !== 0) {
         datasets.push({
-          label: indicator2.name,
+          label: indicator2?.name,
           data:
           secondIndex[1] === 0
               ? data2.slice(secondIndex[0])
               : data2.slice(secondIndex[0], secondIndex[1]),
           backgroundColor: '#008080',
-          yAxisID: indicator.type===indicator2.type?'y':'y2',
+          yAxisID: indicator.type===indicator2?.type?'y':'y2',
           spanGaps: true
         });
       }
@@ -253,8 +255,8 @@ export default function LineChart({
 
   }, [data, data2, indicator, indicator2, startYear, startMonth, endYear, endMonth, beginAtZero, showPresidentTerms]);
 
-  const getOption = (indicator:any, indicator2:any) => {
-    if (indicator2.length!==0 && (indicator.type !== indicator2.type)) {
+  const getOption = (indicator: Indicator, indicator2?: Indicator) => {
+    if (indicator2 !== undefined && (indicator.type !== indicator2?.type)) {
       const options: ChartOptions<'line'> = {
         responsive: true,
         maintainAspectRatio: true,
@@ -466,7 +468,7 @@ export default function LineChart({
         ></input>
         </div>
         <div className="flex-auto justify-end text-right text-xs text-slate-500">
-          {indicator.type===indicator2.type?'':indicator2.unit}
+          {indicator.type===indicator2?.type?'':indicator2?.unit}
         </div>
       </div>
       <div className="flex items-center justify-center">

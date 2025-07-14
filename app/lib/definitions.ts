@@ -27,3 +27,44 @@ export type IndicatorInfo = {
   keyword: string;
   description: string;
 }
+
+export type SearchParams = {
+  event?: string;
+  start?: string;
+  end?: string;
+};
+
+export type RouteParams = {
+  id: string;
+  compareId: string;
+};
+
+export type RouteProps<P = RouteParams, Q = SearchParams> = {
+  params: P;
+  searchParams: Q;
+};
+
+export type EventMeta = {
+  id: string;
+  name: string;
+  date: string;
+};
+
+export type Events = {
+  id: string;
+  name: string;
+  date: string;
+  url: string;
+};
+
+export type DateRange = {
+  start: string;
+  end: string;
+}
+
+export type XYPoint = {
+  x: string;
+  y: string | number;
+}
+
+export type XYPointList = XYPoint[];

@@ -1,4 +1,5 @@
 import { Revenue } from './definitions';
+import { z } from 'zod';
 
 export const formatCurrency = (amount: number) => {
   return (amount / 100).toLocaleString('en-US', {
@@ -67,3 +68,79 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+// YYYY-MM 형식 정규식
+const yearMonthRegex = /^\d{4}-(0[1-9]|1[0-2])$/;
+
+// 오늘 날짜 기준 YYYY-MM
+function getTodayYearMonth(): string {
+  const today = new Date();
+  return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+}
+
+// 주어진 YYYY-MM에서 N년 전 구하기
+function getYearMonthYearsAgo(from: string, years: number): string {
+  const [year, month] = from.split("-").map(Number);
+  const date = new Date(year, month - 1);
+  date.setFullYear(date.getFullYear() - years);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function getValidDateRange(start?: string | null, end?: string | null) {
+  const today = getTodayYearMonth();
+
+  const endValid = yearMonthRegex.test(end || "") && end! <= today
+    ? end!
+    : today;
+
+  const startValid = yearMonthRegex.test(start || "")
+    ? start!
+    : getYearMonthYearsAgo(endValid, 5);
+
+  return { start: startValid, end: endValid };
+}
+
+export const DateRangeSchema = z
+  .object({
+    start: z.string().nullable().optional(),
+    end: z.string().nullable().optional(),
+  })
+  .transform(({ start, end }) => {
+    const { start: s, end: e } = getValidDateRange(start, end);
+    return { start: s, end: e };
+  })
+  .refine(({ start, end }) => start <= end, {
+    message: "시작일은 종료일보다 이전이어야 합니다.",
+  });
+
+export function getYear(date: string): number {
+  const time = new Date(date);
+  return time.getFullYear();
+}
+
+export function getMonth(date: string): number {
+  const time = new Date(date);
+  return time.getMonth() + 1;
+}
+
+export function findEvent<T extends { id: string }>(
+  items: T[],
+  searchValue: string | undefined
+): T | undefined {
+  if (!searchValue) return undefined;
+  return items.find((item) => item.id === searchValue);
+}
+
+export function adjustDateRangeByEvent(
+  dateRange: { start: string; end: string },
+  eventDate?: string
+): { start: string; end: string } {
+  if (!eventDate) return dateRange;
+  if (eventDate < dateRange.start || eventDate > dateRange.end) {
+    return {
+      start: getYearMonthYearsAgo(eventDate, 2),
+      end: getYearMonthYearsAgo(eventDate, -2),
+    };
+  }
+  return dateRange;
+}

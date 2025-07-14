@@ -1,9 +1,5 @@
-export type Events = {
-  id: string;
-  name: string;
-  date: string;
-  url: string;
-};
+import { Events } from "./definitions";
+
 
 export const events : Events[] = [
   { id: 'terror-911', name: '9.11테러', date: '2001-09', url: '/treasury-bond-korea-10'},
