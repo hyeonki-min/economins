@@ -15,8 +15,9 @@ import { useEffect, useState } from 'react';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import 'chartjs-adapter-date-fns';
 import { presidentTerms } from '@/app/lib/presidents';
-import { getMonth, getYear } from '@/app/lib/utils';
+import { getMonth, getStringYearMonth, getYear } from '@/app/lib/utils';
 import { DateRange, Events, Indicator, XYPointList } from '@/app/lib/definitions';
+import { ShareButton } from '@/app/ui/share-button';
 
 
 // Register ChartJS components using ChartJS.register
@@ -476,6 +477,12 @@ export default function LineChart({
           className="chart-container"
         >
           <Line data={chartData} options={chartOptions} plugins={[annotationPlugin]}/>
+        </div>
+      </div>
+      <hr/>
+      <div className="flex items-center justify-end">
+        <div className="flex flex-col">
+          <ShareButton extraParams={{ 'start': getStringYearMonth(startYear, startMonth), 'end': getStringYearMonth(endYear, endMonth) }} />
         </div>
       </div>
     </>

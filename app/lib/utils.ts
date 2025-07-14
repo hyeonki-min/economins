@@ -78,6 +78,13 @@ function getTodayYearMonth(): string {
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 }
 
+// number 입력 받아 YYYY-MM 만들기
+export function getStringYearMonth(year: number, month: number): string {
+  const date = new Date(year, month - 1);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+}
+
+
 // 주어진 YYYY-MM에서 N년 전 구하기
 function getYearMonthYearsAgo(from: string, years: number): string {
   const [year, month] = from.split("-").map(Number);

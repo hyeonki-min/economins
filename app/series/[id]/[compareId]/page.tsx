@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import Carousel from '@/app/ui/carousel';
 import { events } from '@/app/lib/events';
 import { Metadata } from 'next';
-import { seoMetaMap } from '@/app/lib/seoMeta';
+import { seoMetaMap } from '@/app/lib/seo-meta';
 import { EventMeta, RouteProps } from '@/app/lib/definitions';
 import { adjustDateRangeByEvent, DateRangeSchema, findEvent } from '@/app/lib/utils';
 
