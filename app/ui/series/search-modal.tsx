@@ -1,72 +1,110 @@
 'use client';
 
-import { Fragment, useRef, useState } from 'react'
+import React, { cloneElement, Fragment, isValidElement, ReactElement, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { useIndicatorStore } from '@/app/store/useIndicatorStore';
+import { Indicator } from '@/app/lib/definitions';
 
 
 export default function SearchModal(
   {
-    firstTitle,
-    secondTitle,
+    firstIndicator,
+    secondIndicator,
     children,
   }: {
-    firstTitle: string,
-    secondTitle: string,
-    children: React.ReactNode
+    firstIndicator: Indicator,
+    secondIndicator?: Indicator,
+    children: React.ReactNode,
   }) {
-  const [open, setOpen] = useState(false)
-  const cancelButtonRef = useRef(null)
+  const [open, setOpen] = useState(false);
+  const cancelButtonRef = useRef(null);
+  const { setSelected, resetSelected } = useIndicatorStore();
 
   return (
     <>
-      <h1 className="flex items-center self-start text-xl">{ firstTitle }
-      <PlusCircleIcon className="cursor-pointer h-5 w-5 md:text-base" onClick={() => setOpen(!open)}></PlusCircleIcon>
-      { secondTitle }
-      </h1>
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+      <div className="flex items-center mb-2">
+        <button
+          className="group flex items-center gap-1 text-xl font-semibold"
+          onClick={() => {
+            setOpen(true);
+            resetSelected();
+            setSelected({
+              clicked: 0,
+              first: firstIndicator,
+            });
+          }}
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-        </Transition.Child>
+          <span className="group-hover:underline underline-offset-3 decoration-blue-500 transition">
+            {firstIndicator.name}
+          </span>
+          <PlusCircleIcon
+            className="w-5 h-5 text-blue-500 md:text-base"
+          />
+        </button>
+      </div>
+      <div>
+        <button
+          className="group flex items-center gap-1 text-xl font-semibold"
+          onClick={() => {
+            setOpen(true);
+            setSelected({
+              clicked: 1,
+              second: secondIndicator,
+            });
+          }}
+        >
+          <span className="group-hover:underline underline-offset-3 decoration-blue-500 transition">
+            {secondIndicator? secondIndicator.name : "차트 추가하기"}
+          </span>
+          <PlusCircleIcon
+            className="w-5 h-5 text-blue-500 md:text-base"
+          />
+        </button>
+      </div>
+      <Transition.Root show={open} as={Fragment}>
+        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
 
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-end p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel className="min-h-screen relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg">
-                {children}
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                  <button
-                    type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => setOpen(false)}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div className="flex min-h-full items-end justify-end p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="min-h-screen relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:w-full sm:max-w-lg">
+                  {children}
+                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button
+                      type="button"
+                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                      onClick={() => setOpen(false)}
+                      ref={cancelButtonRef}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
           </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
+        </Dialog>
+      </Transition.Root>
     </>
   )
 }

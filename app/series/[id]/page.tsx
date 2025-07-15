@@ -71,8 +71,8 @@ export default async function Page({ params, searchParams }: RouteProps) {
 
   return (
     <>
-      <SearchModal firstTitle={indicator.name} secondTitle="">
-        <SearchResult id={id}></SearchResult>
+      <SearchModal firstIndicator={indicator} secondIndicator={undefined}>
+        <SearchResult id={id}/>
       </SearchModal>
       <div className="md:py-6">
         <div className="flex flex-col">

@@ -57,13 +57,13 @@ export async function generateMetadata({ params, searchParams }: RouteProps): Pr
 export default async function Page({ params, searchParams }: RouteProps) {
   const id = params.id;
   const compareId = params.compareId;
-  const [mainIndicator, mainData, compareIndicator, compareData] = await Promise.all([
+  const [firstIndicator, firstData, secondIndicator, secondData] = await Promise.all([
     createPresignedUrl({ key: 'indicator/'+id }),
     createPresignedUrl({ key: 'data/'+id }),
     createPresignedUrl({ key: 'indicator/'+compareId }),
     createPresignedUrl({ key: 'data/'+compareId }),  
   ]);
-  if (mainIndicator.length < 1 || compareIndicator.length < 1) {
+  if (firstIndicator.length < 1 || secondIndicator.length < 1) {
     notFound();
   }
   let dateRange = DateRangeSchema.parse(searchParams);
@@ -72,12 +72,12 @@ export default async function Page({ params, searchParams }: RouteProps) {
 
   return (
     <>
-      <SearchModal firstTitle={mainIndicator.name} secondTitle={compareIndicator.name}>
+      <SearchModal firstIndicator={firstIndicator} secondIndicator={secondIndicator}>
         <SearchResult id={id}></SearchResult>
       </SearchModal>
       <div className="md:py-6">
         <div className="flex flex-col">
-          <LineChart data={mainData} indicator={mainIndicator} data2={compareData} indicator2={compareIndicator} event={finalEvent} dateRange={dateRange}/>
+          <LineChart data={firstData} indicator={firstIndicator} data2={secondData} indicator2={secondIndicator} event={finalEvent} dateRange={dateRange}/>
         </div>
       </div>
       <div className="">

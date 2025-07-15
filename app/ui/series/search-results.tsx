@@ -1,18 +1,42 @@
 'use client';
 
-import Link from 'next/link';
 import clsx from 'clsx';
 import { RocketLaunchIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce';
 import { Indicator } from '@/app/lib/definitions';
+import { useIndicatorStore } from '@/app/store/useIndicatorStore';
+import { usePathname, useRouter } from 'next/navigation';
 
 
-export default function SearchResults({id, allElement}: {id: string, allElement: Indicator[]}) {
+export default function SearchResults({id, indicators}: {id: string, indicators: Indicator[]}) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [keyword, setKeyword] = useState<string>('');
   const handleSearch = useDebouncedCallback((term) => {
     setKeyword(term);
   }, 300);
+  const selectedIndicator = useIndicatorStore((state) => state.selected);
+
+  const handleLink = (id: string) => {
+    const segments = pathname.split('/'); 
+    if (segments.length < 3) return;
+
+    if (selectedIndicator.clicked === 0) {
+      segments[2] = id;
+    } else {
+      if (segments.length < 4) {
+        segments.push(id);
+      } else {
+        if (segments[2] !== id) {
+          segments[3] = id;
+        }
+      }
+    }
+
+    const newPath = segments.join('/');
+    router.push(newPath);
+  };
 
   return (
     <>
@@ -45,16 +69,14 @@ export default function SearchResults({id, allElement}: {id: string, allElement:
         </div>
       </div>
       <div className="mt-4 space-y-2">
-      {allElement.filter((el)=>el.name.indexOf(keyword) > -1).map((el) => (
-        <Link
-          key={el.name}
-          href={id===el.id?'/series/'+id:'/series/'+id+'/'+el.id}
+      {indicators.filter((el)=>el.name.indexOf(keyword) > -1).map((el) => (
+        <span key={el.id} 
           className={clsx(
-            'group grid items-center rounded-lg border border-slate-300 p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200',
+            'group grid items-center rounded-lg border border-slate-300 p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200 cursor-pointer',
           )}
-        >
-          <h4>{el.name}</h4>
-        </Link>
+          onClick={() => handleLink(el.id)}>
+            {el.name}
+        </span>
       ))}
     </div>
 
