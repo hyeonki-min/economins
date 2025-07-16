@@ -157,6 +157,10 @@ export default function LineChart({
     }
   };
 
+  const changeStartYearByPeriod = (period : number) => {
+    setStartYear(endYear - period);
+  }
+
   useEffect(() => {
     if (
       event != null
@@ -364,6 +368,26 @@ export default function LineChart({
             역대 대통령 재임기간
           </label>
         </div>
+      </div>
+      <div className="flex items-center justify-center gap-2 mb-2">
+        <span
+          className="px-3 py-1 rounded-md border text-sm text-slate-700 cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition"
+          onClick={() => changeStartYearByPeriod(3)}
+        >
+          3Y
+        </span>
+        <span
+          className="px-3 py-1 rounded-md border text-sm text-slate-700 cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition"
+          onClick={() => changeStartYearByPeriod(5)}
+        >
+          5Y
+        </span>
+        <span
+          className="px-3 py-1 rounded-md border text-sm text-slate-700 cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition"
+          onClick={() => changeStartYearByPeriod(10)}
+        >
+          10Y
+        </span>
       </div>
       <div className="flex items-center justify-center">
         <div className="flex-auto text-xs text-slate-500">
