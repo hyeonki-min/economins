@@ -80,7 +80,7 @@ export default async function Page({ params, searchParams }: RouteProps) {
           <LineChart data={firstData} indicator={firstIndicator} data2={secondData} indicator2={secondIndicator} event={finalEvent} dateRange={dateRange}/>
         </div>
       </div>
-      <div className="">
+      <div className="mt-2">
         <Carousel target={finalEvent?.id}/>
       </div>
     </>

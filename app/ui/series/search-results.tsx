@@ -20,15 +20,15 @@ export default function SearchResults({id, indicators}: {id: string, indicators:
 
   const handleLink = (id: string) => {
     const segments = pathname.split('/'); 
-    if (segments.length < 3) return;
+    if (segments.length < 2) return;
 
     if (selectedIndicator.clicked === 0) {
       segments[2] = id;
     } else {
-      if (segments.length < 4) {
+      if (segments.length < 3) {
         segments.push(id);
       } else {
-        if (segments[2] !== id) {
+        if (segments[2] != id) {
           segments[3] = id;
         }
       }
@@ -68,17 +68,29 @@ export default function SearchResults({id, indicators}: {id: string, indicators:
           </div>
         </div>
       </div>
-      <div className="mt-4 space-y-2">
-      {indicators.filter((el)=>el.name.indexOf(keyword) > -1).map((el) => (
-        <span key={el.id} 
-          className={clsx(
-            'group grid items-center rounded-lg border border-slate-300 p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200 cursor-pointer',
-          )}
-          onClick={() => handleLink(el.id)}>
-            {el.name}
-        </span>
-      ))}
-    </div>
+      <div className="m-2 space-y-2">
+        {indicators
+          .filter((el) => el.name.includes(keyword.toUpperCase()))
+          .map((el) => {
+            const isSelected = (el.id === selectedIndicator?.first?.id) || (el.id === selectedIndicator?.second?.id);
+
+            return (
+              <span
+                key={el.id}
+                className={clsx(
+                  'group grid items-center justify-start gap-2 rounded-xl border border-slate-200 shadow-sm p-4 text-slate-800 transition-all duration-200 ease-in-out',
+                  isSelected
+                    ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'hover:bg-blue-50 hover:border-blue-300 cursor-pointer'
+                )}
+                onClick={() => {
+                  if (!isSelected) handleLink(el.id);
+                }}
+              >
+                {el.name}
+              </span>
+            );
+          })}    </div>
 
     </>
   );

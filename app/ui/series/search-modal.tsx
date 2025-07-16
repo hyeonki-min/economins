@@ -1,10 +1,12 @@
 'use client';
 
-import React, { cloneElement, Fragment, isValidElement, ReactElement, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { useIndicatorStore } from '@/app/store/useIndicatorStore';
 import { Indicator } from '@/app/lib/definitions';
+import clsx from 'clsx';
+import { usePathname, useRouter } from 'next/navigation';
 
 
 export default function SearchModal(
@@ -19,7 +21,25 @@ export default function SearchModal(
   }) {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
-  const { setSelected, resetSelected } = useIndicatorStore();
+  const { setSelected } = useIndicatorStore();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleLink = () => {
+    const segments = pathname.split('/'); 
+    if (segments.length < 3) return;
+    segments.pop();
+    const newPath = segments.join('/');
+    router.push(newPath);
+  };
+
+  useEffect(() => {
+    if (firstIndicator) {
+      setSelected({ clicked: 0, first: firstIndicator });
+    } else if (secondIndicator) {
+      setSelected({ clicked: 1, first: secondIndicator });
+    }
+  }, []);
 
   return (
     <>
@@ -28,7 +48,6 @@ export default function SearchModal(
           className="group flex items-center gap-1 text-xl font-semibold"
           onClick={() => {
             setOpen(true);
-            resetSelected();
             setSelected({
               clicked: 0,
               first: firstIndicator,
@@ -43,24 +62,36 @@ export default function SearchModal(
           />
         </button>
       </div>
-      <div>
+      <div className="flex items-center">
         <button
           className="group flex items-center gap-1 text-xl font-semibold"
           onClick={() => {
-            setOpen(true);
-            setSelected({
-              clicked: 1,
-              second: secondIndicator,
-            });
+              setOpen(true);
+              setSelected({
+                clicked: 1,
+                second: secondIndicator,
+              });
           }}
         >
-          <span className="group-hover:underline underline-offset-3 decoration-blue-500 transition">
-            {secondIndicator? secondIndicator.name : "차트 추가하기"}
+          <span
+            className={clsx(
+              'group-hover:underline underline-offset-3 decoration-blue-500 transition',
+              secondIndicator ? 'text-xl' : 'text-sm text-gray-500'
+            )}
+          >
+            {secondIndicator ? secondIndicator.name : '차트 추가하기'}
           </span>
-          <PlusCircleIcon
-            className="w-5 h-5 text-blue-500 md:text-base"
-          />
+          {!secondIndicator ? (
+            <PlusCircleIcon className="w-5 h-5 text-blue-500 md:text-base" />
+          ) : (
+            <></>
+          )}
         </button>
+        {secondIndicator ? (
+          <XCircleIcon className="w-5 h-5 text-red-500 cursor-pointer md:text-base hover:text-red-600" onClick={handleLink}/>
+        ) : (
+          <></>
+        )}
       </div>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
@@ -77,7 +108,7 @@ export default function SearchModal(
           </Transition.Child>
 
           <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-            <div className="flex min-h-full items-end justify-end p-4 text-center sm:items-center sm:p-0">
+            <div className="flex min-h-full items-end justify-end text-center sm:items-center sm:p-0">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
