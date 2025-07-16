@@ -7,18 +7,10 @@ import { notFound } from 'next/navigation';
 import Carousel from '@/app/ui/carousel';
 import { events } from '@/app/lib/events';
 import { Metadata } from 'next';
-import { seoMetaMap } from '@/app/lib/seoMeta';
+import { seoMetaMap } from '@/app/lib/seo-meta';
+import { EventMeta, RouteProps } from '@/app/lib/definitions';
+import { adjustDateRangeByEvent, DateRangeSchema, findEvent } from '@/app/lib/utils';
 
-type Props = {
-  params: { id: string, compareId: string},
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-type EventMeta = {
-  id: string;
-  name: string;
-  date: string;
-};
 
 const getEventMeta = (eventId?: string): EventMeta | null => {
   if (!eventId) return null;
@@ -33,7 +25,7 @@ const buildDescription = (base: string, compare: string, eventName?: string | nu
     ? `${eventName} 전후 ${base}, ${compare} 데이터를 비교해보세요.`
     : `${base}, ${compare} 데이터를 한눈에 비교해보세요.`;
 
-export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: RouteProps): Promise<Metadata> {
   const { id, compareId } = params;
 
   const baseMeta = seoMetaMap[id];
@@ -62,38 +54,34 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   };
 }
 
-export default async function Page({ params, searchParams }: Props) {
+export default async function Page({ params, searchParams }: RouteProps) {
   const id = params.id;
   const compareId = params.compareId;
-  const [mainIndicator, mainData, compareIndicator, compareData] = await Promise.all([
+  const [firstIndicator, firstData, secondIndicator, secondData] = await Promise.all([
     createPresignedUrl({ key: 'indicator/'+id }),
     createPresignedUrl({ key: 'data/'+id }),
     createPresignedUrl({ key: 'indicator/'+compareId }),
     createPresignedUrl({ key: 'data/'+compareId }),  
   ]);
-  if (mainIndicator.length < 1 || compareIndicator.length < 1) {
+  if (firstIndicator.length < 1 || secondIndicator.length < 1) {
     notFound();
   }
-  const target = searchParams.event; 
-
-  const finalEvent = events.find((event : any) => event.id === target) ?? {
-    id: null,
-    name: null,
-    date: null
-  }
+  let dateRange = DateRangeSchema.parse(searchParams);
+  const finalEvent = findEvent(events, searchParams.event);
+  dateRange = adjustDateRangeByEvent(dateRange, finalEvent?.date);
 
   return (
     <>
-      <SearchModal firstTitle={mainIndicator.name} secondTitle={compareIndicator.name}>
+      <SearchModal firstIndicator={firstIndicator} secondIndicator={secondIndicator}>
         <SearchResult id={id}></SearchResult>
       </SearchModal>
       <div className="md:py-6">
         <div className="flex flex-col">
-          <LineChart data={mainData} indicator={mainIndicator} data2={compareData} indicator2={compareIndicator} eventTime={finalEvent.date} eventTitle={finalEvent.name}/>
+          <LineChart data={firstData} indicator={firstIndicator} data2={secondData} indicator2={secondIndicator} event={finalEvent} dateRange={dateRange}/>
         </div>
       </div>
-      <div className="">
-        <Carousel target={finalEvent.id}/>
+      <div className="mt-2">
+        <Carousel target={finalEvent?.id}/>
       </div>
     </>
   );
