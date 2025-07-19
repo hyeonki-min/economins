@@ -1,5 +1,51 @@
-# economins
+# Economins 📊
 
-The economins is a visualization of economic indicators. Through visualization based on open data, it enables you to easily understand economic metrics. It also provides related information and reports to understanding of the economy.
+> **Visualize key economic indicators and uncover insights with interactive charts and timelines.**
 
-이코노민스는 경제 지표 시각화를 제공합니다. 오픈 데이터 기반의 시각화를 통해 경제 지식이 없는 사람들도 경제 지표에 대한 이해를 높이고 관련 정보와 리포트를 제공하여 경제 전반에 대한 이해도를 높일 수 있도록 노력합니다.
+## 🔗 Links
+
+[https://economins.com](https://economins.com)
+
+
+---
+
+## 🧭 Overview
+
+**Economins** is a web-based service that helps users understand macroeconomic trends through visualized data and contextual policy events.
+
+- Compare multiple economic indicators across time
+- Visualize policy or historical events with an interactive timeline
+- Analyze correlations between policies and market responses *(coming soon)*
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend**: [Next.js](https://nextjs.org/), TypeScript, Tailwind CSS  
+- **Charts**: Chart.js, vis-timeline  
+- **Deployment**: Docker, Nginx, AWS EC2  
+- **Data Sources**: [Bank Of Korea](https://ecos.bok.or.kr/), [Korea Exchange](http://www.krx.co.kr/), [Korea Real Estate Board](https://www.reb.or.kr/reb/main.do)
+
+---
+
+## 🚀 Features
+
+- 📈 **Dynamic Economic Charts**  
+  Track and compare indicators like interest rates, inflation, exchange rates, and more
+
+- 📅 **Policy Timeline**  
+  Overlay policy or major events on time-series data for contextual analysis
+
+---
+
+## 🛠️ Getting Started
+
+```bash
+git clone https://github.com/hyeonki-min/economins.git
+cd economins
+npm install
+npm run dev
+```
+> Make sure to create a .env file based on .env.example.
+
+
