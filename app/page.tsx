@@ -6,6 +6,7 @@ import { Indicator } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { nanumsquare } from '@/app/ui/fonts';
 import dynamic from 'next/dynamic';
+import PolicyCard from '@/app/ui/policy-card';
 
 const EconomicTimeline = dynamic(() => import('@/app/ui/timeline'), {
   ssr: false,
@@ -21,6 +22,7 @@ export default async function Page() {
       </div>
       <div className={`${nanumsquare.className} min-h-screen`}>
         <div className="m-0 m-auto max-w-screen-xl">
+          <PolicyCard></PolicyCard>
           {allElement && allElement.length > 0 ? (
             <Category elements={allElement} />
           ) : (

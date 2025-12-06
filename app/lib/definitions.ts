@@ -68,3 +68,8 @@ export type XYPoint = {
 }
 
 export type XYPointList = XYPoint[];
+
+export type MonetaryPolicyBrief = {
+  title?: string;
+  summary?: string[];
+}
