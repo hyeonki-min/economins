@@ -4,7 +4,7 @@ import EconominsLogo from '@/app/ui/logo';
 import Category from '@/app/ui/category';
 import { Indicator } from '@/app/lib/definitions';
 import Link from 'next/link';
-import { nanumsquare } from '@/app/ui/fonts';
+import { pretendard } from '@/app/ui/fonts';
 import dynamic from 'next/dynamic';
 import PolicyCard from '@/app/ui/policy-card';
 
@@ -20,7 +20,7 @@ export default async function Page() {
       <div className="flex sticky top-0 h-12 shrink-0 items-end p-2 md:h-12">
         <EconominsLogo />
       </div>
-      <div className={`${nanumsquare.className} min-h-screen`}>
+      <div className={`${pretendard.className} min-h-screen`}>
         <div className="m-0 m-auto max-w-screen-xl">
           <PolicyCard></PolicyCard>
           {allElement && allElement.length > 0 ? (

@@ -15,15 +15,23 @@ export default function Category({ elements }: { elements: Indicator[] }) {
   const allTypes = Array.from(cType.keys());
   return (
     <div className="grid gap-2 md:grid-cols-4 md:gap-4 text-slate-700">
-      <div className="md:col-span-4 flex gap-2">
+
+      {/* -------- Filter Chips (Scroll on mobile) -------- */}
+      <div className="md:col-span-4 flex gap-2 overflow-x-auto whitespace-nowrap px-1 pb-1 no-scrollbar">
         {allTypes.map((type) => (
           <label
             htmlFor={type}
             key={type}
             className={clsx(
-              'has-[:checked]:text-slate-50 has-[:checked]:bg-neutral-950 cursor-pointer items-center rounded-lg border bg-slate-100 p-1 text-slate-700',
+              `
+              flex-shrink-0 cursor-pointer rounded-full border px-3 py-1 text-sm
+              bg-slate-100 text-slate-700
+              truncate max-w-[120px]
+              hover:bg-slate-200 transition select-none
+              peer-checked:bg-neutral-900 peer-checked:text-white
+            `,
               {
-                'hover:bg-slate-200': type != types,
+                'bg-neutral-900 text-white': type === types,
               },
             )}
           >
@@ -33,28 +41,34 @@ export default function Category({ elements }: { elements: Indicator[] }) {
               id={type}
               value={type}
               type="radio"
-              className="peer hidden"
+              className="hidden"
               onChange={(e) => setTypes(e.target.value)}
               checked={type === types}
-            ></input>
+            />
           </label>
         ))}
       </div>
+
+      {/* -------- Elements Grid -------- */}
       {elements.map((el) => (
         <Link
           key={el.name}
           href={'/series/' + el.id}
           className={clsx(
-            'group grid grid-rows-[32px_1fr_auto] items-center rounded-lg border border-slate-300 p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200',
+            `
+            group grid grid-rows-[32px_1fr_auto] rounded-lg border border-slate-300 
+            p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200 transition
+          `,
             {
               hidden: types !== 'all' ? el.type !== types : false,
             },
           )}
         >
-          <h4>{el.name}</h4>
-          <p className="text-xs">{el.source}</p>
+          <h4 className="font-semibold">{el.name}</h4>
+          <p className="text-xs text-slate-500">{el.source}</p>
         </Link>
       ))}
+
     </div>
   );
 }

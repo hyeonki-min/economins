@@ -1,7 +1,7 @@
 import { Inter, Lusitana, Blinker } from 'next/font/google';
 import localFont from 'next/font/local'
 
-export const nanumsquare = localFont({ src: './NanumSquareNeo-aLt.woff' })
+export const pretendard = localFont({ src: './Pretendard-Regular.woff2' })
 
 export const inter = Inter({ subsets: ['latin'] });
 

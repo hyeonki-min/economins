@@ -46,8 +46,8 @@ export default async function Page({ params, searchParams }: RouteProps) {
   }
   
   const koreanDate = getKoreanMeetingDate(id);
-  const decisions : MonetaryPolicyBrief[] = await createPresignedUrl({ key: `monetary-policy/${id}/decision` });
-  const issues : MonetaryPolicyBrief[] = await createPresignedUrl({ key: `monetary-policy/${id}/issue` });
+  const decisions : MonetaryPolicyBrief[] = await createPresignedUrl({ key: `monetary-policy/${id}/bok-decision` });
+  const issues : MonetaryPolicyBrief[] = await createPresignedUrl({ key: `monetary-policy/${id}/bok-issue` });
   return (
     <div
       className="min-h-[calc(100vh-96px)] w-full"

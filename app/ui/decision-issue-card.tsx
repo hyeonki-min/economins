@@ -60,26 +60,37 @@ export default function DecisionIssueCard({
         </h2>
 
         <div className="space-y-3">
-            {issues.map((item, idx) => (
-            <details
-                key={idx}
-                className="rounded-lg shadow-sm max-w-prose"
-            >
-                <summary className="px-4 py-3 cursor-pointer text-lg font-medium hover:bg-gray-50 transition">
-                {item.title}
-                </summary>
-
-                <div className="px-4 py-4 bg-gray-50 text-gray-600 whitespace-pre-line leading-relaxed">
-                    <ul className="space-y-2 list-disc list-inside">
-                    {item.summary?.map((s, idx) => (
-                        <li key={idx} className="text-base"
-                            dangerouslySetInnerHTML={{ __html: highlightNumbers(s?s:"") }}
-                        ></li>
-                    ))}
-                    </ul>
+            {(!issues || issues.length === 0) ? (
+                <div className="px-4 py-6 text-center text-gray-500 bg-gray-50 rounded-lg border border-gray-200">
+                아직 요약이 생성되지 않았습니다.
                 </div>
-            </details>
-            ))}
+            ) : (
+                issues.map((item, idx) => (
+                <details
+                    key={idx}
+                    className="rounded-lg shadow-sm max-w-prose"
+                >
+                    <summary className="px-4 py-3 cursor-pointer text-lg font-medium hover:bg-gray-50 transition">
+                    {item.title}
+                    </summary>
+
+                    <div className="px-4 py-4 bg-gray-50 text-gray-600 whitespace-pre-line leading-relaxed">
+                    <ul className="space-y-2 list-disc list-inside">
+                        {item.summary?.map((s, idx2) => (
+                            <li
+                            key={idx2}
+                            className="text-base"
+                            dangerouslySetInnerHTML={{
+                                __html: highlightNumbers(s ?? ""),
+                            }}
+                            />
+                        ))
+                        }
+                    </ul>
+                    </div>
+                </details>
+                ))
+            )}
         </div>
 
         <div className="mt-10 pt-4 border-t text-sm text-gray-500 flex justify-end">
