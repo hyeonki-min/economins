@@ -42,8 +42,18 @@ export function getLatestAvailablePolicyId(now: Date): string {
   return publishedIds[publishedIds.length - 1] ?? VALID_POLICY_IDS[0];
 }
 
+export type PolicyId = typeof VALID_POLICY_IDS[number];
+
+export function isValidPolicyId(id: string): id is PolicyId {
+  return (VALID_POLICY_IDS as readonly string[]).includes(id);
+}
+
 export function getPrevNextPolicyId(currentId: string, now: Date) {
-  const index = VALID_POLICY_IDS.indexOf(currentId);
+  if (!isValidPolicyId(currentId)) {
+    return { prev: null, next: null };
+  }
+
+  const index = VALID_POLICY_IDS.indexOf(currentId);  
   if (index === -1) return { prev: null, next: null };
 
   // ▣ prev: 단순히 이전 index → ALWAYS VALID

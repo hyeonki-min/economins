@@ -35,7 +35,7 @@ export default async function Page({ params, searchParams }: RouteProps) {
 
   const isValidId = checkValidId(id);
   const latestId = getLatestAvailablePolicyId(now);
-  const { prev, next } = getPrevNextPolicyId(params.id, now);
+  const { prev, next } = getPrevNextPolicyId(id, now);
 
   if (isValidId && params.id !== latestId && getValidIndex(id) > getValidIndex(latestId)) {
     redirect(`/monetary-policy/${latestId}`);
