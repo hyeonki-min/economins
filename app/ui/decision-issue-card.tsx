@@ -1,3 +1,5 @@
+import { MonetaryPolicyBrief } from '@/app/lib/definitions';
+
 export function highlightNumbers(text: string) {
   return text.replace(
     /(\d[\d.,]*\s?(?:%|bp|p|조|억|만|원)?)/g,
@@ -11,8 +13,8 @@ export default function DecisionIssueCard({
   issues,
 }: {
   koreanDate: string;
-  decisions: { title?: string; summary?: string[] }[];
-  issues: { title?: string; summary?: string[] }[];
+  decisions: MonetaryPolicyBrief[];
+  issues: MonetaryPolicyBrief[];
 }) {
   return (
     <div className="w-full max-w-2xl mx-auto rounded-md shadow-md border bg-white p-4 md:p-8">

@@ -1,5 +1,5 @@
-import { IndicatorInfo } from '@/app/lib/definitions';
-import createPresignedUrl from '@/app/lib/economins';
+import type { IndicatorInfo } from '@/app/lib/definitions';
+import { fetchDataset } from '@/app/lib/fetch-data';
 
 export default async function IndicatorInfo({
   id,
@@ -8,9 +8,7 @@ export default async function IndicatorInfo({
   id: string;
   name: string;
 }) {
-  const indicators: IndicatorInfo[] = await createPresignedUrl({
-    key: 'info/' + id,
-  });
+  const indicators = await fetchDataset<IndicatorInfo>(`info/${id}`);
   return (
     <div className="py-28 fade-in-animation">
       <div className="py-8">

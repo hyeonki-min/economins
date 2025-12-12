@@ -1,6 +1,7 @@
 import LineChart from '@/app/ui/series/line-chart';
 
-import createPresignedUrl from '@/app/lib/economins';
+import { fetchDataset, fetchObject } from '@/app/lib/fetch-data';
+import { Indicator, XYPoint } from '@/app/lib/definitions';
 import SearchModal from '@/app/ui/series/search-modal';
 import SearchResult from '@/app/ui/series/search-result';
 import { notFound } from 'next/navigation';
@@ -59,10 +60,10 @@ export async function generateMetadata({ params, searchParams }: RouteProps): Pr
 export default async function Page({ params, searchParams }: RouteProps) {
   const id = params.id;
   const [indicator, data] = await Promise.all([
-    createPresignedUrl({ key: 'indicator/' + id }),
-    createPresignedUrl({ key: 'data/' + id }),
+    fetchObject<Indicator>(`indicator/${id}`),
+    fetchDataset<XYPoint>(`data/${id}`),
   ]);
-  if (indicator.length < 1) {
+  if (!indicator) {
     notFound();
   }
   let dateRange = DateRangeSchema.parse(searchParams);

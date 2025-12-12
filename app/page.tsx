@@ -1,4 +1,4 @@
-import createPresignedUrl from '@/app/lib/economins';
+import { fetchDataset } from '@/app/lib/fetch-data';
 
 import EconominsLogo from '@/app/ui/logo';
 import Category from '@/app/ui/category';
@@ -13,8 +13,7 @@ const EconomicTimeline = dynamic(() => import('@/app/ui/timeline'), {
 });
 
 export default async function Page() {
-  const allElement: Indicator[] = await createPresignedUrl({ key: 'main/main' });
-
+  const allElement = await fetchDataset<Indicator>(`main/main`);
   return (
     <main className="flex-col bg-slate-50">
       <div className="flex sticky top-0 h-12 shrink-0 items-end p-2 md:h-12">

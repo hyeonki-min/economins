@@ -1,13 +1,11 @@
 import { Report } from '@/app/lib/definitions';
-import createPresignedUrl from '@/app/lib/economins';
+import { fetchDataset } from '@/app/lib/fetch-data';
 
 import { BookOpenIcon, LinkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default async function RelatedReports({ id }: { id: string }) {
-  const relatedReports: Report[] = await createPresignedUrl({
-    key: 'related/' + id,
-  });
+  const relatedReports = await fetchDataset<Report>(`related/${id}`);
   return (
     <div className="min-h-screen py-28 fade-in-animation">
       <div className="w-full py-8">

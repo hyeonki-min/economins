@@ -1,6 +1,7 @@
 import LineChart from '@/app/ui/series/line-chart';
 
-import createPresignedUrl from '@/app/lib/economins';
+import { fetchDataset, fetchObject } from '@/app/lib/fetch-data';
+import { Indicator, XYPoint } from '@/app/lib/definitions';
 import SearchModal from '@/app/ui/series/search-modal';
 import SearchResult from '@/app/ui/series/search-result';
 import { notFound } from 'next/navigation';
@@ -58,26 +59,28 @@ export default async function Page({ params, searchParams }: RouteProps) {
   const id = params.id;
   const compareId = params.compareId;
   const [firstIndicator, firstData, secondIndicator, secondData] = await Promise.all([
-    createPresignedUrl({ key: 'indicator/'+id }),
-    createPresignedUrl({ key: 'data/'+id }),
-    createPresignedUrl({ key: 'indicator/'+compareId }),
-    createPresignedUrl({ key: 'data/'+compareId }),  
+    fetchObject<Indicator>(`indicator/${id}`),
+    fetchDataset<XYPoint>(`data/${id}`),
+    fetchObject<Indicator>(`indicator/${compareId}`),
+    fetchDataset<XYPoint>(`data/${compareId}`),
   ]);
-  if (firstIndicator.length < 1 || secondIndicator.length < 1) {
+  
+  if (!firstIndicator) {
     notFound();
   }
+
   let dateRange = DateRangeSchema.parse(searchParams);
   const finalEvent = findEvent(events, searchParams.event);
   dateRange = adjustDateRangeByEvent(dateRange, finalEvent?.date);
 
   return (
     <>
-      <SearchModal firstIndicator={firstIndicator} secondIndicator={secondIndicator}>
+      <SearchModal firstIndicator={firstIndicator} secondIndicator={secondIndicator ?? undefined}>
         <SearchResult id={id}></SearchResult>
       </SearchModal>
       <div className="md:py-6">
         <div className="flex flex-col">
-          <LineChart data={firstData} indicator={firstIndicator} data2={secondData} indicator2={secondIndicator} event={finalEvent} dateRange={dateRange}/>
+          <LineChart data={firstData} indicator={firstIndicator} data2={secondData} indicator2={secondIndicator ?? undefined} event={finalEvent} dateRange={dateRange}/>
         </div>
       </div>
       <div className="mt-2">

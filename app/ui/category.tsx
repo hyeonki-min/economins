@@ -31,7 +31,7 @@ export default function Category({ elements }: { elements: Indicator[] }) {
               peer-checked:bg-neutral-900 peer-checked:text-white
             `,
               {
-                'bg-slate-900 text-slate-100': type === types,
+                'bg-slate-900 text-white hover:bg-neutral-900': type === types,
               },
             )}
           >

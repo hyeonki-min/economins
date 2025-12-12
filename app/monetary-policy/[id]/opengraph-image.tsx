@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { MonetaryPolicyBrief } from "@/app/lib/definitions";
-import createPresignedUrl from "@/app/lib/economins";
+import { fetchDataset } from "@/app/lib/fetch-data";
 import { getKoreanMeetingDate } from "@/app/lib/policy";
 
 export const size = {
@@ -14,7 +14,8 @@ export const contentType = "image/png";
 export default async function OgImage({ params }: { params: { id: string } }) {
   const id = params.id;
   const koreanDate = getKoreanMeetingDate(id);
-  const decisions : MonetaryPolicyBrief[] = await createPresignedUrl({ key: `monetary-policy/${id}/bok-decision` });
+  const decisions = await fetchDataset<MonetaryPolicyBrief>(`monetary-policy/${id}/bok-decision`);
+  
   return new ImageResponse(
     (
       <div

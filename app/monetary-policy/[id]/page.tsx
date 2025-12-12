@@ -1,4 +1,4 @@
-import createPresignedUrl from '@/app/lib/economins';
+import { fetchDataset } from '@/app/lib/fetch-data';
 import { redirect } from "next/navigation";
 import { events } from '@/app/lib/events';
 import { getLatestAvailablePolicyId, getPrevNextPolicyId, getKoreanMeetingDate, checkValidId, getValidIndex } from '@/app/lib/policy';
@@ -46,8 +46,9 @@ export default async function Page({ params, searchParams }: RouteProps) {
   }
   
   const koreanDate = getKoreanMeetingDate(id);
-  const decisions : MonetaryPolicyBrief[] = await createPresignedUrl({ key: `monetary-policy/${id}/bok-decision` });
-  const issues : MonetaryPolicyBrief[] = await createPresignedUrl({ key: `monetary-policy/${id}/bok-issue` });
+  const decisions = await fetchDataset<MonetaryPolicyBrief>(`monetary-policy/${id}/bok-decision`);
+  const issues = await fetchDataset<MonetaryPolicyBrief>(`monetary-policy/${id}/bok-issue`);
+  
   return (
     <div
       className="min-h-[calc(100vh-96px)] w-full"

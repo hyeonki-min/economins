@@ -43,8 +43,8 @@
 ```bash
 git clone https://github.com/hyeonki-min/economins.git
 cd economins
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 > Make sure to create a .env file based on .env.example.
 
