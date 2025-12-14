@@ -23,7 +23,7 @@ export async function fetchDataset<T>(
 export async function fetchObject<T>(
   key: string
 ): Promise<T | null> {
-  const baseUrl = process.env.CLOUDFRONT_BASE_URL;
+  const baseUrl = process.env.CDN_BASE_URL;
   if (!baseUrl) throw new Error('Missing baseUrl');
 
   const url = `${baseUrl}/${key}.json`;
