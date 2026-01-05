@@ -15,7 +15,7 @@
     "@aws-sdk/signature-v4-crt": "^3.828.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
-    "@next/third-parties": "^14.1.0",
+    "@next/third-parties": "^14.2.35",
     "@tailwindcss/forms": "^0.5.7",
     "@types/node": "20.14.8",
     "chart.js": "^4.4.9",
