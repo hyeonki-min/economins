@@ -63,7 +63,6 @@ export default function DecisionIssueCard({
   decisions: MonetaryPolicyBrief[];
   issues: MonetaryPolicyBrief[];
 }) {
-  console.log(decisions);
   return (
     <div className="w-full max-w-2xl mx-auto rounded-md shadow-md border bg-white p-4 md:p-8">
 
