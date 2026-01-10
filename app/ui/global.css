@@ -142,3 +142,32 @@ input[type='number']::-webkit-outer-spin-button {
 .highlight-number {
   @apply text-blue-800 font-bold px-1;
 }
+
+/* tooltip */
+.auto-tooltip {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted #999;
+}
+
+.auto-tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 1000;
+}
+
+.auto-tooltip:hover::after {
+  opacity: 1;
+}

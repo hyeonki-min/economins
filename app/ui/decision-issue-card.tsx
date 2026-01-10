@@ -7,6 +7,53 @@ export function highlightNumbers(text: string) {
   );
 }
 
+function escapeHtml(text: string) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+export function highlightText(
+  text: string,
+  tooltips?: Record<string, string>
+) {
+  let result = text;
+
+  if (tooltips && Object.keys(tooltips).length > 0) {
+    result = highlightKeywords(result, tooltips);
+  }
+
+  return highlightNumbers(result);
+}
+
+export function highlightKeywords(
+  text: string,
+  dict: Record<string, string>
+) {
+  let result = text;
+  const entries = Object.entries(dict).sort(
+    ([a], [b]) => b.length - a.length
+  );
+
+  for (const [keyword, desc] of entries) {
+    const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(
+      `(?![^<]*</span>)${escaped}`,
+      "g"
+    );
+    const safeKeyword = escapeHtml(keyword);
+    result = result.replace(
+      regex,
+      `<span class="auto-tooltip" data-tooltip="${escapeHtml(desc)}">${safeKeyword}</span>`
+    );
+  }
+
+  return result;
+}
+
 export default function DecisionIssueCard({
   koreanDate,
   decisions,
@@ -16,6 +63,7 @@ export default function DecisionIssueCard({
   decisions: MonetaryPolicyBrief[];
   issues: MonetaryPolicyBrief[];
 }) {
+  console.log(decisions);
   return (
     <div className="w-full max-w-2xl mx-auto rounded-md shadow-md border bg-white p-4 md:p-8">
 
@@ -47,7 +95,7 @@ export default function DecisionIssueCard({
                     <ul className="space-y-2 list-disc list-inside">
                     {item.summary?.map((s, idx) => (
                         <li key={idx} className="text-base"
-                            dangerouslySetInnerHTML={{ __html: highlightNumbers(s?s:"") }}
+                            dangerouslySetInnerHTML={{ __html: highlightText(s?s:"", item?.tooltip) }}
                         ></li>
                     ))}
                     </ul>
@@ -82,9 +130,7 @@ export default function DecisionIssueCard({
                             <li
                             key={idx2}
                             className="text-base"
-                            dangerouslySetInnerHTML={{
-                                __html: highlightNumbers(s ?? ""),
-                            }}
+                            dangerouslySetInnerHTML={{ __html: highlightText(s?s:"", item?.tooltip) }}
                             />
                         ))
                         }

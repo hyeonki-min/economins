@@ -72,4 +72,5 @@ export type XYPointList = XYPoint[];
 export type MonetaryPolicyBrief = {
   title?: string;
   summary?: string[];
+  tooltip?: Record<string, string>; 
 }
