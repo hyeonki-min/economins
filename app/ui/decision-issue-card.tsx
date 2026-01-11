@@ -47,7 +47,7 @@ export function highlightKeywords(
     const safeKeyword = escapeHtml(keyword);
     result = result.replace(
       regex,
-      `<span class="auto-tooltip" data-tooltip="${escapeHtml(desc)}">${safeKeyword}</span>`
+      `<span class="auto-tooltip" data-keyword="${safeKeyword}" data-tooltip="${escapeHtml(desc)}">${safeKeyword}</span>`
     );
   }
 

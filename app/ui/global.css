@@ -146,26 +146,63 @@ input[type='number']::-webkit-outer-spin-button {
 /* tooltip */
 .auto-tooltip {
   position: relative;
-  cursor: help;
+  cursor: pointer;
   border-bottom: 1px dotted #999;
 }
 
 .auto-tooltip::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 130%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #111;
-  color: #fff;
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 13px;
-  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s;
   z-index: 1000;
+}
+
+@media (hover: hover) {
+  .auto-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background: #111;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 6px;
+
+    font-size: 13px;
+    white-space: nowrap;
+
+    transition: opacity 0.2s;
+  }
+}
+
+@media (hover: none) {
+  .auto-tooltip::after {
+    content:
+      attr(data-keyword) " :\A"
+      attr(data-tooltip);
+
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+
+    background: #111;
+    color: #f9fafb;
+
+    padding: clamp(10px, 2.5vw, 16px)
+             clamp(12px, 3vw, 20px);
+    border-radius: 10px;
+
+    font-size: 15px;
+    line-height: 1.5;
+
+    max-width: calc(100vw - 32px);
+    white-space: pre-line;
+    word-break: keep-all;
+
+    transition: opacity 0.15s ease;
+  }
 }
 
 .auto-tooltip:hover::after {
