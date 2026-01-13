@@ -74,3 +74,5 @@ export type MonetaryPolicyBrief = {
   summary?: string[];
   tooltip?: Record<string, string>; 
 }
+
+export type PickerTarget = "start" | "end" | null;

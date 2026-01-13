@@ -18,6 +18,7 @@ import { presidentTerms } from '@/app/lib/presidents';
 import { getMonth, getStringYearMonth, getYear } from '@/app/lib/utils';
 import { DateRange, Events, Indicator, XYPointList } from '@/app/lib/definitions';
 import { ShareButton } from '@/app/ui/share-button';
+import { YearMonthInputGroup } from "@/app/ui/series/date";
 
 
 // Register ChartJS components using ChartJS.register
@@ -30,6 +31,7 @@ ChartJS.register(
   TimeScale,
   annotationPlugin,
 );
+
 
 export default function LineChart({
   data,
@@ -59,7 +61,7 @@ export default function LineChart({
   const [showAnnotation, setShowAnnotation] = useState<boolean>(false);  
   const [showPresidentTerms, setShowPresidentTerms] = useState<boolean>(false);
   const [annotations, setAnnotations] = useState<Record<string, any>>();
-
+  const [openPicker, setOpenPicker] = useState<"start" | "end" | null>(null);
 
   const monthDiff = (d1: Date, d2: Date) => {
     var months;
@@ -159,6 +161,38 @@ export default function LineChart({
 
   const changeStartYearByPeriod = (period : number) => {
     setStartYear(endYear - period);
+  }
+
+  function applyStartDate(year: number, month: number) {
+    const maxYear = new Date().getFullYear();
+
+    let y = Math.min(Math.max(year, 1990), maxYear);
+
+    // range 보호
+    if (y > endYear) {
+      y = endYear;
+    }
+
+    setStartYear(y);
+    setStartMonth(month);
+  }
+
+  function applyEndDate(year: number, month: number) {
+    const maxYear = new Date().getFullYear();
+
+    let y = Math.min(Math.max(year, 1990), maxYear);
+
+    if (
+      year < startYear ||
+      (year === startYear && month < startMonth)
+    ) {
+      year = startYear;
+      month = startMonth;
+    }
+
+    setEndYear(year);
+    setEndMonth(month);
+    setOpenPicker(null);
   }
 
   useEffect(() => {
@@ -390,107 +424,31 @@ export default function LineChart({
         </span>
       </div>
       <div className="flex items-center justify-center">
-        <div className="flex-auto text-xs text-slate-500">
-          {indicator.unit}
-        </div>
-        <div className="flex flex-auto gap-1 items-center justify-center">
-        <input
-          type="number"
-          id="startYear"
-          aria-describedby="helper-text-explanation"
-          className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
-          min="1990"
-          max={new Date().getFullYear()}
-          maxLength={4}
-          value={startYear}
-          onChange={(e) => {
-            setStartYear(e.target.valueAsNumber);
-          }}
-          onBlur={(e) => {
-            const value = e.target.valueAsNumber;
-            const min = parseInt(e.target.min);
-            const max = parseInt(e.target.max);
-            if(isNaN(value) || value < min){
-              setStartYear(min);
-            } else if (value > max) {
-              setStartYear(max);
-            } else if (value > endYear) {
-              setStartYear(endYear);
-            }
-          }}
-        >
-        </input>
-        <input
-          type="number"
-          id="startMonth"
-          aria-describedby="helper-text-explanation"
-          className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
-          min="1"
-          max="12"
-          maxLength={2}
-          value={startMonth}
-          onChange={(e) => {
-            setStartMonth(e.target.valueAsNumber);
-          }}
-          onBlur={(e) => {
-            const value = e.target.valueAsNumber;
-            const min = parseInt(e.target.min);
-            const max = parseInt(e.target.max);
-            if(isNaN(value) || value < min){
-              setStartMonth(min);
-            } else if (value > max) {
-              setStartMonth(max);
-             }
-          }}
-        ></input>
-        <input
-          type="number"
-          id="endYear"
-          aria-describedby="helper-text-explanation"
-          className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
-          min="1990"
-          max={new Date().getFullYear()}
-          maxLength={4}
-          value={endYear}
-          onChange={(e) => {
-            setEndYear(e.target.valueAsNumber);
-          }}
-          onBlur={(e) => {
-            const value = e.target.valueAsNumber;
-            const min = parseInt(e.target.min);
-            const max = parseInt(e.target.max);
-            if(isNaN(value) || value < min){
-              setEndYear(min);
-            } else if (value > max) {
-              setEndYear(max);
-            } else if (value < startYear) {
-              setEndYear(startYear);
-            }
-          }}
-        ></input>
-        <input
-          type="number"
-          id="endMonth"
-          aria-describedby="helper-text-explanation"
-          className="block rounded-lg p-2.5 text-sm text-gray-900 focus:border-indigo-700 focus:ring-indigo-700"
-          min="1"
-          max="12"
-          maxLength={2}
-          value={endMonth}
-          onChange={(e) => {
-            setEndMonth(e.target.valueAsNumber);
-          }}
-          onBlur={(e) => {
-            const value = e.target.valueAsNumber;
-            const min = parseInt(e.target.min);
-            const max = parseInt(e.target.max);
-            if(isNaN(value) || value < min){
-              setEndMonth(min);
-            } else if (value > max) {
-              setEndMonth(max);
-             }
-          }}
-        ></input>
+        <div className="flex-auto text-xs text-slate-500">{indicator.unit}</div>
+        <div className="flex flex-auto gap-2 items-center justify-center">
+          <YearMonthInputGroup
+            target="start"
+            openPicker={openPicker}
+            setOpenPicker={setOpenPicker}
+            year={startYear}
+            month={startMonth}
+            onSelect={applyStartDate}
+            idPrefix="start"
+            indicator={indicator}
+          />
+
+          <span className="text-slate-400">-</span>
+
+          <YearMonthInputGroup
+            target="end"
+            openPicker={openPicker}
+            setOpenPicker={setOpenPicker}
+            year={endYear}
+            month={endMonth}
+            onSelect={applyEndDate}
+            idPrefix="end"
+            indicator={indicator}
+          />
         </div>
         <div className="flex-auto justify-end text-right text-xs text-slate-500">
           {indicator.type===indicator2?.type?'':indicator2?.unit}

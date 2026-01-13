@@ -1,4 +1,4 @@
-import { Revenue } from './definitions';
+import { Revenue, Indicator } from './definitions';
 import { z } from 'zod';
 
 export const formatCurrency = (amount: number) => {
@@ -151,3 +151,60 @@ export function adjustDateRangeByEvent(
   }
   return dateRange;
 }
+
+function parseYearMonth(initDate: string | Date) {
+  if (initDate instanceof Date) {
+    return {
+      year: initDate.getFullYear(),
+      month: initDate.getMonth() + 1,
+    };
+  }
+
+  // "YYYY-MM"
+  if (initDate.includes("-")) {
+    const [y, m] = initDate.split("-");
+    return { year: Number(y), month: Number(m) };
+  }
+
+  // "YYYYMM"
+  return {
+    year: Number(initDate.slice(0, 4)),
+    month: Number(initDate.slice(4, 6)),
+  };
+}
+
+
+export function buildYearsFromInitDate(initDate: string | Date) {
+  const { year: startYear } = parseYearMonth(initDate);
+  const currentYear = new Date().getFullYear();
+
+  return Array.from(
+    { length: currentYear - startYear + 1 },
+    (_, i) => startYear + i
+  );
+}
+
+export function isDisabled(
+  y: number,
+  m: number,
+  indicator: Indicator
+) {
+  const { year: initYear, month: initMonth } =
+    parseYearMonth(indicator.initDate);
+
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+
+  // initDate 이전은 전부 비활성
+  if (y < initYear) return true;
+
+  // 시작년도에서는 initMonth 이전 비활성
+  if (y === initYear && m < initMonth) return true;
+
+  // 현재년도에서는 현재월 이후 비활성
+  if (y === currentYear && m > currentMonth) return true;
+
+  return false;
+}
+
