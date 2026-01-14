@@ -173,6 +173,34 @@ function parseYearMonth(initDate: string | Date) {
   };
 }
 
+export function buildYearsFromInitDates(
+  initDateA: string | Date,
+  initDateB?: string | Date | null
+) {
+  const a = parseYearMonth(initDateA);
+
+  // 비교 대상이 없으면 단일 indicator 기준
+  if (!initDateB) {
+    return buildYearsFromInitDate(initDateA);
+  }
+
+  const b = parseYearMonth(initDateB);
+
+  // 교집합 시작점 = 더 늦은 시작 연도
+  const startYear =
+    a.year > b.year
+      ? a.year
+      : b.year > a.year
+      ? b.year
+      : a.year; // 연도 같으면 그대로
+
+  const currentYear = new Date().getFullYear();
+
+  return Array.from(
+    { length: currentYear - startYear + 1 },
+    (_, i) => startYear + i
+  );
+}
 
 export function buildYearsFromInitDate(initDate: string | Date) {
   const { year: startYear } = parseYearMonth(initDate);
@@ -187,10 +215,11 @@ export function buildYearsFromInitDate(initDate: string | Date) {
 export function isDisabled(
   y: number,
   m: number,
-  indicator: Indicator
+  indicatorA: Indicator,
+  indicatorB: Indicator
 ) {
   const { year: initYear, month: initMonth } =
-    parseYearMonth(indicator.initDate);
+    getCommonStartYearMonth(indicatorA.initDate, indicatorB?.initDate)
 
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -207,4 +236,27 @@ export function isDisabled(
 
   return false;
 }
+
+export function getCommonStartYearMonth(
+  initDateA: string | Date,
+  initDateB?: string | Date | null
+) {
+  const a = parseYearMonth(initDateA);
+
+  if (!initDateB) {
+    return a;
+  }
+
+  const b = parseYearMonth(initDateB);
+
+  if (a.year > b.year) return a;
+  if (b.year > a.year) return b;
+
+  // 같은 연도면 더 늦은 월
+  return {
+    year: a.year,
+    month: Math.max(a.month, b.month),
+  };
+}
+
 

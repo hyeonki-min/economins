@@ -1,29 +1,42 @@
 'use client';
 
+
 import {
   Chart as ChartJS,
-  CategoryScale,
   LinearScale,
+  TimeScale,
   Tooltip,
   PointElement,
   LineElement,
-  TimeScale,
-} from 'chart.js';
-import type { ChartData, ChartOptions } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import type { ChartData, ChartOptions } from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
+import "chartjs-adapter-date-fns";
+
 import { useEffect, useState } from 'react';
-import annotationPlugin from 'chartjs-plugin-annotation';
-import 'chartjs-adapter-date-fns';
-import { presidentTerms } from '@/app/lib/presidents';
-import { getMonth, getStringYearMonth, getYear } from '@/app/lib/utils';
-import { DateRange, Events, Indicator, XYPointList } from '@/app/lib/definitions';
-import { ShareButton } from '@/app/ui/share-button';
+import { Line } from 'react-chartjs-2';
+
+import { presidentTerms } from "@/app/lib/presidents";
+import {
+  getMonth,
+  getStringYearMonth,
+  getYear,
+} from "@/app/lib/utils";
+import {
+  DateRange,
+  Events,
+  Indicator,
+  XYPointList,
+} from "@/app/lib/definitions";
+
+import { ShareButton } from "@/app/ui/share-button";
 import { YearMonthInputGroup } from "@/app/ui/series/date";
+import { PeriodShortcut } from "@/app/ui/series/period-shortcut";
+import { ChartSpecialOptions } from "@/app/ui/series/chart-special-options";
 
 
 // Register ChartJS components using ChartJS.register
 ChartJS.register(
-  CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -194,6 +207,8 @@ export default function LineChart({
     setEndMonth(month);
     setOpenPicker(null);
   }
+
+  const shouldShowSecondaryUnit = indicator2 && indicator.type !== indicator2.type;
 
   useEffect(() => {
     if (
@@ -388,43 +403,23 @@ export default function LineChart({
   return (
     <>
       <div className="flex items-center justify-end">
-        <div className="flex flex-col">
-          <label htmlFor="beginAtZero" className="text-slate-700">
-            <input type="checkbox" id="beginAtZero"
-            style={{"color": "#008080"}}
-            onChange={() => setBeginAtZero(!beginAtZero)}></input>
-            Y축을 0부터 시작
-          </label>
-          <label htmlFor="showPresidentTerms" className="text-slate-700">
-            <input type="checkbox" id="showPresidentTerms"
-            style={{"color": "#008080"}}
-            onChange={() => setShowPresidentTerms(!showPresidentTerms)}></input>
-            역대 대통령 재임기간
-          </label>
-        </div>
+          <ChartSpecialOptions
+            beginAtZero={beginAtZero}
+            showPresidentTerms={showPresidentTerms}
+            onToggleBeginAtZero={() => setBeginAtZero((v) => !v)}
+            onToggleShowPresidentTerms={() => setShowPresidentTerms((v) => !v)}
+          />
       </div>
       <div className="flex items-center justify-center gap-2 mb-2">
-        <span
-          className="px-3 py-1 rounded-md border text-sm text-slate-700 cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition"
-          onClick={() => changeStartYearByPeriod(3)}
-        >
-          3Y
-        </span>
-        <span
-          className="px-3 py-1 rounded-md border text-sm text-slate-700 cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition"
-          onClick={() => changeStartYearByPeriod(5)}
-        >
-          5Y
-        </span>
-        <span
-          className="px-3 py-1 rounded-md border text-sm text-slate-700 cursor-pointer hover:bg-blue-50 hover:border-blue-400 transition"
-          onClick={() => changeStartYearByPeriod(10)}
-        >
-          10Y
-        </span>
+        <PeriodShortcut
+          periods={[3, 5, 10]}
+          onSelect={(years) => changeStartYearByPeriod(years)}
+        />
       </div>
       <div className="flex items-center justify-center">
-        <div className="flex-auto text-xs text-slate-500">{indicator.unit}</div>
+        <div className="flex-auto text-xs text-slate-500">
+          {indicator.unit}
+        </div>
         <div className="flex flex-auto gap-2 items-center justify-center">
           <YearMonthInputGroup
             target="start"
@@ -434,7 +429,8 @@ export default function LineChart({
             month={startMonth}
             onSelect={applyStartDate}
             idPrefix="start"
-            indicator={indicator}
+            indicatorA={indicator}
+            indicatorB={indicator2}
           />
 
           <span className="text-slate-400">-</span>
@@ -447,17 +443,16 @@ export default function LineChart({
             month={endMonth}
             onSelect={applyEndDate}
             idPrefix="end"
-            indicator={indicator}
+            indicatorA={indicator}
+            indicatorB={indicator2}
           />
         </div>
         <div className="flex-auto justify-end text-right text-xs text-slate-500">
-          {indicator.type===indicator2?.type?'':indicator2?.unit}
+          {shouldShowSecondaryUnit ? indicator2.unit : null}
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <div
-          className="chart-container"
-        >
+        <div className="chart-container">
           <Line data={chartData} options={chartOptions} plugins={[annotationPlugin]}/>
         </div>
       </div>

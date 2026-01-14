@@ -12,7 +12,8 @@ export function YearMonthInputGroup({
   month,
   onSelect,
   idPrefix,
-  indicator
+  indicatorA,
+  indicatorB
 }: {
   target: Exclude<PickerTarget, null>;
   openPicker: PickerTarget;
@@ -21,7 +22,8 @@ export function YearMonthInputGroup({
   month: number;
   onSelect: (y: number, m: number) => void;
   idPrefix: string;
-  indicator: Indicator;
+  indicatorA: Indicator;
+  indicatorB?: Indicator;
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -86,7 +88,8 @@ export function YearMonthInputGroup({
                 <YearMonthPicker
                     year={year}
                     month={month}
-                    indicator={indicator}
+                    indicatorA={indicatorA}
+                    indicatorB={indicatorB}
                     onSelect={(y, m) => {
                         onSelect(y, m);
                         setOpenPicker(null);

@@ -1,19 +1,21 @@
 import { Indicator } from "@/app/lib/definitions";
-import { buildYearsFromInitDate, isDisabled } from "@/app/lib/utils";
+import { buildYearsFromInitDates, isDisabled } from "@/app/lib/utils";
 
 
 export function YearMonthPicker({
   year,
   month,
   onSelect,
-  indicator,
+  indicatorA,
+  indicatorB,
 }: {
   year: number;
   month: number;
   onSelect: (y: number, m: number) => void;
-  indicator: Indicator;
+  indicatorA: Indicator;
+  indicatorB?: Indicator;
 }) {
-  const years = buildYearsFromInitDate(indicator!.initDate);
+  const years = buildYearsFromInitDates(indicatorA.initDate, indicatorB?.initDate);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   return (
@@ -39,7 +41,7 @@ export function YearMonthPicker({
 
       <div className="grid grid-cols-4 gap-2">
         {months.map((m) => {
-          const disabled = isDisabled(year, m, indicator);
+          const disabled = isDisabled(year, m, indicatorA, indicatorB);
           return (
           <button
             key={m}
