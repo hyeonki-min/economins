@@ -6,7 +6,15 @@ export const VALID_POLICY_IDS = [
   "2025-07",
   "2025-08",
   "2025-10",
-  "2025-11"
+  "2025-11",
+  "2026-01",
+  "2026-02",
+  "2026-04",
+  "2026-05",
+  "2026-07",
+  "2026-08",
+  "2026-10",
+  "2026-11",
 ] as const;
 
 export const POLICY_MEETING_DATES: Record<string, string> = {
@@ -17,7 +25,15 @@ export const POLICY_MEETING_DATES: Record<string, string> = {
   "2025-07": "2025-07-10",
   "2025-08": "2025-08-28",
   "2025-10": "2025-10-23",
-  "2025-11": "2025-11-27"
+  "2025-11": "2025-11-27",
+  "2026-01": "2026-01-15",
+  "2026-02": "2026-02-26",
+  "2026-04": "2026-04-10",
+  "2026-05": "2026-05-28",
+  "2026-07": "2026-07-16",
+  "2026-08": "2026-08-27",
+  "2026-10": "2026-10-22",
+  "2026-11": "2026-11-26"
 };
 
 export function checkValidId(id: any): boolean {
@@ -33,7 +49,7 @@ export function getLatestAvailablePolicyId(now: Date): string {
     const meetingDateStr = POLICY_MEETING_DATES[id];
     if (!meetingDateStr) return false;
 
-    const meetingDate = new Date(meetingDateStr + "T23:59:59");
+    const meetingDate = new Date(meetingDateStr + "T17:59:59");
 
     return now >= meetingDate;
   });
