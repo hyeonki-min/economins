@@ -39,8 +39,7 @@ export function YearMonthInputGroup({
     <div ref={wrapperRef} className="relative">
       <div
         role="group"
-        aria-expanded={isOpen}
-        tabIndex={0}
+        aria-labelledby={`${idPrefix}Label`}
         className="
           inline-flex items-center gap-1 rounded-lg border px-2 py-1
           cursor-pointer

@@ -216,7 +216,7 @@ export function isDisabled(
   y: number,
   m: number,
   indicatorA: Indicator,
-  indicatorB: Indicator
+  indicatorB?: Indicator
 ) {
   const { year: initYear, month: initMonth } =
     getCommonStartYearMonth(indicatorA.initDate, indicatorB?.initDate)

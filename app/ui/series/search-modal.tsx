@@ -39,7 +39,7 @@ export default function SearchModal(
     } else if (secondIndicator) {
       setSelected({ clicked: 1, first: secondIndicator });
     }
-  }, []);
+  }, [firstIndicator, secondIndicator, setSelected]);
 
   return (
     <>
