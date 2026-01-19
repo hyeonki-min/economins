@@ -9,7 +9,7 @@ export default function EconominsLogo() {
     >
       <Link
         href="/"
-        className="flex items-center self-start px-6 text-sm font-medium transition-colors md:text-base"
+        className="flex items-center self-start text-sm font-medium transition-colors md:text-base"
       >
         <DocumentChartBarIcon className="h-8 w-12 rotate-[15deg]" />
         <p className="text-[18px]">economins</p>

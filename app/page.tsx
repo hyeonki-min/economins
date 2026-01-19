@@ -20,7 +20,7 @@ export default async function Page() {
         <EconominsLogo />
       </div>
       <div className={`${pretendard.className} min-h-screen`}>
-        <div className="m-0 m-auto max-w-screen-xl">
+        <div className="m-0 m-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
           <PolicyCard></PolicyCard>
           {allElement && allElement.length > 0 ? (
             <Category elements={allElement} />

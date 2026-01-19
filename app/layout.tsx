@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${blinker.className} antialiased bg-slate-50`}>{children}
-        <footer className={`${blinker.className} my-3 m-auto max-w-screen-2xl`}>
+        <footer className={`${blinker.className} my-3 m-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8`}>
           copyright © {currentYear} economins. All rights reserved.
         </footer>
       </body>
