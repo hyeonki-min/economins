@@ -1,13 +1,21 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { events } from '@/app/lib/events';
+import { CarouselProps } from '@/app/lib/definitions';
+import { computeDeltas, hasBaseSeriesAtEvent } from '@/app/lib/compute-delta';
+import { formatYm } from '@/app/lib/utils';
 
-export default function Carousel({ target }: { target?: string }) {
+
+export default function Carousel({ event, seriesA, seriesB, indicatorA, indicatorB }: CarouselProps) {
+  const target = event?.id;
   const router = useRouter();
   const searchParams = useSearchParams();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [showB, setShowB] = useState(false);
+  const isCompareMode = !!indicatorB;
+  const isMobile = window.innerWidth < 768;
 
   const handleClick = (id: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -72,61 +80,183 @@ export default function Carousel({ target }: { target?: string }) {
             touch-pan-x
           "
         >
-          {events.map((event) => (
-            <div
-              key={event.id}
-              data-id={event.id}
-              onClick={() => handleClick(event.id)}
-              className={`
-                relative
-                shrink-0
-                snap-center
-                rounded-3xl
-                border
-                cursor-pointer
-                transition-all
-                duration-200
+          {events
+            .filter(event => hasBaseSeriesAtEvent(seriesA, event?.date))
+            .map((event) => {
+              const deltasA = computeDeltas(seriesA, event?.date);
+              const deltasB = computeDeltas(seriesB, event?.date);
 
-                /* 📱 Mobile */
-                w-[68%]
-                aspect-[3/4]
-                max-h-[200px]
+              return (<div
+                key={event.id}
+                data-id={event.id}
+                onClick={() => handleClick(event.id)}
+                className={`
+                  relative
+                  shrink-0
+                  snap-center
+                  rounded-3xl
+                  border
+                  cursor-pointer
+                  transition-all
+                  duration-200
 
-                /* 📱 Tablet */
-                sm:w-[72%]
-                sm:aspect-[1/1]
-                sm:max-h-none
+                  /* 📱 Mobile */
+                  w-[68%]
+                  aspect-[3/4]
+                  max-h-[200px]
 
-                /* 🖥 Desktop */
-                md:w-[calc(33.33%-(32px/3))]
+                  /* 📱 Tablet */
+                  sm:w-[72%]
+                  sm:aspect-[1/1]
+                  sm:max-h-none
 
-                ${
-                  event.id === target
-                    ? 'border-blue-600 bg-blue-50 shadow-md text-blue-700'
-                    : 'border-gray-300 bg-white text-gray-800 hover:border-blue-300'
-                }
-              `}
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div
-                  className="
-                    text-center
-                    font-bold
-                    whitespace-normal
-                    break-keep
-                    leading-tight
-                    px-4
+                  /* 🖥 Desktop */
+                  md:w-[calc(33.33%-(32px/3))]
 
-                    text-3xl
-                    sm:text-4xl
-                    md:text-5xl
-                  "
-                >
-                  {event.name}
+                  ${
+                    event.id === target
+                      ? 'border-blue-600 bg-blue-50 shadow-md text-blue-700'
+                      : 'border-gray-300 bg-white text-gray-800 hover:border-blue-300'
+                  }
+                `}
+              >
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                  <div
+                    className="
+                      text-xs sm:text-sm
+                      text-gray-500
+                      tracking-wide
+                    "
+                  >
+                    {formatYm(event.date)}
+                  </div>
+                  <div
+                    className="
+                      text-center font-bold
+                      break-keep leading-tight px-4
+                      text-3xl sm:text-4xl md:text-5xl
+                    "
+                  >
+                    {event.name}
+                  </div>
+                  <div className={`
+                    flex-col
+                    items-center
+                    gap-1
+                    ${showB ? "hidden" : "flex"}
+                    md:flex
+                  `}>
+                    {isCompareMode && (
+                    <div className="text-xs font-medium text-gray-700">
+                      <button
+                        className="
+                          flex items-center gap-1
+                          text-xs text-gray-500
+                          text-center
+                        "
+                        onClick={(e) => {
+                          if (!isMobile) return;
+                          e.stopPropagation();
+                          setShowB(v => !v)
+                        }}
+                      >
+                        {indicatorA.name}
+                        {isMobile && (
+                        <span className="shrink-0 transition">⇄</span>
+                        )}
+                      </button>
+                    </div>
+                    )}
+                    <div className="grid grid-cols-4 gap-2">
+                      {deltasA.map(d => (
+                        <div
+                          key={d.label}
+                          className="
+                            flex flex-col items-center
+                            rounded-lg px-2 py-1
+                            bg-white/70
+                            text-xs sm:text-sm
+                          "
+                        >
+                          <span className="text-gray-500">{d.label}</span>
+                          <span
+                            className={`font-semibold ${
+                              d.value == null
+                                ? "text-gray-400"
+                                : d.value > 0
+                                ? "text-red-600"
+                                : d.value < 0
+                                ? "text-blue-600"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {d.value == null ? "–" : `${d.value > 0 ? "+" : ""}${d.value}`}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {isCompareMode && (
+                  <div className={`
+                    flex-col
+                    items-center
+                    gap-1
+                    ${showB ? "flex" : "hidden"}
+                    md:flex
+                  `}>
+                    <div className="text-xs font-medium text-gray-700">
+                      <button
+                        className="
+                          flex items-center gap-1
+                          text-xs text-gray-500
+                          text-center
+                        "
+                          onClick={(e) => {
+                            if (!isMobile) return;
+                            e.stopPropagation();
+                            setShowB(v => !v)
+                          }}>
+                        {indicatorB.name}
+                        {isMobile && (
+                        <span className="shrink-0 transition">⇄</span>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-2">
+                      {deltasB.map(d => (
+                        <div
+                        key={d.label}
+                        className="
+                          flex flex-col items-center
+                          rounded-lg px-2 py-1
+                          bg-white/70
+                          text-xs sm:text-sm
+                        "
+                      >
+                        <span className="text-gray-500">{d.label}</span>
+                        <span
+                          className={`font-semibold ${
+                            d.value == null
+                              ? "text-gray-400"
+                              : d.value > 0
+                              ? "text-red-600"
+                              : d.value < 0
+                              ? "text-blue-600"
+                              : "text-gray-700"
+                          }`}
+                        >
+                          {d.value == null ? "–" : `${d.value > 0 ? "+" : ""}${d.value}`}
+                        </span>
+                      </div>
+                      ))}
+                    </div>
+                  </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+              );
+            })}
         </div>
       </div>
 

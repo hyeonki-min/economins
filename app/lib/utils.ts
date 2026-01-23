@@ -259,4 +259,8 @@ export function getCommonStartYearMonth(
   };
 }
 
-
+export function formatYm(ym?: string | null) {
+  if (!ym) return "";
+  const [y, m] = ym.split("-");
+  return `${y}.${m}`;
+}

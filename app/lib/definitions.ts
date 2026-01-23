@@ -76,3 +76,11 @@ export type MonetaryPolicyBrief = {
 }
 
 export type PickerTarget = "start" | "end" | null;
+
+export type CarouselProps = {
+  seriesA?: XYPoint[] | null;
+  seriesB?: XYPoint[] | null;
+  indicatorA?: Indicator;
+  indicatorB?: Indicator;
+  event?: EventMeta;
+};

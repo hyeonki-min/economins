@@ -88,7 +88,7 @@ export default async function Page({ params, searchParams }: RouteProps) {
         </div>
       </div>
       <div className="mt-2">
-        <Carousel target={finalEvent?.id}/>
+        <Carousel seriesA={data} indicatorA={indicator} event={finalEvent}/>
       </div>
       <RelatedReports id={id}></RelatedReports>
       <IndicatorInfo id={id} name={indicator.name}></IndicatorInfo>
