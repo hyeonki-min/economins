@@ -1,4 +1,4 @@
-import { Revenue, Indicator } from './definitions';
+import { Revenue, Indicator, EventMeta } from './definitions';
 import { z } from 'zod';
 
 export const formatCurrency = (amount: number) => {
@@ -263,4 +263,15 @@ export function formatYm(ym?: string | null) {
   if (!ym) return "";
   const [y, m] = ym.split("-");
   return `${y}.${m}`;
+}
+
+export function formatYearMonth(year: number, month: number) {
+  return `${year}-${String(month).padStart(2, "0")}`;
+}
+
+export function monthDiff(d1: Date, d2: Date) {
+  let months = (d2.getFullYear() - d1.getFullYear()) * 12;
+  months -= d1.getMonth();
+  months += d2.getMonth();
+  return months <= 0 ? 0 : months;
 }
