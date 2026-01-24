@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { events } from '@/app/lib/events';
 import { CarouselProps } from '@/app/lib/definitions';
 import { computeDeltas, hasBaseSeriesAtEvent } from '@/app/lib/compute-delta';
@@ -9,25 +9,32 @@ import { formatYm } from '@/app/lib/utils';
 
 
 export default function Carousel({ event, seriesA, seriesB, indicatorA, indicatorB }: CarouselProps) {
-  const target = event?.id;
   const router = useRouter();
   const searchParams = useSearchParams();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [showB, setShowB] = useState(false);
   const isCompareMode = !!indicatorB;
-  const isMobile = window.innerWidth < 768;
+  const pathname = usePathname();
+  const target = event?.id;
+  const isInitialScrollDone = useRef(false);
 
-  const handleClick = (id: string) => {
+  const handleClick = (eventId: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    const currentEvent = params.get('event');
+    const currentEvent = params.get("event");
 
-    if (currentEvent === id) {
-      params.delete('event');
+    params.delete("start");
+    params.delete("end");
+
+    if (currentEvent === eventId) {
+      params.delete("event");
     } else {
-      params.set('event', id);
+      params.set("event", eventId);
     }
 
-    router.replace(`?${params.toString()}`, { scroll: false });
+    router.replace(
+      `${pathname}?${params.toString()}`,
+      { scroll: false }
+    );
   };
 
   /** ▶ Prev / Next (데스크톱용) */
@@ -63,6 +70,16 @@ export default function Carousel({ event, seriesA, seriesB, indicatorA, indicato
 
     container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
   }, [target]);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (isInitialScrollDone.current) return;
+
+    container.scrollLeft = container.scrollWidth;
+    isInitialScrollDone.current = true;
+  }, []);
 
   return (
     <div className="relative flex flex-col items-center">
@@ -147,25 +164,17 @@ export default function Carousel({ event, seriesA, seriesB, indicatorA, indicato
                     md:flex
                   `}>
                     {isCompareMode && (
-                    <div className="text-xs font-medium text-gray-700">
-                      <button
-                        className="
-                          flex items-center gap-1
-                          text-xs text-gray-500
-                          text-center
-                        "
+                      <div
+                        className="md:pointer-events-none cursor-pointer"
                         onClick={(e) => {
-                          if (!isMobile) return;
                           e.stopPropagation();
-                          setShowB(v => !v)
-                        }}
-                      >
-                        {indicatorA.name}
-                        {isMobile && (
-                        <span className="shrink-0 transition">⇄</span>
-                        )}
-                      </button>
-                    </div>
+                          setShowB(v => !v);
+                        }}>
+                        <button className="flex items-center gap-1 text-xs text-gray-500">
+                          {indicatorA?.name}
+                          <span className="md:hidden">⇄</span>
+                        </button>
+                      </div>
                     )}
                     <div className="grid grid-cols-4 gap-2">
                       {deltasA.map(d => (
@@ -204,25 +213,17 @@ export default function Carousel({ event, seriesA, seriesB, indicatorA, indicato
                     ${showB ? "flex" : "hidden"}
                     md:flex
                   `}>
-                    <div className="text-xs font-medium text-gray-700">
-                      <button
-                        className="
-                          flex items-center gap-1
-                          text-xs text-gray-500
-                          text-center
-                        "
-                          onClick={(e) => {
-                            if (!isMobile) return;
-                            e.stopPropagation();
-                            setShowB(v => !v)
-                          }}>
-                        {indicatorB.name}
-                        {isMobile && (
-                        <span className="shrink-0 transition">⇄</span>
-                        )}
+                    <div
+                      className="md:pointer-events-none cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowB(v => !v);
+                        }}>
+                      <button className="flex items-center gap-1 text-xs text-gray-500">
+                        {indicatorB?.name}
+                        <span className="md:hidden">⇄</span>
                       </button>
                     </div>
-
                     <div className="grid grid-cols-4 gap-2">
                       {deltasB.map(d => (
                         <div

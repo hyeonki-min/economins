@@ -22,18 +22,27 @@ export async function fetchDataset<T>(
 
 export async function fetchObject<T>(
   key: string
-): Promise<T | null> {
+): Promise<T | undefined> {
   const baseUrl = process.env.CDN_BASE_URL;
-  if (!baseUrl) throw new Error('Missing baseUrl');
-
-  const url = `${baseUrl}/${key}.json`;
-  const res = await fetch(url, { cache: 'no-store' });
-
-  if (!res.ok) {
-    console.error('fetchObject failed:', res.status);
-    return null;
+  if (!baseUrl) {
+    throw new Error("Missing baseUrl");
   }
 
-  const data = await res.json();
-  return data as T;
+  const url = `${baseUrl}/${key}.json`;
+
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+
+    if (!res.ok) {
+      if (res.status === 404) return undefined;
+
+      console.error("fetchObject failed:", res.status, url);
+      return undefined;
+    }
+
+    return (await res.json()) as T;
+  } catch (e) {
+    console.error("fetchObject error:", e);
+    return undefined;
+  }
 }
