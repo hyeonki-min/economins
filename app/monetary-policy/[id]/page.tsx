@@ -1,10 +1,10 @@
 import { fetchDataset } from '@/app/lib/fetch-data';
 import { redirect } from "next/navigation";
-import { events } from '@/app/lib/events';
+import { events } from '@/app/lib/data/events';
 import { getLatestAvailablePolicyId, getPrevNextPolicyId, getKoreanMeetingDate, checkValidId, getValidIndex } from '@/app/lib/policy';
 
-import DecisionIssueCard from '@/app/ui/decision-issue-card';
-import PrevNextFab from '@/app/ui/prev-next-fab';
+import DecisionIssueCard from '@/app/ui/monetary-policy/decision-issue-card';
+import PrevNextFab from '@/app/ui/monetary-policy/prev-next-fab';
 import { Metadata } from 'next';
 import { Events, RouteProps, MonetaryPolicyBrief } from '@/app/lib/definitions';
 

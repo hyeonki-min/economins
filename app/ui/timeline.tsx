@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { DataSet, Timeline } from 'vis-timeline/standalone';
 import 'vis-timeline/dist/vis-timeline-graph2d.min.css';
-import { events } from '@/app/lib/events';
+import { events } from '@/app/lib/data/events';
 import Link from 'next/link';
 
 
@@ -16,11 +16,12 @@ export default function VisTimeline() {
     
     if (!containerRef.current || timelineRef.current) return;
 
-    const transformed = events.map(({ id, name, date, url }) => ({
-      id,
-      content: name,
-      start: date,
-      url: url,
+    const transformed = events.map(e => ({
+      id: e.id,
+      content: e.name,
+      start: e.date,
+      url: e.url,
+      tooltip: e.description
     }));
 
     const items = new DataSet(transformed);
@@ -44,6 +45,10 @@ export default function VisTimeline() {
     timelineRef.current = new Timeline(containerRef.current, items, options);
 
     timelineRef.current.on('select', (props) => {
+      if (!props.items || props.items.length === 0) {
+        setSelectedItem(null);
+        return;
+      }
       const selectedId = props.items[0];
       const selectedData = items.get(selectedId);
       setSelectedItem(selectedData);
@@ -56,17 +61,64 @@ export default function VisTimeline() {
   }, []);
 
   return <div>
-    <div ref={containerRef} />
-     <div className="mt-4 p-4 border rounded bg-gray-100 text-sm">
-        {selectedItem ? (
-          <div className="flex flex-col">
-            <p>{selectedItem.start}</p>
-            <strong>{selectedItem.content}</strong>
-            <Link href={`/series`+selectedItem.url+`?event=`+selectedItem.id}>👉 지표 보러가기</Link>
+      <div ref={containerRef} />
+      <div className="mt-4">
+      {selectedItem && (
+        <div
+          className="
+            rounded-xl
+            bg-white
+            border border-gray-200
+            shadow-sm
+            p-5
+          "
+        >
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <span
+                className="
+                  inline-block
+                  rounded-md
+                  bg-gray-100
+                  px-2 py-0.5
+                  text-xs font-medium
+                  text-gray-700
+                "
+              >
+                {selectedItem.start}
+              </span>
+            </div>
+
+            <h4 className="text-sm font-semibold text-gray-900 leading-snug">
+              {selectedItem.content}
+            </h4>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              {selectedItem.tooltip}
+            </p>
+            
+            <Link
+              href={`${selectedItem.url}?event=${selectedItem.id}`}
+              className="
+                group mt-1 inline-flex items-center gap-1
+                text-sm font-medium text-gray-700
+                transition-colors
+                hover:text-gray-900
+              "
+            >
+              <span>관련 지표 흐름 보기</span>
+              <span
+                className="
+                  transition-transform
+                  group-hover:translate-x-1
+                "
+                aria-hidden
+              >
+                →
+              </span>
+            </Link>
           </div>
-        ) : (
-          <p></p>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
     </div>;
 }

@@ -5,7 +5,7 @@ import {
 import {
   Events,
 } from "@/app/lib/definitions";
-import { presidentTerms } from "@/app/lib/presidents";
+import { presidentTerms } from "@/app/lib/data/presidents";
 
 
 type AnnotationMap =

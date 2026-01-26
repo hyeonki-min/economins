@@ -56,12 +56,16 @@ export default function Category({ elements }: { elements: Indicator[] }) {
           href={'/series/' + el.id}
           className={clsx(
             `
-            group grid grid-rows-[32px_1fr_auto] rounded-lg border border-slate-300 
-            p-4 text-slate-700 ring-1 ring-transparent hover:bg-slate-200 transition
+            group grid grid-rows-[32px_1fr_auto]
+            rounded-lg border border-slate-300
+            p-4 text-slate-700
+            hover:border-slate-400
+            hover:bg-slate-100
+            hover:shadow-sm
+            transition
+            focus:outline-none focus:ring-2 focus:ring-blue-200
           `,
-            {
-              hidden: types !== 'all' ? el.type !== types : false,
-            },
+            { hidden: types !== 'all' ? el.type !== types : false }
           )}
         >
           <h4 className="font-semibold">{el.name}</h4>

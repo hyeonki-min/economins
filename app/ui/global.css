@@ -82,49 +82,59 @@ input[type='number']::-webkit-outer-spin-button {
     to { opacity: 1; transform: translateY(-50px); transition-delay: 1s; }
   }
 }
-
-/* 타임라인 전체 영역 */
+/* 타임라인 전체 */
 .vis-timeline {
   border: none;
-  background-color: #fafafa;
-  font-family: 'Roboto', sans-serif;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding-top: 10px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 12px 0;
 }
 
-/* 타임라인 막대 영역 */
+/* 기본 아이템 */
 .vis-item {
-  background-color: #1976d2; /* Material Blue 700 */
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 0.875rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  transition: background-color 0.3s ease;
-}
-.vis-item:hover {
-  background-color: #1565c0; /* Darker on hover */
+  background-color: #dbeafe; /* blue-100 */
+  color: #1e40af;           /* blue-900 */
+  border: 1px solid #93c5fd; /* blue-300 */
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-weight: 600;         /* 🔥 살짝 힘 */
+  box-shadow: 0 1px 3px rgba(30, 64, 175, 0.25);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
-/* 선택된 항목 강조 */
+/* Hover */
+.vis-item:hover {
+  background-color: #bfdbfe; /* blue-200 */
+  border-color: #60a5fa;     /* blue-400 */
+  box-shadow: 0 3px 8px rgba(30, 64, 175, 0.35);
+  transform: translateY(-1px);
+}
+
+/* 선택된 아이템 */
 .vis-item.vis-selected {
-  background-color: #ef5350; /* Material Red 400 */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  background-color: #2563eb !important; /* blue-600 */
+  border-color: #1d4ed8 !important;     /* blue-700 */
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.5) !important;
+  transform: translateY(-1px);
 }
 
 /* 그룹 라벨 */
 .vis-label {
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: #424242; /* Grey 800 */
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1f2937; /* gray-800 */
   padding-left: 8px;
 }
 
+
 /* 현재 시간 표시 라인 */
 .vis-current-time {
-  background-color: #ff9800; /* Material Orange */
+  background-color: #7e5d2c; /* Material Orange */
 }
 
 /* 타임라인 라인 및 스케일 라벨 */

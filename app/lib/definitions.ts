@@ -53,6 +53,7 @@ export type EventMeta = {
 export type Events = {
   id: string;
   name: string;
+  description: string;
   date: string;
   url: string;
 };

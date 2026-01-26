@@ -7,7 +7,7 @@ import SearchResult from '@/app/ui/series/search-result';
 import { notFound } from 'next/navigation';
 import RelatedReports from '@/app/ui/series/related-reports';
 import IndicatorInfo from '@/app/ui/series/indicator-info';
-import { events } from '@/app/lib/events';
+import { events } from '@/app/lib/data/events';
 import { seoMetaMap } from '@/app/lib/seo-meta';
 import Carousel from '@/app/ui/carousel';
 import { Metadata } from 'next';

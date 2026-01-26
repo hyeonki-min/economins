@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { events } from '@/app/lib/events';
+import { events } from '@/app/lib/data/events';
 import { CarouselProps } from '@/app/lib/definitions';
 import { computeDeltas, hasBaseSeriesAtEvent } from '@/app/lib/compute-delta';
 import { formatYm } from '@/app/lib/utils';
