@@ -4,8 +4,8 @@ import { IndicatorKey } from "@/app/lib/domain/indicator.keys";
 export const STATIC_INDICATOR_SECTIONS: IndicatorSectionData[] = [
   {
     id: "macro-core",
-    title: "경제를 이해하기 위한 중요 지표",
-    description: "경제의 큰 사이클과 방향성을 이해하는 핵심 지표들입니다.",
+    title: "경제 흐름을 이해하는 다섯 가지 기준",
+    description: "경제의 큰 사이클과 방향성을 이해하는 데 기준이 되는 핵심 지표들입니다.",
     cards: [
         {
         id: "interest-rate",
@@ -188,7 +188,7 @@ export const STATIC_INDICATOR_SECTIONS: IndicatorSectionData[] = [
         href: "/series/treasury-bond-korea-10/base-rate-korea",
         indicators: [
             {
-            key: IndicatorKey.LongTermRate,
+            key: IndicatorKey.KoreaGovBond10Y,
             label: "10년물 국채금리",
             hint: "장기 금리가 급등하면 성장주와 기술주에 부담이 되며, 금리 안정은 주식시장에 우호적입니다."
             },

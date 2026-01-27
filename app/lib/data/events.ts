@@ -31,6 +31,13 @@ export const events : Events[] = [
     "url": "/series/exchange-rate-dollar-korea/treasury-bond-korea-10"
   },
   {
+    "id": "oil-price-crash-2014",
+    "name": "국제 유가 급락",
+    "description": "미국 셰일오일 공급 증가로 국제 유가가 급격히 하락",
+    "date": "2014-11",
+    "url": "/series/kospi"
+  }
+  {
     "id": "china-yuan-devaluation",
     "name": "중국 위안화 절하",
     "description": "중국의 위안화 전격 절하로 글로벌 금융시장 변동성 확대",
@@ -38,11 +45,18 @@ export const events : Events[] = [
     "url": "/series/kospi/current-account-balance-korea"
   },
   {
-    "id": "brexit-referendum",
-    "name": "브렉시트 국민투표",
-    "description": "영국의 EU 탈퇴 결정으로 금융·환율 시장에 충격 발생",
-    "date": "2016-06",
-    "url": "/series/exchange-rate-dollar-korea/kospi"
+    "id": "boj-negative-rate-2016",
+    "name": "일본 마이너스 금리 도입",
+    "description": "경기 부양을 위해 기준금리를 마이너스로 인하",
+    "date": "2016-01",
+    "url": "/series/base-rate-korea/kospi"
+  },
+  {
+    "id": "global-economic-expansion-2017",
+    "name": "글로벌 경기 확장 국면",
+    "description": "세계 경제가 동반 성장하며 확장 국면에 진입",
+    "date": "2017-05",
+    "url": "/series/real-gdp-korea"
   },
   {
     "id": "us-china-trade-war",
@@ -56,28 +70,14 @@ export const events : Events[] = [
     "name": "코로나19 팬데믹",
     "description": "전 세계 봉쇄와 이동 제한으로 실물경제와 금융시장 급락",
     "date": "2020-03",
-    "url": "/series/kospi/unemployment-rate-korea"
+    "url": "/series/base-rate-korea/kospi"
   },
   {
-    "id": "zero-interest-rate-policy",
-    "name": "제로금리 정책",
-    "description": "코로나 대응을 위한 주요국 중앙은행의 초저금리 정책",
-    "date": "2020-03",
-    "url": "/series/base-rate-korea/apt-price-index-all"
-  },
-  {
-    "id": "russia-ukraine-war",
-    "name": "러시아-우크라이나 전쟁",
-    "description": "전쟁 발발로 에너지·원자재 가격 급등과 글로벌 인플레이션 심화",
-    "date": "2022-02",
-    "url": "/series/cpi-korea/exchange-rate-dollar-korea"
-  },
-  {
-    "id": "global-inflation-shock",
-    "name": "글로벌 인플레이션 쇼크",
-    "description": "공급망 붕괴와 에너지 가격 상승으로 물가 급등",
-    "date": "2022-06",
-    "url": "/series/base-rate-korea/apt-price-index-seoul"
+    "id": "global-rate-hike-cycle-2022",
+    "name": "글로벌 기준금리 인상 시작",
+    "description": "높은 인플레이션에 대응해 주요국 중앙은행이 기준금리 인상 사이클에 진입",
+    "date": "2022-03",
+    "url": "/series/base-rate-korea"
   },
   {
     "id": "us-banking-crisis-2023",
@@ -85,6 +85,13 @@ export const events : Events[] = [
     "description": "SVB 파산을 시작으로 지역 은행 중심의 금융 불안 확산",
     "date": "2023-03",
     "url": "/series/kospi/corporate-bond-korea-3-aa"
+  },
+  {
+    "id": "trump-reelected-2024",
+    "name": "트럼프 대통령 재선",
+    "description": "미국 대선에서 트럼프 후보가 당선되며 보호무역·재정 확대 정책 재부각",
+    "date": "2024-11",
+    "url": "/series/exchange-rate-dollar-korea"
   }
 ]
 

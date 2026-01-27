@@ -16,6 +16,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 1.0,
   });
 
+  urls.push({
+    url: `${baseUrl}/overview`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
+  urls.push({
+    url: `${baseUrl}/indicators`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
   seriesIds.forEach((id) => {
     urls.push({
       url: `${baseUrl}/series/${id}`,

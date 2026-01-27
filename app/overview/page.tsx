@@ -10,6 +10,9 @@ export default async function Page() {
   return (
     <div>
       <div>
+        <h1 className="text-xl md:text-2xl font-semibold mt-3 mb-3">
+          경제를 이해하기 위한 핵심 지표
+        </h1>
         {sections
           .map(section => (
           <Section

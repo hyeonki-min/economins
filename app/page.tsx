@@ -23,11 +23,11 @@ export default async function Page() {
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-10">
            <header className="mb-8 space-y-2">
             <h1 className="text-2xl font-bold text-gray-900">
-              경제 지표로 이해하는 지금의 경제
+              주요 경제 지표로 경제 흐름을 살펴보세요.
             </h1>
             <p className="text-sm text-gray-600">
-              주요 지표와 정책, 이벤트를 연결해
-              지금 경제가 어떤 국면에 있는지 이해할 수 있도록 돕습니다.
+              지표와 경제 이벤트를 함께 살펴보며 지금 경제가 어떤 방향에 있는지 한눈에 볼 수 있고,
+              통화정책방향 결정회의 요약으로 현재 대한민국 경제 상황을 쉽게 이해할 수 있습니다.
             </p>
           </header>
           <PolicyCard></PolicyCard>
