@@ -36,7 +36,7 @@ export const events : Events[] = [
     "description": "미국 셰일오일 공급 증가로 국제 유가가 급격히 하락",
     "date": "2014-11",
     "url": "/series/kospi"
-  }
+  },
   {
     "id": "china-yuan-devaluation",
     "name": "중국 위안화 절하",
