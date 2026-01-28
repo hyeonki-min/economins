@@ -1,26 +1,12 @@
 import { fetchDataset } from '@/app/lib/fetch-data';
 import { redirect } from "next/navigation";
-import { events } from '@/app/lib/data/events';
 import { getLatestAvailablePolicyId, getPrevNextPolicyId, getKoreanMeetingDate, checkValidId, getValidIndex } from '@/app/lib/policy';
 
 import DecisionIssueCard from '@/app/ui/monetary-policy/decision-issue-card';
 import PrevNextFab from '@/app/ui/monetary-policy/prev-next-fab';
 import { Metadata } from 'next';
-import { Events, RouteProps, MonetaryPolicyBrief } from '@/app/lib/definitions';
+import { RouteProps, MonetaryPolicyBrief } from '@/app/lib/definitions';
 
-
-const getEventMeta = (eventId?: string): Events | null => {
-  if (!eventId) return null;
-  return events.find((event) => event.id === eventId) ?? null;
-};
-
-const buildTitle = (base: string, eventName?: string | null) =>
-  eventName ? `${base} - ${eventName}` : `${base}`;
-
-const buildDescription = (base: string, eventName?: string | null) =>
-  eventName
-    ? `${eventName} 전후 ${base}`
-    : `${base}`;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -51,13 +37,7 @@ export default async function Page({ params, searchParams }: RouteProps) {
   
   return (
     <div
-      className="min-h-[calc(100vh-96px)] w-full"
-      style={{
-        position: "relative",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      className="min-h-[calc(100vh-96px)] w-full relative flex items-center justify-center"
     >
       <PrevNextFab direction="prev" targetId={prev} />
       <PrevNextFab direction="next" targetId={next} />

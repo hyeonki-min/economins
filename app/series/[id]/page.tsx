@@ -35,8 +35,8 @@ export async function generateMetadata({ params, searchParams }: RouteProps): Pr
 
   if (!baseMeta) {
     return {
-      title: '경제 지표 시각화 - economins',
-      description: '기준금리, 아파트 실거래가 등 경제 데이터를 시각적으로 비교해보는 플랫폼',
+      title: '경제 흐름을 한눈에 보는 경제 지표 시각화 플랫폼',
+      description: '기준금리·물가·환율·주택가격 등 주요 경제 지표를 시각적으로 비교해 지금의 경제 흐름을 한눈에 파악하세요.',
     };
   }
 
@@ -71,7 +71,7 @@ export default async function Page({ params, searchParams }: RouteProps) {
   dateRange = adjustDateRangeByEvent(dateRange, finalEvent?.date);
 
   return (
-    <>
+    <div className="mt-2">
       <SearchModal firstIndicator={indicator} secondIndicator={undefined}>
         <SearchResult id={id}/>
       </SearchModal>
@@ -92,6 +92,6 @@ export default async function Page({ params, searchParams }: RouteProps) {
       </div>
       <RelatedReports id={id}></RelatedReports>
       <IndicatorInfo id={id} name={indicator.name}></IndicatorInfo>
-    </>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import EconominsLogo from '@/app/ui/logo';
+import EconominsLogo from '@/app/ui/header/logo';
 import Link from 'next/link';
 import { pretendard } from '@/app/ui/fonts';
 import dynamic from 'next/dynamic';
@@ -15,11 +15,7 @@ export default async function Page() {
   const sections = await loadIndicatorSections();
 
   return (
-    <main className="flex-col bg-gray-50">
-      <div className="flex sticky top-0 h-12 shrink-0 items-end p-2">
-        <EconominsLogo />
-      </div>
-      <div className={`${pretendard.className} min-h-screen`}>
+      <section className={`${pretendard.className}`}>
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-10">
            <header className="mb-8 space-y-2">
             <h1 className="text-2xl font-bold text-gray-900">
@@ -142,7 +138,6 @@ export default async function Page() {
             <EconomicTimeline />
           </section>
         </div>
-      </div>
-    </main>
+      </section>
   );
 }

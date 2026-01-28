@@ -28,18 +28,27 @@ export default function VisTimeline() {
 
     var now = new Date();
     const maxDate = new Date(now.getFullYear(), now.getMonth()+1, 1);
+    const isMobile = window.innerWidth < 640;
 
+    const mobileStart = new Date(
+      now.getFullYear() - 10,
+      now.getMonth(),
+      1
+    );
     const options = {
       width: '100%',
-      height: '300px',
-      min: new Date(1996, 0, 1),
+      height: 300,
+      min: new Date(2008, 0, 1),
       max: maxDate,
       editable: false,
       margin: {
         item: 10,
         axis: 5,
       },
-      
+      ...(isMobile && {
+        start: mobileStart,
+        end: maxDate,
+      }),
     };
 
     timelineRef.current = new Timeline(containerRef.current, items, options);
