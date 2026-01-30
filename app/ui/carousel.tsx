@@ -133,7 +133,15 @@ export default function Carousel({ event, seriesA, seriesB, indicatorA, indicato
                   ${
                     event.id === target
                       ? 'border-blue-600 bg-blue-50 shadow-md text-blue-700'
-                      : 'border-gray-300 bg-white text-gray-800 hover:border-blue-300'
+                      : `
+                        border-gray-300
+                        bg-white
+                        text-gray-800
+                        hover:bg-blue-50/50
+                        hover:border-blue-300
+                        hover:text-blue-700
+                        transition-colors duration-150
+                      `
                   }
                 `}
               >

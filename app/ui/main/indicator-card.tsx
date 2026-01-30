@@ -44,8 +44,8 @@ export default function IndicatorCard({
             className={`
               flex-1 rounded-md px-2 py-1.5 transition
               ${active === idx
-                ? "bg-white shadow text-gray-900 font-medium"
-                : "text-gray-500"}
+                ? "bg-white shadow text-gray-900"
+                : "text-gray-500 font-medium"}
             `}
           >
             {item.label}
