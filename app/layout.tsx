@@ -1,8 +1,9 @@
 import '@/app/ui/global.css';
 import { blinker } from '@/app/ui/fonts';
 import { Metadata } from 'next';
-import { GoogleTagManager } from '@next/third-parties/google'
 import Header from '@/app/ui/header/Header';
+import type { ReactNode } from 'react'
+import GTM from '@/app/ui/gtm'
 
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const currentYear = new Date().getFullYear();
   return (
@@ -28,11 +29,11 @@ export default function RootLayout({
       <body className={`${blinker.className} min-h-screen antialiased bg-slate-50`}>
         <Header />
         {children}
+        <GTM />
         <footer className={`${blinker.className} my-3 m-auto max-w-screen-2xl px-4 text-sm sm:px-6 lg:px-8`}>
           copyright © {currentYear} economins. All rights reserved.
         </footer>
       </body>
-      <GoogleTagManager gtmId="GTM-KXQRLLCL" />
     </html>
   );
 }

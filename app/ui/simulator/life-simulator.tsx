@@ -3,7 +3,7 @@
 import { LifePlanState } from '@/app/lib/simulator/types'
 import ScenarioPlan from '@/app/ui/simulator/life-scenario-form'
 import Simulation from '@/app/ui/simulator/simulation'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 export default function LifeSimulatorClient() {
   const desktopScrollRef = useRef<HTMLDivElement>(null)

@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { DataSet, Timeline } from 'vis-timeline/standalone';
-import 'vis-timeline/dist/vis-timeline-graph2d.min.css';
+import { Timeline } from 'vis-timeline';
+import { DataSet } from 'vis-data';
 import { events } from '@/app/lib/data/events';
 import Link from 'next/link';
 

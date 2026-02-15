@@ -8,70 +8,82 @@ export const size = {
   height: 630,
 };
 
-export const contentType = "image/png";
+type Props = {
+  params: Promise<{ id: string }>
+};
 
-
-export default async function OgImage({ params }: { params: { id: string } }) {
-  const id = params.id;
+export default async function OgImage({ params }: Props) {
+  const { id } = await params;
   const koreanDate = getKoreanMeetingDate(id);
   const decisions = await fetchDataset<MonetaryPolicyBrief>(`monetary-policy/${id}/bok-decision`);
   
-  return new ImageResponse(
-    (
+return new ImageResponse(
+  (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        background: "linear-gradient(135deg, #ffffff 0%, #f9fafb 100%)",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "28px 32px",
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        color: "#111827",
+      }}
+    >
+      {/* 상단 브랜드 */}
       <div
         style={{
-          width: "100%",
-          height: "100%",
-          background: "#ffffff",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          textAlign: "center",
-          padding: "10px 10px",
-          fontFamily: "system-ui, sans-serif",
-          color: "#111827",
+          fontSize: 14,
+          fontWeight: 600,
+          color: "#6b7280",
+          letterSpacing: "-0.01em",
         }}
       >
+        ECONOMINS · 통화정책
+      </div>
+
+      {/* 중앙 콘텐츠 */}
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            fontSize: 24,
-            fontWeight: 600,
-            marginBottom: 6,
+            fontSize: 26,
+            fontWeight: 700,
+            marginBottom: 8,
+            lineHeight: 1.2,
           }}
         >
-          {koreanDate} 통화정책방향 요약
+          {koreanDate} 통화정책방향
         </div>
 
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
             fontSize: 18,
             color: "#374151",
-            lineHeight: 1.3,
+            lineHeight: 1.4,
+            maxWidth: "90%",
           }}
         >
-          {decisions?.[0]?.title ?? "한국은행의 기준금리 결정을 참고하세요."}
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: 20,
-            fontSize: 14,
-            color: "#6b7280",
-          }}
-        >
-          economins.com
+          {decisions?.[0]?.title ??
+            "한국은행의 기준금리 결정을 확인하세요."}
         </div>
       </div>
-    ),
-    {
-      width: 476,
-      height: 250,
-    }
-  );
+
+      {/* 하단 도메인 */}
+      <div
+        style={{
+          fontSize: 14,
+          color: "#9ca3af",
+        }}
+      >
+        economins.com
+      </div>
+    </div>
+  ),
+  {
+    width: 476,
+    height: 250,
+  }
+);
 }

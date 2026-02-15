@@ -1,15 +1,10 @@
-import EconominsLogo from '@/app/ui/header/logo';
 import Link from 'next/link';
 import { pretendard } from '@/app/ui/fonts';
-import dynamic from 'next/dynamic';
 import PolicyCard from '@/app/ui/monetary-policy/policy-card';
 import Section from '@/app/ui/main/section';
 import IndicatorCard from '@/app/ui/main/indicator-card';
 import { loadIndicatorSections } from '@/app/lib/services/indicator.service';
-
-const EconomicTimeline = dynamic(() => import('@/app/ui/timeline'), {
-  ssr: false,
-});
+import EconomicTimeline from '@/app/ui/timeline'
 
 export default async function Page() {
   const sections = await loadIndicatorSections();

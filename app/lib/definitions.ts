@@ -39,9 +39,12 @@ export type RouteParams = {
   compareId: string;
 };
 
-export type RouteProps<P = RouteParams, Q = SearchParams> = {
-  params: P;
-  searchParams: Q;
+export type RouteProps<
+  P = RouteParams,
+  Q = SearchParams
+> = {
+  params: Promise<Readonly<P>>;
+  searchParams: Promise<Readonly<Q>>;
 };
 
 export type EventMeta = {

@@ -27,7 +27,8 @@ const buildDescription = (base: string, compare: string, eventName?: string | nu
     : `${base}, ${compare} 데이터를 한눈에 비교해보세요.`;
 
 export async function generateMetadata({ params, searchParams }: RouteProps): Promise<Metadata> {
-  const { id, compareId } = params;
+  const { id, compareId } = await params;
+  const resolvedSearchParams = await searchParams;
 
   const baseMeta = seoMetaMap[id];
   const compareMeta = seoMetaMap[compareId];
@@ -39,7 +40,7 @@ export async function generateMetadata({ params, searchParams }: RouteProps): Pr
     };
   }
 
-  const eventId = searchParams.event as string | undefined;
+  const eventId = resolvedSearchParams.event as string | undefined;
   const eventMeta = getEventMeta(eventId);
 
   const title = buildTitle(baseMeta.title, compareMeta.title, eventMeta?.name);
@@ -56,22 +57,31 @@ export async function generateMetadata({ params, searchParams }: RouteProps): Pr
 }
 
 export default async function Page({ params, searchParams }: RouteProps) {
-  const id = params.id;
-  const compareId = params.compareId;
+  const { id, compareId } = await params;
+  const resolvedSearchParams = await searchParams;
+
   const [firstIndicator, firstData, secondIndicator, secondData] = await Promise.all([
     fetchObject<Indicator>(`indicator/${id}`),
     fetchDataset<XYPoint>(`data/${id}`),
     fetchObject<Indicator>(`indicator/${compareId}`),
     fetchDataset<XYPoint>(`data/${compareId}`),
   ]);
-  
+
   if (!firstIndicator) {
     notFound();
   }
 
-  let dateRange = DateRangeSchema.parse(searchParams);
-  const finalEvent = findEvent(events, searchParams.event);
-  dateRange = adjustDateRangeByEvent(dateRange, finalEvent?.date);
+  let dateRange = DateRangeSchema.parse(resolvedSearchParams);
+
+  const finalEvent = findEvent(
+    events,
+    resolvedSearchParams.event
+  );
+
+  dateRange = adjustDateRangeByEvent(
+    dateRange,
+    finalEvent?.date
+  );
 
   return (
     <>

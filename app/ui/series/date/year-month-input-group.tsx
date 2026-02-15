@@ -1,6 +1,6 @@
 import { Indicator, PickerTarget } from "@/app/lib/definitions";
 import { useClickOutside } from "@/app/lib/click-outside";
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { YearMonthPicker } from "./year-month-picker";
 
 
@@ -17,7 +17,9 @@ export function YearMonthInputGroup({
 }: {
   target: Exclude<PickerTarget, null>;
   openPicker: PickerTarget;
-  setOpenPicker: (v: PickerTarget) => void;
+  setOpenPicker: React.Dispatch<
+    React.SetStateAction<PickerTarget | null>
+  >;
   year: number;
   month: number;
   onSelect: (y: number, m: number) => void;
@@ -27,11 +29,12 @@ export function YearMonthInputGroup({
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  useClickOutside(wrapperRef, () => {
-    if (openPicker === target) {
-      setOpenPicker(null);
-    }
-  });
+  const handleClose = useCallback(() => {
+    setOpenPicker(prev => (prev === target ? null : prev));
+  }, [target]);
+
+  useClickOutside(wrapperRef, handleClose);
+
 
   const isOpen = openPicker === target;
 

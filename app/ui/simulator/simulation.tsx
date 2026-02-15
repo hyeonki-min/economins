@@ -10,8 +10,8 @@ import { FinancialStressIndicator } from '@/app/ui/simulator/finance-stress-indi
 import { LifePlanState } from '@/app/lib/simulator/types'
 
 
-type Props = {
-  scrollRef: React.RefObject<HTMLDivElement>
+type Props<T extends HTMLElement = HTMLDivElement> = {
+  scrollRef: React.RefObject<T | null>
   plan: LifePlanState
   setMobileMode: React.Dispatch<
     React.SetStateAction<"simulation" | "plan">
@@ -28,7 +28,7 @@ export default function Simulation({ scrollRef, plan, setMobileMode }: Props) {
     setAge(startAge)
   }, [startAge])
 
-  useLifeScroll(scrollRef, age, setAge, startAge, maxAge)
+  useLifeScroll(scrollRef, setAge, startAge, maxAge)
 
   const finance = calculateSimpleFinance(plan, age)
   const { labels, riskLevel } = getLifeState(age, plan, finance)

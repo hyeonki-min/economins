@@ -3,8 +3,7 @@
 import { useEffect } from "react"
 
 export function useLifeScroll(
-  ref: React.RefObject<HTMLElement>,
-  value: number,
+  ref: React.RefObject<HTMLElement | null>,
   onChange: (updater: (prev: number) => number) => void,
   min: number,
   max: number
@@ -24,24 +23,23 @@ export function useLifeScroll(
       })
     }
 
-    // 🔵 wheel (왼쪽 영역에서만)
     const handleWheel = (e: WheelEvent) => {
-      if ((e.target as HTMLElement).closest("input, textarea")) return
+      const target = e.target as HTMLElement
+      if (target.closest("input, textarea")) return
       if (Math.abs(e.deltaY) < 10) return
 
       e.preventDefault()
       step(e.deltaY > 0 ? 1 : -1)
     }
 
-    // 🔵 body scroll 기반
     const handleScroll = () => {
       const scrollY = window.scrollY
       const delta = scrollY - prevScrollY
 
-      if (Math.abs(delta) < 40) return
-
-      step(delta > 0 ? 1 : -1)
-      prevScrollY = scrollY
+      if (Math.abs(delta) >= 40) {
+        step(delta > 0 ? 1 : -1)
+        prevScrollY = scrollY
+      }
     }
 
     const el = ref.current
@@ -50,11 +48,13 @@ export function useLifeScroll(
       el.addEventListener("wheel", handleWheel, { passive: false })
     }
 
+    window.addEventListener("scroll", handleScroll, { passive: true })
+
     return () => {
       if (el) {
         el.removeEventListener("wheel", handleWheel)
       }
+      window.removeEventListener("scroll", handleScroll)
     }
   }, [ref, onChange, min, max])
 }
-
