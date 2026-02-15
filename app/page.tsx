@@ -115,6 +115,44 @@ export default async function Page() {
                 </span>
               </div>
             </Link>
+
+            <Link
+              href="/simulator"
+              className="
+                group relative rounded-xl border border-gray-200
+                bg-white p-5
+                transition
+                hover:bg-gray-50
+                hover:border-gray-300
+                hover:shadow-sm
+              "
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-xl">📈</span>
+
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    인생 재무 시뮬레이터
+                  </h3>
+
+                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                    소득, 소비, 결혼, 주택, 자산 수익률까지.
+                    당신의 선택이 시간이 지나 어떻게 쌓이는지
+                    한눈에 확인해보세요.
+                  </p>
+                </div>
+
+                <span
+                  className="
+                    text-gray-400 transition-transform
+                    group-hover:translate-x-1
+                  "
+                  aria-hidden
+                >
+                  →
+                </span>
+              </div>
+            </Link>
           </div>
 
           <section
