@@ -9,8 +9,10 @@ export function useLifeScroll(
   max: number
 ) {
   useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
     let last = 0
-    let prevScrollY = window.scrollY
 
     const step = (dir: 1 | -1) => {
       const now = Date.now()
@@ -24,37 +26,45 @@ export function useLifeScroll(
     }
 
     const handleWheel = (e: WheelEvent) => {
-      const target = e.target as HTMLElement
-      if (target.closest("input, textarea")) return
       if (Math.abs(e.deltaY) < 10) return
-
       e.preventDefault()
       step(e.deltaY > 0 ? 1 : -1)
     }
 
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const delta = scrollY - prevScrollY
+    let startY = 0
+    let acc = 0
+    const THRESHOLD = 24
 
-      if (Math.abs(delta) >= 40) {
-        step(delta > 0 ? 1 : -1)
-        prevScrollY = scrollY
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return
+      startY = e.touches[0].clientY
+      acc = 0
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!e.cancelable) return
+      if (e.touches.length !== 1) return
+
+      const y = e.touches[0].clientY
+      const dy = y - startY
+      startY = y
+      acc += dy
+
+      if (Math.abs(acc) >= THRESHOLD) {
+        e.preventDefault()
+        step(acc < 0 ? 1 : -1)
+        acc = 0
       }
     }
 
-    const el = ref.current
-
-    if (el) {
-      el.addEventListener("wheel", handleWheel, { passive: false })
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    el.addEventListener("wheel", handleWheel, { passive: false })
+    el.addEventListener("touchstart", handleTouchStart, { passive: true })
+    el.addEventListener("touchmove", handleTouchMove, { passive: false })
 
     return () => {
-      if (el) {
-        el.removeEventListener("wheel", handleWheel)
-      }
-      window.removeEventListener("scroll", handleScroll)
+      el.removeEventListener("wheel", handleWheel)
+      el.removeEventListener("touchstart", handleTouchStart)
+      el.removeEventListener("touchmove", handleTouchMove)
     }
   }, [ref, onChange, min, max])
 }

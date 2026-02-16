@@ -32,19 +32,22 @@ export default function LifeSimulatorClient() {
   })
 
   return (
-<div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8">
+    <div className="grid lg:grid-cols-[360px_1fr] gap-8">
       {/* Desktop Left */}
       <aside className="hidden lg:block">
-        <div ref={desktopScrollRef} className="sticky top-24 h-fit">
-        <Simulation
-          scrollRef={desktopScrollRef}
-          plan={plan}
-          setMobileMode={setMobileMode}
-        />
+        <div
+          ref={desktopScrollRef}
+          className="sticky top-24 touch-none select-none"
+        >
+          <Simulation
+            scrollRef={desktopScrollRef}
+            plan={plan}
+            setMobileMode={setMobileMode}
+          />
         </div>
       </aside>
 
-      {/* Desktop Right */}
+      {/* Desktop Right (NO overflow-y-auto) */}
       <div className="hidden lg:block">
         <ScenarioPlan
           plan={plan}
@@ -53,9 +56,16 @@ export default function LifeSimulatorClient() {
         />
       </div>
 
-      {/* Mobile */}
-      <div ref={mobileScrollRef} className="lg:hidden relative">
-        {/* Simulation 기본 화면 */}
+      {/* ================= Mobile ================= */}
+      <div
+        ref={mobileScrollRef}
+        className="
+          lg:hidden
+          relative
+          touch-none
+          overscroll-y-contain
+        "
+      >
         <Simulation
           scrollRef={mobileScrollRef}
           plan={plan}
@@ -88,12 +98,18 @@ export default function LifeSimulatorClient() {
           `}
           style={{ maxHeight: "95vh" }}
         >
-          {/* Drag Indicator */}
           <div className="flex justify-center py-3">
             <div className="w-10 h-1.5 bg-gray-300 rounded-full" />
           </div>
 
-          <div className="px-6 pb-10 overflow-y-auto max-h-[90vh]">
+          <div
+            className="
+              px-6 pb-10
+              overflow-y-auto
+              max-h-[90vh]
+              overscroll-y-contain
+            "
+          >
             <ScenarioPlan
               plan={plan}
               onChange={setPlan}
@@ -102,6 +118,7 @@ export default function LifeSimulatorClient() {
           </div>
         </div>
       </div>
+
     </div>
   )
 }
