@@ -6,6 +6,7 @@ import IndicatorCard from '@/app/ui/main/indicator-card';
 import { loadIndicatorSections } from '@/app/lib/services/indicator.service';
 import EconomicTimeline from '@/app/ui/timeline'
 
+
 export default async function Page() {
   const sections = await loadIndicatorSections();
 

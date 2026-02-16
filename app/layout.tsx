@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import Header from '@/app/ui/header/Header';
 import type { ReactNode } from 'react'
 import GTM from '@/app/ui/gtm'
+import 'vis-timeline/styles/vis-timeline-graph2d.min.css'
 
 
 export const metadata: Metadata = {

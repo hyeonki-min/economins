@@ -1,27 +1,15 @@
 import { FinanceCardData } from '@/app/lib/simulator/types';
-import clsx from 'clsx';
 import { useState } from 'react';
 import Modal from '@/app/ui/simulator/modal';
-import LivingExpenseModal from '@/app/ui/simulator/modal/living-expense-modal';
-import ChildExpenseModal from '@/app/ui/simulator/modal/child-expense-modal';
-import SalaryIncreaseRateModal from '@/app/ui/simulator/modal/salary-raise-modal';
-import TaxModal from '@/app/ui/simulator/modal/tax-modal';
-import MarriageExpenseModal from '@/app/ui/simulator/modal/marriage-expense-modal';
-import MortgageLoanModal from '@/app/ui/simulator/modal/mortgage-loan-modal';
-import RealEstateEquityModal from '@/app/ui/simulator/modal/real-estate-equity-modal';
-import RetirementPensionModal from '@/app/ui/simulator/modal/retire-pension-modal';
-import EtfInvestmentModal from '@/app/ui/simulator/modal/etf-investment-modal';
-import DepositSavingModal from '@/app/ui/simulator/modal/deposit-saving-modal';
-import JeonseModal from '@/app/ui/simulator/modal/jeonse-modal';
+import InfoButton from '@/app/ui/simulator/info-button'
+import {
+  InfoModalType,
+  modalTitleMap,
+  modalComponentMap,
+} from '@/app/lib/simulator/modal-config'
+import SummaryButton from '@/app/ui/simulator/summary-button';
+import { ActiveKey } from '@/app/lib/definitions';
 
-type ActiveKey =
-  | 'salary'
-  | 'netMonthlyIncome'
-  | 'expense'
-  | 'saving'
-  | 'asset'
-  | 'liability'
-  | null;
 
 interface Props {
   data: FinanceCardData;
@@ -29,108 +17,9 @@ interface Props {
   setActive: (v: ActiveKey) => void;
 }
 
-type Color = 'blue' | 'indigo' | 'red' | 'rose' | 'green' | 'emerald';
-
-const activeColorClass: Record<Color, string> = {
-  blue: 'bg-blue-100 ring-2 ring-blue-300 focus:ring-blue-300',
-  indigo: 'bg-indigo-100 ring-2 ring-indigo-300 focus:ring-indigo-300',
-  red: 'bg-red-100 ring-2 ring-red-300 focus:ring-red-300',
-  rose: 'bg-rose-100 ring-2 ring-rose-300 focus:ring-rose-300',
-  green: 'bg-green-100 ring-2 ring-green-300 focus:ring-green-300',
-  emerald: 'bg-emerald-100 ring-2 ring-emerald-300 focus:ring-emerald-300',
-};
-
-type InfoModalType = 'living' | 'child' | 'salary' | 'tax' | 'marriage' | 'mortgage' | 'realestate' | 'retire' | 'saving' | 'etf' | 'housingDeposit' | null
-
-const modalConfig = {
-  living: {
-    title: '생활비는 어떻게 계산하나요?',
-    content: <LivingExpenseModal />,
-  },
-  child: {
-    title: '자녀 양육비는 어떻게 계산하나요?',
-    content: <ChildExpenseModal />,
-  },
-  salary: {
-    title: '연봉 상승률은 어떻게 정해지나요?',
-    content: <SalaryIncreaseRateModal />,
-  },
-  tax: {
-    title: '4대보험 및 세금은 어떻게 계산하나요?',
-    content: <TaxModal />,
-  },
-  marriage: {
-    title: '결혼 비용은 어떻게 계산하나요?',
-    content: <MarriageExpenseModal />,
-  },
-  mortgage: {
-    title: '집값과 대출은 어떻게 계산하나요?',
-    content: <MortgageLoanModal />,
-  },
-  realestate: {
-    title: '부동산 지분이란?',
-    content: <RealEstateEquityModal />,
-  },
-  retire : {
-    title: '퇴직 연금 수령액은 어떻게 계산하나요?',
-    content: <RetirementPensionModal />,
-  },
-  saving : {
-    title: '예금/적금은 어떻게 계산하나요?',
-    content: <DepositSavingModal />,
-  },
-  etf : {
-    title: 'ETF는 어떻게 계산하나요?',
-    content: <EtfInvestmentModal />,
-  },
-  housingDeposit : {
-    title: '전월세 보증금의 함정',
-    content: <JeonseModal />,
-  }
-} as const
-
-
-function SummaryButton({
-  label,
-  value,
-  unit = '만원',
-  activeKey,
-  active,
-  onClick,
-  color,
-}: {
-  label: string;
-  value: number | null;
-  unit?: string;
-  activeKey: ActiveKey;
-  active: ActiveKey;
-  onClick: () => void;
-  color: Color;
-}) {
-  const isActive = active === activeKey;
-
-  return (
-    <button
-      onClick={onClick}
-      className={clsx(
-        'p-3 rounded-xl text-left transition-all',
-        'hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98]',
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
-        isActive
-          ? activeColorClass[color]
-          : 'bg-gray-50 hover:bg-gray-100'
-      )}
-    >
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="text-base font-bold text-gray-900">
-        {value !== null ? `${value.toLocaleString()} ${unit}` : '—'}
-      </p>
-    </button>
-  );
-}
-
 export default function FinanceMiniCard({ data, active, setActive }: Props) {
   const [openModal, setOpenModal] = useState<InfoModalType>(null)
+  const ContentComponent = openModal ? modalComponentMap[openModal] : null
 
   return (
     <div className="
@@ -148,8 +37,7 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
         <SummaryButton
           label="연봉"
           value={data.salary.annualIncome}
-          activeKey="salary"
-          active={active}
+          isActive={active === 'salary'}
           color="blue"
           onClick={() => setActive(active === 'salary' ? null : 'salary')}
         />
@@ -157,8 +45,7 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
         <SummaryButton
           label="월 실수령"
           value={data.monthly.net}
-          activeKey="netMonthlyIncome"
-          active={active}
+          isActive={active === 'netMonthlyIncome'}
           color="indigo"
           onClick={() =>
             setActive(active === 'netMonthlyIncome' ? null : 'netMonthlyIncome')
@@ -168,8 +55,7 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
         <SummaryButton
           label="월 소비"
           value={data.expense?.total ?? null}
-          activeKey="expense"
-          active={active}
+          isActive={active === 'expense'}
           color="red"
           onClick={() => setActive(active === 'expense' ? null : 'expense')}
         />
@@ -177,8 +63,7 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
         <SummaryButton
           label="월 저축"
           value={data.saving?.total ?? null}
-          activeKey="saving"
-          active={active}
+          isActive={active === 'saving'}
           color="green"
           onClick={() => setActive(active === 'saving' ? null : 'saving')}
         />
@@ -186,8 +71,7 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
         <SummaryButton
           label="순자산"
           value={data.accumulated.grossAssetsAbs}
-          activeKey="asset"
-          active={active}
+          isActive={active === 'asset'}
           color="emerald"
           onClick={() => setActive(active === 'asset' ? null : 'asset')}
         />
@@ -195,8 +79,7 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
         <SummaryButton
           label="부채"
           value={data.liability.total}
-          activeKey="liability"
-          active={active}
+          isActive={active === 'liability'}
           color="rose"
           onClick={() => setActive(active === 'liability' ? null : 'liability')}
         />
@@ -211,13 +94,13 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
       >
         {active && (
           <div className="mt-4 p-4 rounded-xl bg-gray-50 space-y-2">
-            {openModal && (
+            {openModal && ContentComponent && (
               <Modal
                 open
                 onClose={() => setOpenModal(null)}
-                title={modalConfig[openModal].title}
+                title={modalTitleMap[openModal]}
               >
-                {modalConfig[openModal].content}
+                <ContentComponent />
               </Modal>
             )}
             {active === 'salary' && (
@@ -232,19 +115,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-1">
                     <span className="text-slate-500">연봉 상승률</span>
-
-                    <button
-                      type="button"
-                      onClick={() => setOpenModal('salary')}
-                      className="
-                        text-slate-400
-                        hover:text-slate-600
-                        transition
-                      "
-                      aria-label="연봉 상승률 설명"
-                    >
-                      ⓘ
-                    </button>
+                    <InfoButton
+                      modalKey="salary"
+                      onOpen={setOpenModal}
+                      ariaLabel="연봉 상승률 설명"
+                    />
                   </div>
                   <span className="font-semibold text-slate-800">
                     {data.salary.increaseRate.toLocaleString()}%
@@ -286,19 +161,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">4대 보험 및 세금</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('tax')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="4대 보험 및 세금 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="tax"
+                        onOpen={setOpenModal}
+                        ariaLabel="4대 보험 및 세금 설명"
+                      />
                     </div>
                     <span className="font-semibold">
                       {data.monthly?.tax ?? '—'} 만원
@@ -320,19 +187,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">생활비</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('living')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="생활비 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="living"
+                        onOpen={setOpenModal}
+                        ariaLabel="생활비 설명"
+                      />
                     </div>
                     <span className="font-semibold text-slate-800">
                       {data.expense.living.toLocaleString()} 만원
@@ -350,19 +209,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">자녀 양육비</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('child')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="자녀 양육비 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="child"
+                        onOpen={setOpenModal}
+                        ariaLabel="자녀 양육비 설명"
+                      />
                     </div>
                     <span className="font-semibold">
                       {data.expense.child.toLocaleString()} 만원
@@ -373,19 +224,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">결혼 비용</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('marriage')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="결혼 비용 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="marriage"
+                        onOpen={setOpenModal}
+                        ariaLabel="결혼 비용 설명"
+                      />
                     </div>
                     <span className="font-semibold">
                       {data.expense.marriage.toLocaleString()} 만원
@@ -455,19 +298,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">예금/적금</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('saving')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="예금/적금 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="saving"
+                        onOpen={setOpenModal}
+                        ariaLabel="예금/적금 설명"
+                      />
                     </div>
                     <span className="font-semibold text-slate-800">
                       {data.accumulated.deposit.toLocaleString()} 만원
@@ -477,19 +312,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">ETF</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('etf')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="ETF 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="etf"
+                        onOpen={setOpenModal}
+                        ariaLabel="ETF 설명"
+                      />
                     </div>
                     <span className="font-semibold">
                       {data.accumulated.etf.toLocaleString()} 만원
@@ -499,19 +326,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">부동산 지분</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('realestate')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="부동산 지분 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="realestate"
+                        onOpen={setOpenModal}
+                        ariaLabel="부동산 지분 설명"
+                      />
                     </div>
                     <span className="font-semibold">
                       {data.accumulated.realEstate.toLocaleString()} 만원
@@ -521,19 +340,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">전월세 보증금</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('housingDeposit')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="전월세 보증금 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="housingDeposit"
+                        onOpen={setOpenModal}
+                        ariaLabel="전월세 보증금 설명"
+                      />
                     </div>
                     <span className="font-semibold">
                       {data.accumulated.housingDeposit.toLocaleString()} 만원
@@ -543,19 +354,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">퇴직 연금 수령액</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('retire')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label=" 퇴직 연금 수령액 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="retire"
+                        onOpen={setOpenModal}
+                        ariaLabel="퇴직 연금 수령액 설명"
+                      />
                     </div>
                     <span className="font-semibold">
                       {data.accumulated.totalRp.toLocaleString()} 만원
@@ -590,19 +393,11 @@ export default function FinanceMiniCard({ data, active, setActive }: Props) {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1">
                       <span className="text-slate-500">주담대 원금</span>
-
-                      <button
-                        type="button"
-                        onClick={() => setOpenModal('mortgage')}
-                        className="
-                          text-slate-400
-                          hover:text-slate-600
-                          transition
-                        "
-                        aria-label="주담대 원금 설명"
-                      >
-                        ⓘ
-                      </button>
+                      <InfoButton
+                        modalKey="mortgage"
+                        onOpen={setOpenModal}
+                        ariaLabel="주담대 원금 설명"
+                      />
                     </div>
                     <span className="font-semibold text-slate-800">
                       {data.liability.mortgage.loanAmount.toLocaleString()}만원

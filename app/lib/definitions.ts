@@ -88,3 +88,12 @@ export type CarouselProps = {
   indicatorB?: Indicator;
   event?: EventMeta;
 };
+
+export type ActiveKey =
+  | 'salary'
+  | 'netMonthlyIncome'
+  | 'expense'
+  | 'saving'
+  | 'asset'
+  | 'liability'
+  | null;
