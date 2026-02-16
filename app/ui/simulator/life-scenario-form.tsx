@@ -83,22 +83,12 @@ export default function ScenarioPlan({ plan, onChange, setMobileMode }: Props) {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <div
-        className="
-          lg:hidden
-          sticky top-0 z-50
-          bg-white
-        "
-      >
-        <div className="flex items-center justify-between">
-
-          {/* 요약 영역 */}
-          <div className="flex-1 text-sm text-slate-700 truncate">
-            <ScenarioSummaryCard plan={plan} />
-          </div>
-
-          {/* + 버튼 */}
-          <div className="ml-3">
+      <div className="lg:hidden sticky top-0 z-50 bg-slate-50">
+        <div className="mb-6">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 min-w-0">
+              <ScenarioSummaryCard plan={plan} />
+            </div>
             <button
               onClick={() => setMobileMode("simulation")}
               className="
@@ -107,7 +97,6 @@ export default function ScenarioPlan({ plan, onChange, setMobileMode }: Props) {
                 rounded-full
                 bg-slate-900
                 text-white
-                leading-none
                 active:scale-90
                 transition
               "
@@ -115,10 +104,8 @@ export default function ScenarioPlan({ plan, onChange, setMobileMode }: Props) {
               +
             </button>
           </div>
-
         </div>
       </div>
-
       <div className="
         mx-auto
         w-full

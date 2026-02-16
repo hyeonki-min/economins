@@ -44,11 +44,13 @@ export default function Simulation({ scrollRef, plan, setMobileMode }: Props) {
         스크롤로 인생 재무 흐름을 탐험하세요
       </div>
 
-      <div className="space-y-2 mb-4">
-        {labels.map((e, i) => (
-          <div key={i} className="text-lg">{e}</div>
-        ))}
-      </div>
+      {labels.length > 0 && (
+        <div className="space-y-2 mb-4">
+          {labels.map((e, i) => (
+            <div key={i} className="text-lg">{e}</div>
+          ))}
+        </div>
+      )}
 
       <FinancialStressIndicator riskLevel={riskLevel}/>
 

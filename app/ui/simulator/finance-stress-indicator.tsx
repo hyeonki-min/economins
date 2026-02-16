@@ -11,7 +11,8 @@ export function FinancialStressIndicator({
   return (
     <div className="space-y-2">
       {/* 바 */}
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center gap-2">
+        {/* Risk Bar */}
         <div
           className={`w-40 h-4 rounded-full transition-all duration-300 ${
             riskLevel === 0
@@ -21,20 +22,21 @@ export function FinancialStressIndicator({
               : 'bg-red-500'
           }`}
         />
-      </div>
 
-      {/* 라벨 + i */}
-      <div className="flex items-center justify-center gap-1">
-        <span className="text-sm">재정 압박 지수</span>
-
+        {/* Info Button */}
         <button
           onClick={() => setOpen(true)}
           aria-label="재정 압박 지수 설명"
           className="
-            w-4 h-4 flex items-center justify-center
-            rounded-full border border-gray-300
-            text-[10px] text-gray-500
-            hover:bg-gray-100
+            w-5 h-5
+            flex items-center justify-center
+            rounded-full
+            border border-slate-300
+            text-[11px] text-slate-500
+            hover:bg-slate-100
+            active:scale-90
+            transition
+            shrink-0
           "
         >
           i

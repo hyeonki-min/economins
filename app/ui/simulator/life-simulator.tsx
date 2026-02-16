@@ -88,7 +88,7 @@ export default function LifeSimulatorClient() {
         <div
           className={`
             fixed bottom-0 left-0 right-0 z-50
-            bg-white
+            bg-slate-50
             rounded-t-3xl
             shadow-2xl
             transition-transform duration-300 ease-out
