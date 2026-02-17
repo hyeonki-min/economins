@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { FinancialStressIndicator } from '@/app/ui/simulator/finance-stress-indicator'
 import { LifePlanState } from '@/app/lib/simulator/types'
 import { ActiveKey } from '@/app/lib/definitions'
+import { AgeSwipeWrapper } from '@/app/ui/simulator/age-swipe'
 
 
 type Props<T extends HTMLElement = HTMLDivElement> = {
@@ -34,14 +35,25 @@ export default function Simulation({ scrollRef, plan, setMobileMode }: Props) {
   const { labels, riskLevel } = getLifeState(age, plan, finance)
   const [active, setActive] = useState<ActiveKey>(null);
 
-
   return (
     <div className="mx-auto w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center text-center px-2 py-2 sm:py-0 transition">
 
-      <AgeDisplay age={age} />
+      <AgeSwipeWrapper
+        age={age}
+        min={startAge}
+        max={maxAge}
+        onChange={setAge}
+      >
+        <AgeDisplay age={age} />
+      </AgeSwipeWrapper>      
 
       <div className="text-xl text-gray-500 mb-4">
-        스크롤로 인생 재무 흐름을 탐험하세요
+        <span className="hidden lg:inline">
+          스크롤로 인생 재무 흐름을 탐험하세요
+        </span>
+        <span className="inline lg:hidden">
+          스와이프로 인생 재무 흐름을 탐험하세요
+        </span>
       </div>
 
       {labels.length > 0 && (

@@ -32,19 +32,20 @@ export function SelectCard<T>({
               key={String(opt.value)}
               onClick={() => onChange(opt.value)}
               className={`
-                rounded-lg border p-3 text-left transition
+                rounded-xl border p-3 text-left transition-all duration-150
                 ${selected
-                  ? "border-blue-500 bg-blue-50 ring-2 ring-blue-200"
-                  : "border-slate-300 hover:bg-slate-100"}
+                  ? "border-2 border-blue-500 text-slate-900"
+                  : "border border-slate-300 text-slate-600 hover:border-slate-400"
+                }
               `}
             >
 
-            <div className="mt-1 text-base font-semibold text-slate-800">
+            <div className="mt-1 text-base font-semibold">
               {opt.label}
             </div>
 
             {opt.value && (
-              <div className="mt-2 text-xs text-slate-400 group-hover:text-slate-500">
+              <div className="mt-2 text-xs group-hover:text-slate-500">
                 {opt.description}
               </div>
             )}

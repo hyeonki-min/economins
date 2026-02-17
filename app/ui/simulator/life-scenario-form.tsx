@@ -83,28 +83,8 @@ export default function ScenarioPlan({ plan, onChange, setMobileMode }: Props) {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <div className="lg:hidden sticky top-0 z-50 bg-slate-50">
-        <div className="mb-6">
-          <div className="flex items-center gap-3">
-            <div className="flex-1 min-w-0">
-              <ScenarioSummaryCard plan={plan} />
-            </div>
-            <button
-              onClick={() => setMobileMode("simulation")}
-              className="
-                w-7 h-7
-                flex items-center justify-center
-                rounded-full
-                bg-slate-900
-                text-white
-                active:scale-90
-                transition
-              "
-            >
-              +
-            </button>
-          </div>
-        </div>
+      <div className="lg:hidden sticky top-0 z-50 bg-slate-50 overflow-hidden shadow-sm">
+        <ScenarioSummaryCard plan={plan} />
       </div>
       <div className="
         mx-auto
@@ -135,19 +115,19 @@ export default function ScenarioPlan({ plan, onChange, setMobileMode }: Props) {
           title="은퇴 기준"
           description="언제까지 소득이 발생한다고 가정할지 선택합니다."
         >
-          <SelectCard
-            title="은퇴"
+          <NumericInputCard
+            title="은퇴 나이"
             value={plan.retirementAge}
-            onChange={(v) =>
-              onChange(p => ({ ...p, retirementAge: v }))
-            }
-            options={[
+            unit="세"
+            presets={[
               { label: "60세", value: 60, description: "정년 보장"},
               { label: "49세", value: 49, description: "평균 퇴직 연령" },
               { label: "83세", value: 83, description: "평균 사망 연령"},
             ]}
+            onChange={(retirementAge) =>
+              onChange(p => ({ ...p, retirementAge }))
+            }
           />
-
         </Section>
 
         {/* ===================== */}
@@ -479,6 +459,27 @@ export default function ScenarioPlan({ plan, onChange, setMobileMode }: Props) {
             ]}
           />
         </Section>
+        {setMobileMode && (
+          <button
+            onClick={() => setMobileMode("simulation")}
+            className="
+              lg:hidden
+              w-full
+              mt-4
+              py-3
+              rounded-xl
+              bg-slate-900
+              text-white
+              font-medium
+              transition
+              hover:ring-2 hover:ring-slate-900/30
+              active:ring-2 active:ring-slate-900
+              active:scale-[0.98]
+            "
+          >
+            확인하기
+          </button>
+        )}
       </div>
     </main>
   )

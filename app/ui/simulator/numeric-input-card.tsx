@@ -80,13 +80,14 @@ export function NumericInputCard({
               className={`
                 rounded-lg border p-3 text-left transition
                 ${selected
-                  ? "border-blue-500 bg-blue-50 ring-2 ring-blue-200"
-                  : "border-slate-300 hover:bg-slate-100"}
+                  ? "border-2 border-blue-500 text-slate-900"
+                  : "border border-slate-300 text-slate-600 hover:border-slate-400"
+                }
               `}
             >
               <div className="font-semibold">{preset.label}</div>
               {preset.description && (
-                <div className="text-xs text-slate-500">
+                <div className="text-xs">
                   {preset.description}
                 </div>
               )}
@@ -99,39 +100,46 @@ export function NumericInputCard({
           className={`
             rounded-lg border p-3 transition h-16 min-w-0
             ${editing || isCustomValue
-              ? "border-blue-500 bg-blue-50 ring-2 ring-blue-200"
-              : "border-slate-300 hover:bg-slate-100 cursor-pointer"}
+              ? "border-2 border-blue-500 text-slate-900"
+              : "border border-slate-300 text-slate-600 hover:border-slate-400"
+            }
           `}
           onClick={() => setEditing(true)}
         >
           {!editing ? (
             <>
               <div className="font-semibold">직접 입력</div>
-              <div className="text-xs text-slate-500">
+              <div className="text-xs">
                 {value.toLocaleString()}
                 {unit}
               </div>
             </>
           ) : (
-            <div className="mt-2 min-w-0">
-            <input
-              ref={inputRef}
-              type="text"
-              value={draft}
-              onChange={(e) =>
-                setDraft(e.target.value.replace(/[^\d]/g, ""))
-              }
-              onBlur={commit}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") commit()
-                if (e.key === "Escape") setEditing(false)
-              }}
-              className="
-                w-full min-w-0 box-border rounded-md border border-slate-300
-                px-2 py-1 text-sm leading-tight h-8
-                focus:outline-none focus:ring-2 focus:ring-blue-200
-              "
-            />
+            <div className="mt-2 min-w-0 relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={draft}
+                onChange={(e) =>
+                  setDraft(e.target.value.replace(/[^\d]/g, ""))
+                }
+                onBlur={commit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") commit()
+                  if (e.key === "Escape") setEditing(false)
+                }}
+                className="
+                  w-full min-w-0 box-border rounded-md border border-slate-300
+                  px-2 py-1 pr-12 text-sm leading-tight h-8
+                  focus:outline-none focus:ring-2 focus:ring-blue-200
+                "
+              />
+
+              {unit && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none">
+                  {unit}
+                </span>
+              )}
             </div>
           )}
         </div>

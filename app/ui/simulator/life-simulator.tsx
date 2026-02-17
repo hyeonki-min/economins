@@ -62,7 +62,6 @@ export default function LifeSimulatorClient() {
         className="
           lg:hidden
           relative
-          touch-none
           overscroll-y-contain
         "
       >
