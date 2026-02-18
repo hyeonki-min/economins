@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { FinancialStressIndicator } from '@/app/ui/simulator/finance-stress-indicator'
 import { LifePlanState } from '@/app/lib/simulator/types'
 import { ActiveKey } from '@/app/lib/definitions'
-import { AgeSwipeWrapper } from '@/app/ui/simulator/age-swipe'
+import { useLifeSwipe } from '@/app/hooks/use-life-swipe'
 
 
 type Props<T extends HTMLElement = HTMLDivElement> = {
@@ -30,6 +30,7 @@ export default function Simulation({ scrollRef, plan, setMobileMode }: Props) {
   }, [startAge])
 
   useLifeScroll(scrollRef, setAge, startAge, maxAge)
+  useLifeSwipe(scrollRef, setAge, startAge, maxAge)
 
   const finance = calculateSimpleFinance(plan, age)
   const { labels, riskLevel } = getLifeState(age, plan, finance)
@@ -38,14 +39,7 @@ export default function Simulation({ scrollRef, plan, setMobileMode }: Props) {
   return (
     <div className="mx-auto w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center text-center px-2 py-2 sm:py-0 transition">
 
-      <AgeSwipeWrapper
-        age={age}
-        min={startAge}
-        max={maxAge}
-        onChange={setAge}
-      >
-        <AgeDisplay age={age} />
-      </AgeSwipeWrapper>      
+      <AgeDisplay age={age} />
 
       <div className="text-xl text-gray-500 mb-4">
         <span className="hidden lg:inline">
