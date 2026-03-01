@@ -1,49 +1,45 @@
-import { fetchDataset } from '@/app/lib/fetch-data';
 import { redirect } from "next/navigation";
-import { getLatestAvailablePolicyId, getPrevNextPolicyId, getKoreanMeetingDate, checkValidId, getValidIndex } from '@/app/lib/policy';
+import { getLatestAvailablePolicyId, checkValidId, getValidIndex } from '@/app/lib/policy';
 
-import DecisionIssueCard from '@/app/ui/monetary-policy/decision-issue-card';
-import PrevNextFab from '@/app/ui/monetary-policy/prev-next-fab';
 import { Metadata } from 'next';
-import { RouteProps, MonetaryPolicyBrief } from '@/app/lib/definitions';
+import { RouteProps } from '@/app/lib/definitions';
+import { MonetaryPolicyPageBody } from "@/app/ui/monetary-policy/body";
 
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {
+  const { id } = await params;
+
+  const now = new Date();
+  const latestId = getLatestAvailablePolicyId(now);
+  const isLatest = id === latestId;
+
   return {
     title: '한국은행 통화정책방향 결정회의 요약 - economins',
-    description: '한국은행에서 발표하는 통화정책방향 결정회의의 핵심 내용을 쉽고 명확하게 요약해 제공합니다. 기준금리 동향, 금통위의 판단 근거, 경제 전망, 주요 리스크 요인을 빠르게 확인할 수 있습니다.',
+    description:
+      '한국은행에서 발표하는 통화정책방향 결정회의의 핵심 내용을 쉽고 명확하게 요약해 제공합니다. 기준금리 동향, 금통위의 판단 근거, 경제 전망, 주요 리스크 요인을 빠르게 확인할 수 있습니다.',
+    alternates: {
+      canonical: '/monetary-policy',
+    },
+    robots: isLatest
+      ? { index: true, follow: true } // 최신만 인덱스 허용(원하면 false로 바꿔도 됨)
+      : { index: false, follow: true }, // 과거/미래는 검색결과 제외, 링크 탐색은 허용
   };
 }
 
 export default async function Page({ params }: RouteProps) {
   const now = new Date();
-
   const { id } = await params;
 
   const isValidId = checkValidId(id);
   const latestId = getLatestAvailablePolicyId(now);
-  const { prev, next } = getPrevNextPolicyId(id, now);
-
-  if (isValidId && id !== latestId && getValidIndex(id) > getValidIndex(latestId)) {
-    redirect(`/monetary-policy/${latestId}`);
-  }
 
   if (!isValidId) {
-    redirect(`/monetary-policy/${latestId}`);
+    redirect('/monetary-policy');
   }
-  
-  const koreanDate = getKoreanMeetingDate(id);
-  const decisions = await fetchDataset<MonetaryPolicyBrief>(`monetary-policy/${id}/bok-decision`);
-  const issues = await fetchDataset<MonetaryPolicyBrief>(`monetary-policy/${id}/bok-issue`);
-  
-  return (
-    <div
-      className="min-h-[calc(100vh-96px)] w-full relative flex items-center justify-center"
-    >
-      <PrevNextFab direction="prev" targetId={prev} />
-      <PrevNextFab direction="next" targetId={next} />
 
-      <DecisionIssueCard koreanDate={koreanDate} decisions={decisions} issues={issues} />
-    </div>
-  );
+  if (id !== latestId && getValidIndex(id) > getValidIndex(latestId)) {
+    redirect('/monetary-policy');
+  }
+
+  return <MonetaryPolicyPageBody id={id} />;
 }

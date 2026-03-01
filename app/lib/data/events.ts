@@ -35,7 +35,7 @@ export const events : Events[] = [
     "name": "국제 유가 급락",
     "description": "미국 셰일오일 공급 증가로 국제 유가가 급격히 하락",
     "date": "2014-11",
-    "url": "/series/kospi"
+    "url": "/series/kospi/oil"
   },
   {
     "id": "china-yuan-devaluation",
@@ -77,7 +77,7 @@ export const events : Events[] = [
     "name": "글로벌 기준금리 인상 시작",
     "description": "높은 인플레이션에 대응해 주요국 중앙은행이 기준금리 인상 사이클에 진입",
     "date": "2022-03",
-    "url": "/series/base-rate-korea"
+    "url": "/series/base-rate-korea/oil"
   },
   {
     "id": "us-banking-crisis-2023",
@@ -91,7 +91,7 @@ export const events : Events[] = [
     "name": "트럼프 대통령 재선",
     "description": "미국 대선에서 트럼프 후보가 당선되며 보호무역·재정 확대 정책 재부각",
     "date": "2024-11",
-    "url": "/series/exchange-rate-dollar-korea"
+    "url": "/series/exchange-rate-dollar-korea/gold"
   }
 ]
 

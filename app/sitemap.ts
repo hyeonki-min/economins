@@ -1,5 +1,4 @@
 import { MetadataRoute } from "next";
-import { VALID_POLICY_IDS } from "@/app/lib/policy";
 import { fetchDataset } from '@/app/lib/fetch-data';
 import { Indicator } from '@/app/lib/definitions';
 
@@ -42,12 +41,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   });
 
-  VALID_POLICY_IDS.forEach((date) => {
-    urls.push({
-      url: `${baseUrl}/monetary-policy/${date}`,
-      priority: 0.7,
-      changeFrequency: "monthly",
-    });
+  urls.push({
+    url: `${baseUrl}/monetary-policy`,
+    priority: 1.0,
+    changeFrequency: "monthly",
   });
 
   return urls;
