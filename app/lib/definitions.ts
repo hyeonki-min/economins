@@ -97,3 +97,16 @@ export type ActiveKey =
   | 'asset'
   | 'liability'
   | null;
+
+export type InstallmentRow = {
+  id: string;
+  round: number;
+  execYmd: string; // YYYY-MM-DD
+  principal: number; // 실행금액(원)
+};
+
+export type InstallmentComputed = InstallmentRow & {
+  days: number;
+  interest: number;
+  warnings: string[];
+};

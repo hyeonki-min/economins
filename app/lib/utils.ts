@@ -275,3 +275,43 @@ export function monthDiff(d1: Date, d2: Date) {
   months += d2.getMonth();
   return months <= 0 ? 0 : months;
 }
+
+export function uid() {
+  return Math.random().toString(16).slice(2) + Date.now().toString(16);
+}
+
+export function parseYmd(ymd: string) {
+  // YYYY-MM-DD
+  const [y, m, d] = ymd.split("-").map(Number);
+  if (!y || !m || !d) return null;
+  const dt = new Date(y, m - 1, d);
+  // invalid guard (e.g. 2026-02-31)
+  if (dt.getFullYear() !== y || dt.getMonth() !== m - 1 || dt.getDate() !== d) return null;
+  return dt;
+}
+
+export function toYmd(d: Date) {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+export function addDays(base: Date, days: number) {
+  const d = new Date(base);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+export function dayDiff(a: Date, b: Date) {
+  const diff = b.getTime() - a.getTime();
+  return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+}
+
+export function formatWon(n: number) {
+  return n.toLocaleString("ko-KR", { maximumFractionDigits: 0 }) + "원";
+}
+
+export function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
