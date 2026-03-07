@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import MidLoanCalculator from "@/app/ui/mid-loan/mid-loan-calculator";
+import MidLoanCalculator from "@/app/calculator/mid-loan/mid-loan-calculator";
 
 
 export const metadata: Metadata = {

@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import SummaryButton from "@/app/ui/simulator/summary-button";
 import { ActiveKey, InstallmentRow } from "@/app/lib/definitions";
 import { DateInput, GhostButton, Input, ToggleButton } from "@/app/ui/mid-loan/component";
-import { buildRowsEqual, buildRowsEvenlyByDate, computeInstallments, scalePrincipalKeepRatio } from "@/app/lib/mid-loan";
+import { buildRowsEqual, buildRowsEvenlyByDate, computeInstallments, scalePrincipalKeepRatio } from "@/app/lib/calculator/mid-loan";
 import { clamp, formatWon, parseYmd, toYmd, uid } from "@/app/lib/utils";
 
 type Mode = "simple" | "advanced";

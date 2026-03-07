@@ -149,6 +149,80 @@ export default async function Page() {
                 </span>
               </div>
             </Link>
+            <Link
+              href="/calculator/mortgage"
+              className="
+                group relative rounded-xl border border-gray-200
+                bg-white p-5
+                transition
+                hover:bg-gray-50
+                hover:border-gray-300
+                hover:shadow-sm
+              "
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-xl">🏠</span>
+
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    주택담보대출 계산기
+                  </h3>
+
+                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                    LTV·DSR 대출 가능 금액, 월 상환액, 총 이자,
+                    우대금리 효과와 혼합·변동 금리 시나리오까지
+                    한 번에 계산합니다.
+                  </p>
+                </div>
+
+                <span
+                  className="
+                    text-gray-400 transition-transform
+                    group-hover:translate-x-1
+                  "
+                  aria-hidden
+                >
+                  →
+                </span>
+              </div>
+            </Link>
+
+            <Link
+              href="/calculator/mid-loan"
+              className="
+                group relative rounded-xl border border-gray-200
+                bg-white p-5
+                transition
+                hover:bg-gray-50
+                hover:border-gray-300
+                hover:shadow-sm
+              "
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-xl">🏗️</span>
+
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    중도금 대출 계산기
+                  </h3>
+
+                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                    분양 아파트 중도금 대출 이자, 회차별 실행일,
+                    금리 변화에 따른 총 이자 부담을 계산합니다.
+                  </p>
+                </div>
+
+                <span
+                  className="
+                    text-gray-400 transition-transform
+                    group-hover:translate-x-1
+                  "
+                  aria-hidden
+                >
+                  →
+                </span>
+              </div>
+            </Link>
           </div>
 
           <section
