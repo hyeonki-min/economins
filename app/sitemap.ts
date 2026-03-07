@@ -34,6 +34,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   urls.push({
+    url: `${baseUrl}/calculator/mortgage`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
+  urls.push({
     url: `${baseUrl}/calculator/mid-loan`,
     priority: 0.9,
     changeFrequency: "monthly",
