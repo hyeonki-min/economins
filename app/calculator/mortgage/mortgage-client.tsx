@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import {Card, HighlightCard, IntInput, MiniStat, NumberInput, Row, SummaryCards, TogglePill} from "@/app/ui/calculator/component"
+import {Card, IntInput, MiniStat, NumberInput, Row, SummaryCards, TogglePill} from "@/app/ui/calculator/component"
 import {
   summarizeLoan,
   simulateAnnuityWithRatePath,
@@ -19,11 +19,7 @@ import {
   calculateAcquisitionTax,
   calculateBrokerageFee,
 } from "@/app/lib/calculator/tax"
-
-const krw = (n: number) =>
-  `${Math.round(n).toLocaleString("ko-KR", {
-    maximumFractionDigits: 0,
-  })}원`
+import { krw } from "@/app/lib/utils"
 
 const pct = (n: number) => `${n.toFixed(2)}%`
 

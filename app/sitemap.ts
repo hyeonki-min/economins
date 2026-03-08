@@ -45,6 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
   });
 
+  urls.push({
+    url: `${baseUrl}/calculator/fuel`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
   seriesIds.forEach((id) => {
     urls.push({
       url: `${baseUrl}/series/${id}`,

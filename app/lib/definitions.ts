@@ -110,3 +110,35 @@ export type InstallmentComputed = InstallmentRow & {
   interest: number;
   warnings: string[];
 };
+
+export type FuelType = "gasoline" | "diesel";
+
+export type VehicleType =
+  | "compact"
+  | "compactSedan"
+  | "midsize"
+  | "large"
+  | "truck5t";
+
+export interface VehiclePreset {
+  label: string;
+  tank: number;
+  efficiency: number;
+  icon: string;
+}
+
+export interface FullTankResult {
+  needed: number;
+  cost: number;
+}
+
+export interface PriceImpactResult {
+  newPrice: number;
+  diff: number;
+}
+
+export interface TravelWorthResult {
+  saving: number;
+  fuelCost: number;
+  worth: boolean;
+}

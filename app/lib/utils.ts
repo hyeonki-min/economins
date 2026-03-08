@@ -315,3 +315,8 @@ export function formatWon(n: number) {
 export function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
 }
+
+export const krw = (n: number) =>
+  `${Math.round(n).toLocaleString("ko-KR", {
+    maximumFractionDigits: 0,
+  })}원`
