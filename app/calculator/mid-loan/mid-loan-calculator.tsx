@@ -143,7 +143,20 @@ export default function MidLoanCalculator() {
 
     setRows(next);
   };
+  function estimateStampDuty(loan: number) {
+    if (loan <= 50_000_000) return 0
+    if (loan <= 100_000_000) return 35_000
+    if (loan <= 1_000_000_000) return 75_000
+    return 175_000
+  }
 
+  function estimateGuaranteeFee(loan: number) {
+    const min = loan * 0.002
+    const max = loan * 0.005
+    return { min, max }
+  }
+  const stampDuty = estimateStampDuty(middlePrincipal)
+  const guarantee = estimateGuaranteeFee(middlePrincipal)
   return (
     <main className="max-w-6xl mx-auto px-4 py-14 space-y-12">
 
@@ -254,20 +267,20 @@ export default function MidLoanCalculator() {
                         <div className="flex items-center gap-1">
                         <span className="text-slate-500">계약금</span>
                         </div>
-                        <span className="font-semibold text-slate-800">
+                        <span className="font-semibold text-slate-800 tabular-nums">
                         {formatWon(contract)}
                         </span>
                     </div>
                     <div className="flex justify-between">
                         <span className="text-slate-500">중도금</span>
-                        <span className="font-semibold">
+                        <span className="font-semibold tabular-nums">
                         {formatWon(middlePrincipal)}
                         </span>
                     </div>
     
                     <div className="flex justify-between">
                         <span className="text-slate-500">잔금</span>
-                        <span className="font-semibold">
+                        <span className="font-semibold tabular-nums">
                         {formatWon(balance)}
                         </span>
                     </div>
@@ -293,13 +306,13 @@ export default function MidLoanCalculator() {
                             <span>
                                 {r.round}차 · {r.execYmd} · {r.days}일
                             </span>
-                            <span className="font-medium">
+                            <span className="font-medium tabular-nums">
                                 {formatWon(r.interest)}
                             </span>
                             </div>
                         ))}
                         <hr className="my-2" />
-                        <div className="flex justify-between font-semibold">
+                        <div className="flex justify-between font-semibold tabular-nums">
                             <span>합계</span>
                             <span>{formatWon(totalInterest)}</span>
                         </div>
@@ -323,19 +336,19 @@ export default function MidLoanCalculator() {
                     <div className="px-4 py-3 space-y-2 text-sm">
                         <div className="flex justify-between">
                             <span className="text-slate-500">중도금 대출 원금</span>
-                            <span className="font-semibold text-slate-800">
+                            <span className="font-semibold text-slate-800 tabular-nums">
                             {formatWon(middlePrincipal)}
                             </span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-slate-500">중도금 대출 이자</span>
-                            <span className="font-semibold text-slate-800">
+                            <span className="font-semibold text-slate-800 tabular-nums">
                             {formatWon(totalInterest)}
                             </span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-slate-500">잔금</span>
-                            <span className="font-semibold text-slate-800">
+                            <span className="font-semibold text-slate-800 tabular-nums">
                             {formatWon(balance)}
                             </span>
                         </div>
@@ -354,7 +367,7 @@ export default function MidLoanCalculator() {
                     <div className="px-4 py-3 space-y-2 text-sm">
                         <div className="flex justify-between">
                         <span className="text-slate-500">분양가</span>
-                        <span className="font-semibold text-slate-800">
+                        <span className="font-semibold text-slate-800 tabular-nums">
                             {formatWon(salePrice)}
                         </span>
                         </div>
@@ -363,15 +376,29 @@ export default function MidLoanCalculator() {
                         <div className="flex items-center gap-1">
                             <span className="text-slate-500">중도금 이자</span>
                         </div>
-                        <span className="font-semibold">
+                        <span className="font-semibold tabular-nums">
                             {formatWon(totalInterest)}
                         </span>
                         </div>
                                                 
                         <div className="flex justify-between">
                         <span className="text-slate-500">합계</span>
-                        <span className="font-semibold text-slate-800">
+                        <span className="font-semibold text-slate-800 tabular-nums">
                             {formatWon(totalCost)}
+                        </span>
+                        </div>
+                        <div className="border-b border-slate-200">
+                        </div>
+                        <div className="flex justify-between">
+                        <span className="text-slate-500">인지대</span>
+                        <span className="font-semibold text-slate-800 tabular-nums">
+                            {formatWon(stampDuty)}
+                        </span>
+                        </div>
+                        <div className="flex justify-between">
+                        <span className="text-slate-500">보증보험료(예상)</span>
+                        <span className="font-semibold text-slate-800 tabular-nums">
+                            {guarantee.min + "원 - "+ guarantee.max + "원"}
                         </span>
                         </div>
                     </div>
@@ -493,7 +520,7 @@ export default function MidLoanCalculator() {
 
                         <div className="min-w-[160px]">
                           <div className="text-xs text-gray-500">회차 이자</div>
-                          <div className="font-semibold">{computed ? formatWon(computed.interest) : "-"}</div>
+                          <div className="font-semibold tabular-nums">{computed ? formatWon(computed.interest) : "-"}</div>
                         </div>
 
                         <div className="ml-auto">

@@ -223,6 +223,83 @@ export default async function Page() {
                 </span>
               </div>
             </Link>
+
+            <Link
+              href="/calculator/fuel"
+              className="
+                group relative rounded-xl border border-gray-200
+                bg-white p-5
+                transition
+                hover:bg-gray-50
+                hover:border-gray-300
+                hover:shadow-sm
+              "
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-xl">⛽</span>
+
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    주유비 계산기
+                  </h3>
+
+                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                    휘발유·경유 만땅 가격, 주유 금액별 리터,
+                    기름값 변동 영향과 다른 주유소 이동 시
+                    절약 금액까지 계산합니다.
+                  </p>
+                </div>
+
+                <span
+                  className="
+                    text-gray-400 transition-transform
+                    group-hover:translate-x-1
+                  "
+                  aria-hidden
+                >
+                  →
+                </span>
+              </div>
+            </Link>
+
+            <Link
+              href="/calculator/jeonse-vs-rent"
+              className="
+                group relative rounded-xl border border-gray-200
+                bg-white p-5
+                transition
+                hover:bg-gray-50
+                hover:border-gray-300
+                hover:shadow-sm
+              "
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-xl">🏠</span>
+
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    전세 vs 월세 계산기
+                  </h3>
+
+                  <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                    전세와 월세 전환 시 자산 차이를 계산합니다.
+                    전월세 전환율, 월세 절약 금액, 투자 수익률을
+                    반영해 거주기간 동안의 자산 증가 효과를
+                    비교합니다.
+                  </p>
+                </div>
+
+                <span
+                  className="
+                    text-gray-400 transition-transform
+                    group-hover:translate-x-1
+                  "
+                  aria-hidden
+                >
+                  →
+                </span>
+              </div>
+            </Link>
           </div>
 
           <section

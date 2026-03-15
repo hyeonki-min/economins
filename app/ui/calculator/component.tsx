@@ -191,3 +191,60 @@ export function MiniStat({
     </div>
   )
 }
+
+export function ResultRow({
+  label,
+  value,
+}: {
+  label: string
+  value: string
+}) {
+  return (
+    <div className="flex justify-between text-sm">
+      <span className="text-gray-500">{label}</span>
+      <span className="font-semibold tabular-nums">{value}</span>
+    </div>
+  )
+}
+
+export function PercentInput({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: number
+  onChange: (v: number) => void
+}) {
+  return (
+    <NumberInput2
+      label={`${label} (%)`}
+      value={value * 100}
+      onChange={(v) => onChange(v / 100)}
+    />
+  )
+}
+
+export function NumberInput2({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: number
+  onChange: (v: number) => void
+}) {
+  return (
+    <div>
+      <div className="text-sm mb-1">{label}</div>
+      <input
+        type="number"
+        value={value}
+        onChange={(e) =>
+          onChange(Number(e.target.value))
+        }
+        className="w-full border rounded-lg px-3 py-2 text-right"
+      />
+    </div>
+  )
+}
