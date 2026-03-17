@@ -312,7 +312,6 @@ export default function MortgageClient() {
           <Row label="집 가격(억)">
             <NumberInput
               value={homePriceEok}
-              step={0.1}
               onChange={setHomePriceEok}
             />
           </Row>
@@ -320,7 +319,6 @@ export default function MortgageClient() {
           <Row label="자기자본 합계(억)">
             <NumberInput
               value={equityEok}
-              step={0.1}
               onChange={setEquityEok}
             />
           </Row>
@@ -328,7 +326,6 @@ export default function MortgageClient() {
           <Row label="현재 연봉(만원)">
             <NumberInput
               value={annualIncome}
-              step={100}
               onChange={setAnnualIncome}
             />
           </Row>
@@ -338,13 +335,12 @@ export default function MortgageClient() {
           <Row label="금리(%)">
             <NumberInput
               value={annualRate}
-              step={0.01}
               onChange={setAnnualRate}
             />
           </Row>
 
           <Row label="기간(년)">
-            <NumberInput value={years} step={1} onChange={setYears} />
+            <NumberInput value={years} onChange={setYears} />
           </Row>
 
           <div className="space-y-2">
@@ -401,7 +397,6 @@ export default function MortgageClient() {
           <Row label="DSR 한도(%)">
             <NumberInput
               value={dsr * 100}
-              step={1}
               onChange={(v) => setDsr(v / 100)}
             />
           </Row>
@@ -546,7 +541,6 @@ export default function MortgageClient() {
           <Row label="혼합(5년 고정) 금리(%)">
             <NumberInput
               value={hybridFixedRate}
-              step={0.01}
               onChange={setHybridFixedRate}
             />
           </Row>
@@ -554,7 +548,6 @@ export default function MortgageClient() {
           <Row label="변동 시작금리(%)">
             <NumberInput
               value={variableStartRate}
-              step={0.01}
               onChange={setVariableStartRate}
             />
           </Row>
