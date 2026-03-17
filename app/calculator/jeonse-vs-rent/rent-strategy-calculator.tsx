@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import JeonseToRentResult from "@/app/calculator/jeonse-vs-rent/jeonse-to-rent-result"
 import RentToJeonseResult from "@/app/calculator/jeonse-vs-rent/rent-to-jeonse-result"
-import { Card, NumberInput2, PercentInput } from "@/app/ui/calculator/component"
+import { Card, InputRow, MoneyInput, NumberInput, PercentInput } from "@/app/ui/calculator/component"
 
 type Mode = "jeonseToRent" | "rentToJeonse"
 
@@ -301,79 +301,85 @@ export default function RentStrategyCalculator() {
 
           {mode === "jeonseToRent" && (
             <>
-              <NumberInput2
-                label="전세금"
+            <InputRow label="전세 보증금">
+              <MoneyInput
                 value={jeonse}
                 onChange={setJeonse}
               />
-
-              <NumberInput2
-                label="월세 보증금"
+            </InputRow>
+            <InputRow label="월세 보증금">
+              <MoneyInput
                 value={deposit}
                 onChange={setDeposit}
               />
+            </InputRow>
             </>
           )}
 
           {mode === "rentToJeonse" && (
             <>
-              <NumberInput2
-                label="보증금"
-                value={deposit}
-                onChange={setDeposit}
-              />
+              <InputRow label="보증금">
+                <MoneyInput
+                  value={deposit}
+                  onChange={setDeposit}
+                />
+              </InputRow>
+              <InputRow label="월세">
+                <MoneyInput
+                  value={monthlyRent}
+                  onChange={setMonthlyRent}
+                />              
+              </InputRow>
 
-              <NumberInput2
-                label="월세"
-                value={monthlyRent}
-                onChange={setMonthlyRent}
-              />
             </>
           )}
-
-          <PercentInput
-            label="전환율"
-            value={conversionRate}
-            onChange={setConversionRate}
-          />
+              <InputRow label="전환율">
+                <PercentInput
+                  value={conversionRate}
+                  onChange={setConversionRate}
+                />
+              </InputRow>
 
         </Card>
 
         <Card title="투자 조건">
-
-          <NumberInput2
-            label="월 저축 가능 금액"
-            value={monthlySaving}
-            onChange={setMonthlySaving}
-          />
-
-          <PercentInput
-            label="투자 수익률"
-            value={investmentReturn}
-            onChange={setInvestmentReturn}
-          />
+          <InputRow label="월 저축 가능 금액">
+            <MoneyInput
+              value={monthlySaving}
+              onChange={setMonthlySaving}
+            />
+          </InputRow>
+          <InputRow label="투자 수익률">
+            <PercentInput
+              value={investmentReturn}
+              onChange={setInvestmentReturn}
+            />
+          </InputRow>
 
         </Card>
 
         <Card title="거주 시뮬레이션">
+          <InputRow label="거주 기간 (년)">
+            <NumberInput
+              value={years}
+              onChange={setYears}
+            />
+          </InputRow>
+          
+          <InputRow label="전세 상승률">
+            <PercentInput
+              value={jeonseGrowth}
+              onChange={setJeonseGrowth}
+            />
+          </InputRow>
 
-          <NumberInput2
-            label="거주 기간 (년)"
-            value={years}
-            onChange={setYears}
-          />
-
-          <PercentInput
-            label="전세 상승률"
-            value={jeonseGrowth}
-            onChange={setJeonseGrowth}
-          />
-
-          <PercentInput
-            label="월세 상승률"
-            value={rentGrowth}
-            onChange={setRentGrowth}
-          />
+          <InputRow label="월세 상승률">
+            <PercentInput
+              value={rentGrowth}
+              onChange={setRentGrowth}
+            />
+          </InputRow>
+         
 
         </Card>
 
@@ -392,17 +398,18 @@ export default function RentStrategyCalculator() {
 
           {loanEnabled && (
             <>
-              <NumberInput2
-                label="대출 금액"
-                value={loanAmount}
-                onChange={setLoanAmount}
-              />
-
-              <PercentInput
-                label="대출 금리"
-                value={loanRate}
-                onChange={setLoanRate}
-              />
+              <InputRow label="대출 금액">
+              <MoneyInput
+                  value={loanAmount}
+                  onChange={setLoanAmount}
+                />
+              </InputRow>
+              <InputRow label="대출 금리">
+                <PercentInput
+                  value={loanRate}
+                  onChange={setLoanRate}
+                />
+              </InputRow>
             </>
           )}
 

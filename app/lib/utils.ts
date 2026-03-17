@@ -320,3 +320,15 @@ export const krw = (n: number) =>
   `${Math.round(n).toLocaleString("ko-KR", {
     maximumFractionDigits: 0,
   })}원`
+
+export function sanitize(v: string) {
+  return v.replace(/[^0-9]/g, "")
+}
+
+export function format(v: number) {
+  return v.toLocaleString()
+}
+
+export function unformat(v: string) {
+  return v.replace(/,/g, "")
+}

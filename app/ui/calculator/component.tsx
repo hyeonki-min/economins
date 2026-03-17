@@ -1,5 +1,6 @@
 "use client"
 
+import { format, sanitize, unformat } from "@/app/lib/utils"
 import React from "react"
 
 type Props = {
@@ -76,36 +77,75 @@ export function Row({
 
 export function NumberInput({
   value,
-  step,
   onChange,
+  suffix,
 }: {
   value: number
-  step: number
   onChange: (v: number) => void
+  suffix?: string
 }) {
-  const [text, setText] = React.useState(value.toString())
+  const [text, setText] = React.useState(format(value))
+  const [isEditing, setIsEditing] = React.useState(false)
 
   React.useEffect(() => {
-    setText(value.toString())
-  }, [value])
+    if (!isEditing) {
+      setText(format(value))
+    }
+  }, [value, isEditing])
 
   return (
-    <input
-      type="text"
-      inputMode="decimal"
-      value={text}
-      onChange={(e) => {
-        const raw = e.target.value.replace(/[^0-9.]/g, "")
-        setText(raw)
+    <div className="flex items-center gap-2 border rounded-xl px-3 py-2 focus-within:border-gray-400 bg-white">
+      <input
+        type="text"
+        inputMode="numeric"
+        value={text}
+        onFocus={() => {
+          setIsEditing(true)
+          setText(unformat(text))
+        }}
+        onBlur={() => {
+          setIsEditing(false)
+          const num = Number(text)
+          setText(format(num))
+        }}
+        onChange={(e) => {
+          const raw = sanitize(e.target.value)
+          setText(raw)
 
-        const num = Number(raw)
-        if (!Number.isNaN(num)) {
-          onChange(num)
-        }
-      }}
-      className="w-[160px] rounded-xl border border-gray-200 px-3 py-2 text-right text-sm outline-none focus:border-gray-400"
-    />
+          const num = Number(raw)
+          if (!Number.isNaN(num)) {
+            onChange(num)
+          }
+        }}
+        className="
+          flex-1 min-w-0
+          text-right
+          tabular-nums
+          outline-none
+        "
+      />
+
+      {suffix && (
+        <span className="text-gray-500 text-sm whitespace-nowrap">
+          {suffix}
+        </span>
+      )}
+    </div>
   )
+}
+
+export function MoneyInput(props: {
+  value: number
+  onChange: (v: number) => void
+}) {
+  return <NumberInput {...props} suffix="원" />
+}
+
+export function PercentInput(props: {
+  value: number
+  onChange: (v: number) => void
+}) {
+  return <NumberInput {...props} suffix="%" />
 }
 
 export function IntInput({
@@ -200,51 +240,39 @@ export function ResultRow({
   value: string
 }) {
   return (
-    <div className="flex justify-between text-sm">
-      <span className="text-gray-500">{label}</span>
-      <span className="font-semibold tabular-nums">{value}</span>
+    <div className="flex justify-between">
+      <span className="text-sm text-gray-700">{label}</span>
+      <span className="text-base font-semibold tabular-nums">{value}</span>
     </div>
   )
 }
 
-export function PercentInput({
+export function InputRow({
   label,
-  value,
-  onChange,
+  children,
+  hint,
 }: {
   label: string
-  value: number
-  onChange: (v: number) => void
+  children: React.ReactNode
+  hint?: string
 }) {
   return (
-    <NumberInput2
-      label={`${label} (%)`}
-      value={value * 100}
-      onChange={(v) => onChange(v / 100)}
-    />
-  )
-}
+    <div className="space-y-1">
+      <div className="flex items-center justify-between gap-3">
+        <label className="text-sm text-gray-700">
+          {label}
+        </label>
 
-export function NumberInput2({
-  label,
-  value,
-  onChange,
-}: {
-  label: string
-  value: number
-  onChange: (v: number) => void
-}) {
-  return (
-    <div>
-      <div className="text-sm mb-1">{label}</div>
-      <input
-        type="number"
-        value={value}
-        onChange={(e) =>
-          onChange(Number(e.target.value))
-        }
-        className="w-full border rounded-lg px-3 py-2 text-right"
-      />
+        <div className="w-[160px] shrink-0 flex justify-end">
+          {children}
+        </div>
+      </div>
+
+      {hint && (
+        <div className="text-xs text-gray-500">
+          {hint}
+        </div>
+      )}
     </div>
   )
 }

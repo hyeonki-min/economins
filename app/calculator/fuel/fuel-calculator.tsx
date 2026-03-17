@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { VEHICLES } from "@/app/lib/calculator/vehicle-presets";
-import { Card, NumberInput, Row } from "@/app/ui/calculator/component";
+import { Card, MoneyInput, NumberInput, ResultRow, Row } from "@/app/ui/calculator/component";
 import { krw } from "@/app/lib/utils";
 import { VehicleType } from "@/app/lib/definitions";
 
@@ -114,17 +114,9 @@ export default function FuelCalculator() {
 
         <Card title="더 싼 주유소로 가면 이득일까요?">
 
-        <Row label="가격 차이">
-            {krw(priceDiff)}
-        </Row>
-
-        <Row label="예상 절약 금액">
-            {krw(saving)}
-        </Row>
-
-        <Row label="이동 비용">
-            {krw(travelCost)}
-        </Row>
+        <ResultRow label="가격 차이" value={krw(priceDiff)} />
+        <ResultRow label="예상 절약 금액" value={krw(saving)} />
+        <ResultRow label="이동 비용" value={krw(travelCost)} />
 
         <div className="border-t mt-4 pt-4">
 
@@ -132,7 +124,7 @@ export default function FuelCalculator() {
             순 절약 금액
             </div>
 
-            <div className="text-3xl font-bold">
+            <div className="text-3xl font-bold tabular-nums">
             {krw(netSaving)}
             </div>
 
@@ -154,9 +146,8 @@ export default function FuelCalculator() {
 
           <Row label="리터당 가격">
 
-            <NumberInput
+            <MoneyInput
               value={price}
-              step={1}
               onChange={setPrice}
             />
 
@@ -195,9 +186,8 @@ export default function FuelCalculator() {
 
           <Row label="직접 입력">
 
-            <NumberInput
+            <MoneyInput
               value={budget}
-              step={1000}
               onChange={(v)=>{
                 setFullTank(false)
                 setBudget(Math.min(v, maxBudget))
@@ -248,16 +238,14 @@ export default function FuelCalculator() {
           <Row label="거리 (km)">
             <NumberInput
               value={distance}
-              step={1}
               onChange={setDistance}
             />
           </Row>
 
           <Row label="대체 주유소 가격">
 
-            <NumberInput
+            <MoneyInput
               value={altPrice}
-              step={1}
               onChange={setAltPrice}
             />
 
