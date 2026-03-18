@@ -300,6 +300,44 @@ export default async function Page() {
                 </span>
               </div>
             </Link>
+
+            <Link
+              href="/calculator/cash-value"
+              className="
+                group relative rounded-xl border border-gray-200
+                bg-white p-5
+                transition
+                hover:bg-gray-50
+                hover:border-gray-300
+                hover:shadow-sm
+              "
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-xl">💸</span>
+
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    현금 가치 계산기
+                  </h3>
+
+                  <p className="mt-1 text-sm leading-relaxed text-gray-500">
+                    1억을 그냥 두면 어떻게 달라질까요?
+                    물가 상승에 따른 현금 가치 하락과
+                    예금·금·코스피·아파트의 자산 차이를 비교합니다.
+                  </p>
+                </div>
+
+                <span
+                  className="
+                    text-gray-400 transition-transform
+                    group-hover:translate-x-1
+                  "
+                  aria-hidden
+                >
+                  →
+                </span>
+              </div>
+            </Link>
           </div>
 
           <section

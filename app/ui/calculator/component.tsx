@@ -1,6 +1,6 @@
 "use client"
 
-import { format, sanitize, unformat } from "@/app/lib/utils"
+import { format, formatMoney, sanitize, unformat } from "@/app/lib/utils"
 import React from "react"
 
 type Props = {
@@ -275,4 +275,65 @@ export function InputRow({
       )}
     </div>
   )
+}
+
+
+type ResultRowWithBarProp = {
+  name: string;
+  value: number;
+  base: number;
+  max: number;
+  highlight?: boolean;
+};
+
+export function ResultRowWithBar({
+  name,
+  value,
+  base,
+  max,
+  highlight,
+}: ResultRowWithBarProp) {
+  const ratio = value / base;
+  const percent = (ratio - 1) * 100;
+  const width = (value / max) * 100;
+
+  return (
+    <div className="space-y-2">
+
+      <div className="flex justify-between items-end">
+        <div
+          className={`text-sm ${
+            highlight ? "text-red-500 font-semibold" : "text-gray-600"
+          }`}
+        >
+          {name}
+        </div>
+
+        <div className="text-right">
+          <div className="text-lg font-semibold tabular-nums">
+            {formatMoney(value)}
+          </div>
+
+          <div
+            className={`text-xs tabular-nums ${
+              percent >= 0 ? "text-red-500" : "text-blue-600"
+            }`}
+          >
+            {percent >= 0 ? "+" : ""}
+            {percent.toFixed(0)}%
+          </div>
+        </div>
+      </div>
+
+      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+        <div
+          className={`h-full rounded-full ${
+            highlight ? "bg-red-500" : "bg-gray-900"
+          }`}
+          style={{ width: `${width}%` }}
+        />
+      </div>
+
+    </div>
+  );
 }

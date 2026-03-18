@@ -332,3 +332,13 @@ export function format(v: number) {
 export function unformat(v: string) {
   return v.replace(/,/g, "")
 }
+
+export function formatMoney(v: number) {
+  if (v >= 100_000_000) {
+    return `${(v / 100_000_000).toFixed(1)}억`;
+  }
+  if (v >= 10_000) {
+    return `${Math.floor(v / 10_000)}만원`;
+  }
+  return v.toLocaleString();
+}
