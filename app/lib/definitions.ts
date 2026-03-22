@@ -142,3 +142,56 @@ export interface TravelWorthResult {
   fuelCost: number;
   worth: boolean;
 }
+
+export type InsuranceInput = {
+  monthlyPremium: number
+
+  paymentYears: number
+  elapsedYears: number
+
+  currentAge: number
+  maturityAge: number
+
+  expectedClaimAge: number // 🔥 추가
+
+  coverageAmount: number
+  inflationRate: number
+
+  expectedReturnRate: number // 🔥 투자 수익률
+  surrenderValue?: number    // 선택
+}
+
+export type InsuranceCompareResult = {
+  paidSoFarNominal: number
+  remainingNominal: number
+  totalNominal: number
+  
+  yearsToClaim: number
+
+  coverageFutureValue: number
+  coveragePresentValue: number
+
+  investmentFutureValue: number
+  investmentPresentValue: number
+
+  differencePV: number
+  ratio: number
+}
+
+export type NumberInputProps = {
+  value: number
+  onChange: (v: number) => void
+  suffix?: string
+  min?: number
+  max?: number
+  decimalScale?: number
+}
+
+export type AgeInputProps = Omit<NumberInputProps, "suffix"> & {
+  minAge: number
+  maxAge: number
+}
+
+export type DurationInputProps = Omit<NumberInputProps, "suffix">
+
+export type PercentInputProps = Omit<NumberInputProps, "suffix">

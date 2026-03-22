@@ -1,6 +1,7 @@
 "use client"
 
-import { format, formatMoney, sanitize, unformat } from "@/app/lib/utils"
+import { AgeInputProps, DurationInputProps, NumberInputProps, PercentInputProps } from "@/app/lib/definitions"
+import { format, formatMoney, sanitize, sanitizeDecimal, unformat } from "@/app/lib/utils"
 import React from "react"
 
 type Props = {
@@ -79,11 +80,10 @@ export function NumberInput({
   value,
   onChange,
   suffix,
-}: {
-  value: number
-  onChange: (v: number) => void
-  suffix?: string
-}) {
+  min,
+  max,
+  decimalScale,
+}: NumberInputProps) {
   const [text, setText] = React.useState(format(value))
   const [isEditing, setIsEditing] = React.useState(false)
 
@@ -93,11 +93,24 @@ export function NumberInput({
     }
   }, [value, isEditing])
 
+  function clamp(n: number) {
+    if (min !== undefined && n < min) return min
+    if (max !== undefined && n > max) return max
+    return n
+  }
+
+  function normalize(n: number) {
+    if (decimalScale !== undefined) {
+      return Number(n.toFixed(decimalScale))
+    }
+    return n
+  }
+
   return (
     <div className="flex items-center gap-2 border rounded-xl px-3 py-2 focus-within:border-gray-400 bg-white">
       <input
         type="text"
-        inputMode="numeric"
+        inputMode="decimal" // 🔥 변경
         value={text}
         onFocus={() => {
           setIsEditing(true)
@@ -105,24 +118,20 @@ export function NumberInput({
         }}
         onBlur={() => {
           setIsEditing(false)
-          const num = Number(text)
+          const num = normalize(clamp(Number(text)))
           setText(format(num))
+          onChange(num)
         }}
         onChange={(e) => {
-          const raw = sanitize(e.target.value)
+          const raw = sanitizeDecimal(e.target.value, decimalScale)
           setText(raw)
 
           const num = Number(raw)
           if (!Number.isNaN(num)) {
-            onChange(num)
+            onChange(normalize(clamp(num)))
           }
         }}
-        className="
-          flex-1 min-w-0
-          text-right
-          tabular-nums
-          outline-none
-        "
+        className="flex-1 min-w-0 text-right tabular-nums outline-none"
       />
 
       {suffix && (
@@ -134,18 +143,37 @@ export function NumberInput({
   )
 }
 
-export function MoneyInput(props: {
-  value: number
-  onChange: (v: number) => void
-}) {
-  return <NumberInput {...props} suffix="원" />
+export function AgeInput({
+  minAge,
+  maxAge,
+  ...props
+}: AgeInputProps) {
+  return (
+    <NumberInput
+      {...props}
+      suffix="세"
+      min={minAge}
+      max={maxAge}
+    />
+  )
 }
 
-export function PercentInput(props: {
-  value: number
-  onChange: (v: number) => void
-}) {
-  return <NumberInput {...props} suffix="%" />
+export function DurationInput(props: DurationInputProps) {
+  return <NumberInput {...props} suffix="년" />
+}
+
+export const MoneyInput = (props: NumberInputProps) => (
+  <NumberInput {...props} suffix="원" />
+)
+
+export function PercentInput(props: PercentInputProps) {
+  return (
+    <NumberInput
+      {...props}
+      suffix="%"
+      decimalScale={2}
+    />
+  )
 }
 
 export function IntInput({
@@ -336,4 +364,27 @@ export function ResultRowWithBar({
 
     </div>
   );
+}
+
+export function Field({
+  label,
+  description,
+  children,
+}: {
+  label: string
+  description?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-700">{label}</span>
+        {children}
+      </div>
+
+      {description && (
+        <p className="text-xs text-gray-400">{description}</p>
+      )}
+    </div>
+  )
 }

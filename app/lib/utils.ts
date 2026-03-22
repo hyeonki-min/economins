@@ -342,3 +342,21 @@ export function formatMoney(v: number) {
   }
   return v.toLocaleString();
 }
+
+export function sanitizeDecimal(value: string, decimalScale?: number) {
+  // 숫자 + 소수점만 허용
+  let cleaned = value.replace(/[^\d.]/g, "")
+
+  // 소수점 1개만 허용
+  const parts = cleaned.split(".")
+  if (parts.length > 2) {
+    cleaned = parts[0] + "." + parts.slice(1).join("")
+  }
+
+  // 소수점 자리 제한
+  if (decimalScale !== undefined && parts[1]) {
+    cleaned = parts[0] + "." + parts[1].slice(0, decimalScale)
+  }
+
+  return cleaned
+}
