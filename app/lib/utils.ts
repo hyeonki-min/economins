@@ -360,3 +360,11 @@ export function sanitizeDecimal(value: string, decimalScale?: number) {
 
   return cleaned
 }
+
+export function formatDate(date: Date) {
+  return date.toISOString().slice(0, 10)
+}
+
+export function getLastDayOfMonth(year: number, month: number) {
+  return new Date(year, month + 1, 0)
+}
