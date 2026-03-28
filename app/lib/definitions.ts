@@ -195,3 +195,27 @@ export type AgeInputProps = Omit<NumberInputProps, "suffix"> & {
 export type DurationInputProps = Omit<NumberInputProps, "suffix">
 
 export type PercentInputProps = Omit<NumberInputProps, "suffix">
+
+export type IssueLevel = "LOW" | "MEDIUM" | "HIGH"
+
+export type IssueStatus = "BUY" | "NEUTRAL" | "WAIT"
+
+export type MarketIssueType =
+  | "QUAD_WITCHING"
+  | "OPTIONS_EXPIRY"
+  | "MONTH_END"
+  | "QUARTER_END"
+  | "YEAR_END"
+  | "KOREA_EXPIRY"
+
+export type IssueCategory = "STRUCTURAL" | "MACRO"
+
+export type MarketIssue = {
+  type: string
+  name: string
+  level: IssueLevel
+  date: string
+  summary: string
+  market: "KR" | "US"
+  category: IssueCategory
+}

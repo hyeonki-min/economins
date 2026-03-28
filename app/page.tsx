@@ -25,7 +25,7 @@ export default async function Page() {
                 경제 인사이트
               </h2>
               <p className="text-sm text-gray-500 mt-1 leading-relaxed">
-                시장 흐름과 주요 지표를 한눈에 확인
+                시장 흐름과 주요 지표를 한눈에 확인하세요
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
@@ -83,6 +83,43 @@ export default async function Page() {
                         모든 경제 지표를 한눈에 탐색하고 비교할 수 있습니다.
                       </p>
                     </div>
+                    <span
+                      className="
+                        text-gray-400 transition-transform
+                        group-hover:translate-x-1 group-hover:text-gray-600
+                      "
+                      aria-hidden
+                    >
+                      →
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/economic-cycle"
+                  className="
+                    group relative rounded-xl border border-gray-200
+                    bg-white p-5
+                    transition
+                    hover:bg-gray-50
+                    hover:border-gray-300
+                    hover:shadow-sm
+                  "
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl">🔄</span>
+
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 leading-tight">
+                        지금 경제는 어디 있을까?
+                      </h3>
+
+                      <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                        물가와 경기 데이터를 기반으로 지금 경제가 어느 위치에 있는지 확인하고,
+                        각 사이클에 따라 주식·채권·금·원자재 흐름을 이해할 수 있습니다.
+                      </p>
+                    </div>
+
                     <span
                       className="
                         text-gray-400 transition-transform

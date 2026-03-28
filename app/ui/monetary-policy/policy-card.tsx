@@ -3,8 +3,11 @@ import Link from "next/link";
 export default function PolicyCard() {
   return (
     <section className="rounded-xl px-6 py-5 
-bg-gradient-to-r from-gray-100 to-gray-200 
-border border-gray-200">
+      bg-gradient-to-r from-gray-100 to-gray-200 
+      border border-gray-200
+      hover:border-gray-300
+      hover:shadow-sm
+      ">
       <Link
         href="/monetary-policy"
         className="
