@@ -70,8 +70,12 @@ export function Row({
 }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <div className="text-sm text-gray-700">{label}</div>
-      <div className="min-w-[160px] flex justify-end text-right tabular-nums">{children}</div>
+      <div className="text-sm text-gray-700 shrink-0">{label}</div>
+      <div className="flex items-center justify-end min-w-0 md:min-w-[160px]">
+        <div className="truncate text-right tabular-nums">
+          {children}
+        </div>
+      </div>
     </div>
   )
 }
