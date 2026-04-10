@@ -34,6 +34,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   urls.push({
+    url: `${baseUrl}/economic-cycle`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
+  urls.push({
     url: `${baseUrl}/calculator/mortgage`,
     priority: 0.9,
     changeFrequency: "monthly",
@@ -46,7 +52,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   urls.push({
+    url: `${baseUrl}/calculator/jeonse-vs-rent`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
+  urls.push({
     url: `${baseUrl}/calculator/fuel`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
+  urls.push({
+    url: `${baseUrl}/calculator/return`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
+  urls.push({
+    url: `${baseUrl}/calculator/insurance-value`,
+    priority: 0.9,
+    changeFrequency: "monthly",
+  });
+
+  urls.push({
+    url: `${baseUrl}/calculator/cash-value`,
     priority: 0.9,
     changeFrequency: "monthly",
   });

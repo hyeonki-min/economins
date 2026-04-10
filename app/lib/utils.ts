@@ -368,3 +368,18 @@ export function formatDate(date: Date) {
 export function getLastDayOfMonth(year: number, month: number) {
   return new Date(year, month + 1, 0)
 }
+
+export function formatPercent(value: number, digits = 2): string {
+  if (!Number.isFinite(value)) return "-"
+
+  return new Intl.NumberFormat("ko-KR", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value)
+}
+
+export function formatNumber(value: number): string {
+  if (!Number.isFinite(value)) return "-"
+
+  return new Intl.NumberFormat("ko-KR").format(value)
+}

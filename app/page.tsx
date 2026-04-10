@@ -256,44 +256,6 @@ export default async function Page() {
                 </Link>
 
                 <Link
-                  href="/calculator/fuel"
-                  className="
-                    group relative rounded-xl border border-gray-200
-                    bg-white p-5
-                    transition
-                    hover:bg-gray-50
-                    hover:border-gray-300
-                    hover:shadow-sm
-                  "
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="text-xl">⛽</span>
-
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 leading-tight">
-                        주유비 계산기
-                      </h3>
-
-                      <p className="text-sm text-gray-500 mt-1 leading-relaxed">
-                        휘발유·경유 만땅 가격, 주유 금액별 리터,
-                        기름값 변동 영향과 다른 주유소 이동 시
-                        절약 금액까지 계산합니다.
-                      </p>
-                    </div>
-
-                    <span
-                      className="
-                        text-gray-400 transition-transform
-                        group-hover:translate-x-1 group-hover:text-gray-600
-                      "
-                      aria-hidden
-                    >
-                      →
-                    </span>
-                  </div>
-                </Link>
-
-                <Link
                   href="/calculator/jeonse-vs-rent"
                   className="
                     group relative rounded-xl border border-gray-200
@@ -317,6 +279,44 @@ export default async function Page() {
                         전월세 전환율, 월세 절약 금액, 투자 수익률을
                         반영해 거주기간 동안의 자산 증가 효과를
                         비교합니다.
+                      </p>
+                    </div>
+
+                    <span
+                      className="
+                        text-gray-400 transition-transform
+                        group-hover:translate-x-1 group-hover:text-gray-600
+                      "
+                      aria-hidden
+                    >
+                      →
+                    </span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/calculator/fuel"
+                  className="
+                    group relative rounded-xl border border-gray-200
+                    bg-white p-5
+                    transition
+                    hover:bg-gray-50
+                    hover:border-gray-300
+                    hover:shadow-sm
+                  "
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl">⛽</span>
+
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 leading-tight">
+                        주유비 계산기
+                      </h3>
+
+                      <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                        휘발유·경유 만땅 가격, 주유 금액별 리터,
+                        기름값 변동 영향과 다른 주유소 이동 시
+                        절약 금액까지 계산합니다.
                       </p>
                     </div>
 
@@ -391,6 +391,42 @@ export default async function Page() {
                       <p className="mt-1 text-sm leading-relaxed text-gray-500">
                         보험을 유지할지, 해지 후 투자할지 비교합니다.
                         보장금과 투자 결과를 미래 금액과 지금 기준 가치로 함께 계산합니다.
+                      </p>
+                    </div>
+
+                    <span
+                      className="
+                        text-gray-400 transition-transform
+                        group-hover:translate-x-1 group-hover:text-gray-600
+                      "
+                      aria-hidden
+                    >
+                      →
+                    </span>
+                  </div>
+                </Link>
+                <Link
+                  href="/calculator/return"
+                  className="
+                    group relative rounded-xl border border-gray-200
+                    bg-white p-5
+                    transition
+                    hover:bg-gray-50
+                    hover:border-gray-300
+                    hover:shadow-sm
+                  "
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl">🎯</span>
+
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 leading-tight">
+                        복리 수익률 계산기
+                      </h3>
+
+                      <p className="mt-1 text-sm leading-relaxed text-gray-500">
+                        목표 금액을 달성하려면 필요한 수익률을 계산하고,
+                        같은 수익률을 반복했을 때 최종 수익률을 복리 기준으로 확인합니다.
                       </p>
                     </div>
 
