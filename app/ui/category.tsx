@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { Indicator } from '@/app/lib/definitions';
@@ -8,16 +8,21 @@ import { Indicator } from '@/app/lib/definitions';
 
 export default function Category({ elements }: { elements: Indicator[] }) {
   const [types, setTypes] = useState<string>('all');
-  let cType = new Map([['all', '']]);
-  elements.map((el) => {
-    cType.set(el.type, '');
-  });
-  const allTypes = Array.from(cType.keys());
+  const allTypes = useMemo(() => {
+    const set = new Set<string>()
+    set.add('all')
+
+    elements.forEach((el) => {
+      set.add(el.type)
+    })
+
+    return Array.from(set)
+  }, [elements])
   return (
     <div className="grid gap-2 md:grid-cols-4 md:gap-4 text-slate-700">
 
       {/* -------- Filter Chips (Scroll on mobile) -------- */}
-      <div className="md:col-span-4 flex gap-2 overflow-x-auto whitespace-nowrap px-1 pb-1 no-scrollbar">
+      <div className="md:col-span-4 flex gap-2 overflow-x-auto whitespace-nowrap px-1 pb-2">
         {allTypes.map((type) => (
           <label
             htmlFor={type}
@@ -56,20 +61,28 @@ export default function Category({ elements }: { elements: Indicator[] }) {
           href={'/series/' + el.id}
           className={clsx(
             `
-            group grid grid-rows-[32px_1fr_auto]
-            rounded-lg border border-slate-300
-            p-4 text-slate-700
-            hover:border-slate-400
-            hover:bg-slate-100
-            hover:shadow-sm
+            group rounded-xl border border-slate-200
+            bg-white p-4
             transition
-            focus:outline-none focus:ring-2 focus:ring-blue-200
+            hover:border-slate-300
+            hover:bg-slate-50
+            hover:shadow-sm
+            hover:-translate-y-[1px]
           `,
             { hidden: types !== 'all' ? el.type !== types : false }
           )}
         >
-          <h4 className="font-semibold">{el.name}</h4>
-          <p className="text-xs text-slate-500">{el.source}</p>
+          <h4 className="font-semibold text-slate-900">
+            {el.name}
+          </h4>
+
+          <p className="mt-1 text-xs text-slate-500">
+            {el.source}
+          </p>
+
+          <p className="mt-2 text-xs text-slate-400">
+            {el.type}
+          </p>
         </Link>
       ))}
 

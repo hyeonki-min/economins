@@ -15,10 +15,15 @@ export default async function Page() {
   }
   return (
     <>
-      <h1 className="text-xl md:text-2xl font-semibold mt-3 mb-3">
-        관심 있는 경제 지표를 골라보세요.
-      </h1>
-      <Category elements={allElement}></Category>
+      <section className="mt-8">
+        <h1 className="text-xl md:text-2xl font-semibold">
+          경제 지표를 선택하고 시장 흐름을 확인하세요
+        </h1>
+
+        <div className="mt-6">
+          <Category elements={allElement} />
+        </div>
+      </section>
     </>
   );
 }

@@ -92,6 +92,13 @@ export const events : Events[] = [
     "description": "미국 대선에서 트럼프 후보가 당선되며 보호무역·재정 확대 정책 재부각",
     "date": "2024-11",
     "url": "/series/exchange-rate-dollar-korea/gold"
+  },
+  {
+    "id": "iran-war-2026",
+    "name": "이란 전쟁",
+    "description": "2026년 중동 긴장으로 유가가 급등하고, 환율과 금리까지 영향을 받으며 글로벌 시장 변동성 증대",
+    "date": "2026-03",
+    "url": "/series/exchange-rate-dollar-korea/oil"
   }
 ]
 
