@@ -441,6 +441,42 @@ export default async function Page() {
                     </span>
                   </div>
                 </Link>
+                <Link
+                  href="/portfolio"
+                  className="
+                    group relative rounded-xl border border-gray-200
+                    bg-white p-5
+                    transition
+                    hover:bg-gray-50
+                    hover:border-gray-300
+                    hover:shadow-sm
+                  "
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xl">🛒</span>
+
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-900 leading-tight">
+                        포트폴리오 자산 분배기
+                      </h3>
+
+                      <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                        투자금액을 입력하면 올웨더, 버핏, 보글 포트폴리오 기준으로
+                        자산 비중에 맞는 투자 금액과 실제 매수 수량을 계산할 수 있습니다.
+                      </p>
+                    </div>
+
+                    <span
+                      className="
+                        text-gray-400 transition-transform
+                        group-hover:translate-x-1 group-hover:text-gray-600
+                      "
+                      aria-hidden
+                    >
+                      →
+                    </span>
+                  </div>
+                </Link>
               </div>
             </section>
 

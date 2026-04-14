@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "1억을 현금, 예금, 코스피, 금, 아파트에 투자했다면 10년 뒤 얼마가 될까요? 물가 상승까지 반영한 실제 가치 변화를 확인해보세요.",
   alternates: {
-    canonical: "/calculator/value",
+    canonical: "/calculator/cash-value",
   },
 };
 
