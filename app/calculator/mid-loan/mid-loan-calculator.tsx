@@ -2,19 +2,20 @@
 import React, { useEffect, useMemo, useState } from "react";
 import SummaryButton from "@/app/ui/simulator/summary-button";
 import { ActiveKey, InstallmentRow } from "@/app/lib/definitions";
-import { DateInput, GhostButton, Input, ToggleButton } from "@/app/ui/mid-loan/component";
+import { DateInput, GhostButton, ToggleButton } from "@/app/ui/mid-loan/component";
 import { buildRowsEqual, buildRowsEvenlyByDate, computeInstallments, scalePrincipalKeepRatio } from "@/app/lib/calculator/mid-loan";
 import { clamp, formatWon, parseYmd, toYmd, uid } from "@/app/lib/utils";
+import { InputRow, MoneyInput, NumberInput } from "@/app/ui/calculator/component";
 
 type Mode = "simple" | "advanced";
 
 export default function MidLoanCalculator() {
   // Inputs
-  const [salePrice, setSalePrice] = useState(600_000_000);
+  const [salePrice, setSalePrice] = useState(1_000_000_000);
   const [contractRate, setContractRate] = useState(10);
   const [middleRate, setMiddleRate] = useState(60);
   const [installmentCount, setInstallmentCount] = useState(6);
-  const [annualRate, setAnnualRate] = useState(4.0);
+  const [annualRate, setAnnualRate] = useState(3.85);
   const [startYmd, setStartYmd] = useState(() => {
     return new Date().toISOString().slice(0, 10);
   });
@@ -191,12 +192,12 @@ export default function MidLoanCalculator() {
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
 
         {/* ===== 왼쪽: 결과 카드 ===== */}
-        <section
-          className="
+        <section className="
             bg-white
             border border-slate-200
             rounded-3xl
-            p-6
+            p-4
+            md:p-6
             space-y-5
             shadow-sm
           "
@@ -253,7 +254,7 @@ export default function MidLoanCalculator() {
             `}
             >
             {active && (
-                <div className="mt-4 p-4 rounded-xl bg-gray-50 space-y-2">
+                <div className="mt-4 p-4 px-3 rounded-xl bg-gray-50 space-y-2">
                 {active === 'salary' && (
                     <>
                     <div className="border-b border-slate-100">
@@ -299,7 +300,7 @@ export default function MidLoanCalculator() {
                         </span>
                     </div>
 
-                    <div className="px-2 py-2 space-y-2 text-sm">
+                    <div className="py-2 md:px-2 space-y-2 text-sm">
                         <div className="bg-white border rounded-xl p-4 space-y-2">
                         {interestPack.computed.map((r) => (
                             <div key={r.id} className="flex justify-between text-sm">
@@ -410,23 +411,27 @@ export default function MidLoanCalculator() {
       </section>
       {/* 입력 */}
       <section className="space-y-6">
-        <Input label="분양가 (원)" value={salePrice} onChange={setSalePrice} min={0} step={1000000} />
-        <Input label="계약금 비율 (%)" value={contractRate} onChange={setContractRate} min={0} max={100} step={0.1} />
-        <Input label="중도금 비율 (%)" value={middleRate} onChange={setMiddleRate} min={0} max={100} step={0.1} />
-        <Input label="연이율 (%)" value={annualRate} onChange={setAnnualRate} min={0} max={30} step={0.01} />
-
-        <Input
-          label="중도금 회차 수"
-          value={installmentCount}
-          onChange={(v) => {
-            const next = clamp(Math.round(v), 1, 20);
-            setInstallmentCount(next);
-            if (mode === "advanced") syncRowsCount(next);
-          }}
-          min={1}
-          max={20}
-          step={1}
-        />
+        <InputRow label="분양가">
+          <MoneyInput value={salePrice} onChange={setSalePrice}/>
+        </InputRow>
+        <InputRow label="계약금 비율">
+          <NumberInput value={contractRate} onChange={setContractRate} suffix="%"/>
+        </InputRow>
+        <InputRow label="중도금 비율">
+          <NumberInput value={middleRate} onChange={setMiddleRate} suffix="%"/>
+        </InputRow>
+        <InputRow label="연이율">
+          <NumberInput value={annualRate} onChange={setAnnualRate} suffix="%"/>
+        </InputRow>
+        <InputRow label="중도금 회차 수">
+          <NumberInput value={installmentCount}
+            onChange={(v) => {
+              const next = clamp(Math.round(v), 1, 20);
+              setInstallmentCount(next);
+              if (mode === "advanced") syncRowsCount(next);
+            }}
+          />
+        </InputRow>
         <DateInput label="1차 실행일" value={startYmd} onChange={setStartYmd} />
         <DateInput label="입주일" value={endYmd} onChange={setEndYmd} />
 
